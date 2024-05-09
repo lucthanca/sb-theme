@@ -5,7 +5,11 @@ module.exports = {
     "./tailwind/pre-process-template/**/*.liquid"
   ],
   theme: {
-    extend: {},
+    extend: {
+      padding: {
+        '100%': '100%'
+      }
+    },
   },
   plugins: [],
 }
