@@ -1,7 +1,7 @@
 *,
 *::before,
 *::after {
-  border-color: rgba(var(--colors-line-and-border),1);
+  border-color: rgba(var(--colors-line-and-border, 242, 242, 242),1);
 }
 *:focus-visible {
   outline-offset: 1px;
@@ -311,7 +311,7 @@ h6, .h6 {
   font-family: var(--font-heading-family);
   font-style: var(--font-heading-style);
   font-weight: var(--font-heading-weight);
-  color: rgba(var(--colors-heading));
+  color: rgba(var(--colors-heading)) !important;
   @apply break-words leading-tight selection:bg-[rgba(var(--colors-heading),0.2)];
 }
 h1, .h1 {
@@ -347,7 +347,7 @@ button{
 }
 button.button-outline, .button.button-outline {
   background: rgba(var(--background-secondary-button),1);
-  color: rgb(var(--colors-secondary-button));
+  color: rgb(var(--colors-secondary-button, 0, 0, 0)) !important;
   box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button),1);
   border: none;
   transition: 0.3s;
@@ -523,7 +523,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 .image-treatment-overlay {
-  background: rgba(var(--image-treatment-overlay));
+  background: rgba(var(--image-treatment-overlay, 32, 32, 32), 1);
 }
 .image-treatment-text {
   color: rgba(var(--image-treatment-text));
@@ -648,14 +648,14 @@ svg {
     background-position: 100% 100%, 0% 100%;
   }
   button.button-arrow {
-    background: rgb(var(--colors-text), 0.3);
-    color: rgb(var(--colors-text));
+    background: rgb(var(--colors-text, 82, 81, 81), 0.3);
+    color: rgb(var(--colors-text, 82, 81, 81));
     box-shadow: none;
     border-radius: 50px;
   }
   button.button-arrow:hover {
-    color: rgb(var(--colors-button-text-hover));
-    background: var(--colors-button-hover);
+    color: rgb(var(--colors-button-text-hover, 0, 0, 0));
+    background: rgb(var(--colors-button-hover, 255, 102, 0));
   }
   .hover-text-link:hover {
     color: rgb(var(--colors-text-link));
@@ -669,7 +669,7 @@ svg {
   button.button-solid,
   .button.button-solid {
     border: none;
-    background: var(--colors-button-hover);
+    background: rgb(var(--colors-button-hover, 255, 102, 0));
   }
   button.none_border,
   .button.none_border {
@@ -790,4 +790,54 @@ svg {
   .header-full-width .cart-popup {
     max-width: 100%;
   }
+}
+
+[role="button"], [type="button"], .button, .button .button-text {
+  color: rgb(var(--colors-button-text-hover));
+}
+
+button.button-solid, .button.button-solid {
+  border: none;
+  background-color: var(--colors-button-hover);
+}
+
+@media (min-width: 1024px) {
+  button.button-solid, .button.button-solid {
+      border: none;
+      box-shadow: none;
+      color: rgb(var(--colors-button-text));
+      background-color: rgba(var(--colors-button));
+      overflow: hidden;
+      background-origin: border-box;
+  }
+
+  button.button-solid:hover, .button.button-solid:hover {
+    transition-delay: 0.5s;
+    transition-property: background-color;
+    background-color: var(--colors-button-hover);
+    color: rgba(var(--colors-button-text-hover));
+    background-origin: border-box;
+  }
+
+  button.button-solid:before, .button.button-solid:before {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: var(--button-width);
+    height: var(--button-height);
+    background-color: var(--colors-button-hover);
+    backface-visibility: hidden;
+    will-change: transform;
+    transform: var(--button-transform, rotate3d(0,0,1,-10deg) translate3d(-130%,-10em,0));
+    transform-origin: var(--button-transform-origin, 100% 0%);
+    transition: transform 0.5s ease;
+  }
+}
+
+.button:after {
+  box-shadow: none !important;
 }
