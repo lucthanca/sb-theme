@@ -798,15 +798,15 @@ svg {
 
 button.button-solid, .button.button-solid {
   border: none;
-  background-color: var(--colors-button-hover);
+  background-color: rgb(var(--colors-button-hover, 255, 102, 0));
 }
 
 @media (min-width: 1024px) {
   button.button-solid, .button.button-solid {
       border: none;
       box-shadow: none;
-      color: rgb(var(--colors-button-text));
-      background-color: rgba(var(--colors-button));
+      color: rgb(var(--colors-button-text, 255, 255, 255));
+      background-color: rgb(var(--colors-button, 0, 0, 0));
       overflow: hidden;
       background-origin: border-box;
   }
@@ -814,8 +814,8 @@ button.button-solid, .button.button-solid {
   button.button-solid:hover, .button.button-solid:hover {
     transition-delay: 0.5s;
     transition-property: background-color;
-    background-color: var(--colors-button-hover);
-    color: rgba(var(--colors-button-text-hover));
+    background-color: rgb(var(--colors-button-hover, 255, 102, 0));
+    color: rgb(var(--colors-button-text-hover, 0, 0, 0));
     background-origin: border-box;
   }
 
@@ -827,9 +827,9 @@ button.button-solid, .button.button-solid {
     right: 0;
     bottom: 0;
     left: 0;
-    width: var(--button-width);
-    height: var(--button-height);
-    background-color: var(--colors-button-hover);
+    width: var(--button-width, 102%);
+    height: var(--button-height, 500%);
+    background-color: rgb(var(--colors-button-hover, 255, 102, 0));
     backface-visibility: hidden;
     will-change: transform;
     transform: var(--button-transform, rotate3d(0,0,1,-10deg) translate3d(-130%,-10em,0));
