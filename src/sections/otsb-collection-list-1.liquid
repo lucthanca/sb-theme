@@ -1,58 +1,4 @@
 <script>
-  window.Eurus = {
-    sliderScript: 'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.3/dist/js/splide.min.js',
-    loadedScript: [],
-  };
-</script>
-
-<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.10.5/dist/cdn.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.5/dist/cdn.min.js"></script>
-
-<script>
-  const deferScriptLoad = (name, src, onload, requestVisualChange = false) => {
-    window.Eurus.loadedScript.push(name);
-
-    ((events) => {
-      const loadScript = () => {
-        events.forEach((type) => window.removeEventListener(type, loadScript));
-        clearTimeout(autoloadScript);
-
-        const initScript = () => {
-          const script = document.createElement('script');
-          script.setAttribute('src', src);
-          script.setAttribute('defer', '');
-          script.onload = () => {
-            document.dispatchEvent(new CustomEvent(name + ' loaded'));
-            onload();
-          };
-
-          document.head.appendChild(script);
-        };
-
-        if (requestVisualChange) {
-          if (window.requestIdleCallback) {
-            requestIdleCallback(initScript);
-          } else {
-            requestAnimationFrame(initScript);
-          }
-        } else {
-          initScript();
-        }
-      };
-
-      let autoloadScript;
-      if (Shopify.designMode) {
-        loadScript();
-      } else {
-        const wait = window.innerWidth > 767 ? 2000 : 5000;
-        events.forEach((type) => window.addEventListener(type, loadScript, { once: true, passive: true }));
-        autoloadScript = setTimeout(() => {
-          loadScript();
-        }, wait);
-      }
-    })(['touchstart', 'mouseover', 'wheel', 'scroll', 'keydown']);
-  };
-
   requestAnimationFrame(() => {
     document.addEventListener('alpine:init', () => {
       Alpine.store('xSplide', {
@@ -156,8 +102,8 @@
             splide.mount();
           };
 
-          if (!window.Eurus.loadedScript.includes('slider')) {
-            deferScriptLoad('slider', window.Eurus.sliderScript, initSlider, true);
+          if (!window.OTSB.loadedScript.includes('slider')) {
+            deferScriptLoad('slider', window.OTSB.sliderScript, initSlider, true);
           } else if (window.Splide) {
             initSlider();
           } else {
@@ -303,7 +249,7 @@
   {% endif %}
 {%- endstyle -%}
 
-{% render 'eurus-section-divider' %}
+{% render 'otsb-section-divider' %}
 
 <div class="pt-[{{ section.settings.padding_top_mobile }}px] md:pt-[{{ section.settings.padding_top }}px] pb-[{{ section.settings.padding_bottom_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px]">
   {%- unless section.settings.heading == blank -%}
@@ -320,7 +266,7 @@
             aria-labelledby="ViewAll-{{ section.id }} SectionHeading-{{ section.id }}"
           >
             View all<span class="w-2 h-2 inline-block ml-1.5 mt-0.5">
-              {%- render 'icon-alls', icon: 'icon-double-arrow' -%}
+              {%- render 'otsb-icon-alls', icon: 'icon-double-arrow' -%}
             </span>
           </a>
         </div>
@@ -393,7 +339,7 @@
               >
                 {% case block.type %}
                   {%- when 'featured_collection' -%}
-                    {% render 'eurus-card-collection',
+                    {% render 'otsb-card-collection',
                       card_collection: block.settings.collection,
                       image_ratio: section.settings.image_ratio,
                       ratio: ratio,
@@ -409,7 +355,7 @@
                       image_overlay_opacity: section.settings.image_overlay_opacity
                     %}
                   {%- when 'promotion_block' -%}
-                    {% render 'eurus-promotion-block',
+                    {% render 'otsb-promotion-block',
                       image_ratio: section.settings.image_ratio,
                       ratio: ratio,
                       image: block.settings.image,
@@ -450,13 +396,13 @@
               class="splide__arrow splide__arrow--prev button-arrow lg:block absolute none_border z-10 w-8 h-8 lg:w-14 lg:h-14 rounded-full after:text-[20px] pt-2 pb-2 pl-2 pr-2 lg:pt-4 lg:pl-4 lg:pb-4 lg:pr-4 top-1/2 -translate-y-1/2 duration-100 opacity-60 hover:opacity-100 disabled:opacity-40 disabled:cursor-not-allowed{% if settings.lang_direction contains request.locale.iso_code %} right-0 lg:-right-24{% else %}  -rotate-180 left-0 lg:-left-24{% endif %}"
               aria-label="previous slide"
             >
-              {% render 'eurus-icon-alls', icon: 'icon-arrow' %}
+              {% render 'otsb-icon-alls', icon: 'icon-arrow' %}
             </button>
             <button
               class="splide__arrow splide__arrow--next button-arrow lg:block absolute none_border z-10 w-8 h-8 lg:w-14 lg:h-14 rounded-full after:text-[20px] pt-2 pb-2 pl-2 pr-2 lg:pt-4 lg:pl-4 lg:pb-4 lg:pr-4 top-1/2 -translate-y-1/2 duration-100 opacity-60 hover:opacity-100 disabled:opacity-40 disabled:cursor-not-allowed{% if settings.lang_direction contains request.locale.iso_code %} -rotate-180 left-0 lg:-left-24{% else %} right-0 lg:-right-24{% endif %}"
               aria-label="next slide"
             >
-              {% render 'eurus-icon-alls', icon: 'icon-arrow' %}
+              {% render 'otsb-icon-alls', icon: 'icon-arrow' %}
             </button>
           </div>
         {%- endif -%}
@@ -467,7 +413,7 @@
 
 {% schema %}
 {
-  "name": "Eurus - Collection List 1",
+  "name": "OTSB - Collection List 1",
   "tag": "section",
   "class": "section section-collection-list x-section",
   "max_blocks": 16,
@@ -1318,7 +1264,7 @@
   ],
   "presets": [
     {
-      "name": "Eurus - Collection List 1",
+      "name": "OTSB - Collection List 1",
       "blocks": [
         {
           "type": "featured_collection"

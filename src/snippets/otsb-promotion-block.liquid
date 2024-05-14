@@ -217,7 +217,7 @@
                             <div class="inline-flex items-center mb-3 md:mb-5 justify-{{ alignment }} text-[rgba(var(--colors-text))]">
                               <span class="inline-block icon--{{ block.id }}">
                                 {% if custom_icon == blank %}
-                                  {% render 'eurus-icon-labels-bags', icon: icon %}
+                                  {% render 'otsb-icon-labels-bags', icon: icon %}
                                 {% else %}
                                   {{ custom_icon }}
                                 {% endif %}
@@ -239,7 +239,7 @@
                           {%- endif -%}
                           {%- if button_label != blank -%}
                             {% if button_link %}<a href="{{ button_link }}" aria-label="{{ button_label }}"{% if open_new_window %} target="_blank"{% endif %}{% else %}<p{% endif %} class="button{% if show_button_primary %} button-solid{% else %} button-outline{% endif %} button--{{ block.id }} inline-block empty:hidden pl-4 pr-4 lg:pl-6 lg:pr-6 pt-2.5 pb-2.5 leading-normal md:pt-3 md:pb-3 cursor-pointer p-break-words{% if content == blank and image_ratio != "round" %} mt-3{% endif %}{% if button_link == blank %} hover:cursor-not-allowed opacity-70{%- endif -%}">
-                              {% render 'eurus-button-label', button_label: button_label, show_button_primary: show_button_primary %}
+                              {% render 'otsb-button-label', button_label: button_label, show_button_primary: show_button_primary %}
                             {% if button_link %}</a>{% else %}</p>{% endif %}
                           {%- endif -%}
                         </div>

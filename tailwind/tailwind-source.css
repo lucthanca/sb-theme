@@ -5,6 +5,6 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 @import url(components/theme-settings.css);
-@import url(components/eurus-collection-list.css);
+@import url(components/otsb-collection-list.css);
 
 [x-cloak] { display: none !important; }

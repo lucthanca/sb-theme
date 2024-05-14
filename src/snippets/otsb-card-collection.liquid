@@ -145,13 +145,13 @@
                               </div>
                             {%- else -%}
                               <div class="flex{% unless image_ratio == "auto" %} absolute{% endunless %} top-0 left-0 w-full h-full items-center bg-[#c9c9c9]">
-                                {% render 'eurus-icon-placeholder', icon: 'icon-collection' , class: 'text-[#acacac] w-full h-full' -%}
+                                {% render 'otsb-icon-placeholder', icon: 'icon-collection' , class: 'text-[#acacac] w-full h-full' -%}
                               </div>
                             {%- endif -%}
                           </div>
                         {%- else -%}
                           <div class='flex{% unless image_ratio == "auto" %} absolute{% endunless %} top-0 left-0 w-full h-full items-center bg-[#c9c9c9]'>
-                            {% render 'eurus-icon-placeholder', icon: 'icon-collection' , class: 'text-[#acacac] w-full h-full' -%}
+                            {% render 'otsb-icon-placeholder', icon: 'icon-collection' , class: 'text-[#acacac] w-full h-full' -%}
                           </div>
                         {%- endif -%}
                         {% if text_overlay %}
@@ -232,7 +232,7 @@
                           {%- endstyle -%}
                           <div>
         <a href="{{ card_collection.url }}"{% if open_new_window_button %} target="_blank"{% endif %} class="button{% if show_button_primary %} button-solid{% else %} button-outline{% endif %} button--{{ blockID }} p-break-words border inline-block empty:hidden mt-4 lg:mt-6 lg:mb-4 xl:mb-6 pl-4 pr-4 lg:pl-6 lg:pr-6 pt-2.5 pb-2.5 leading-normal md:pt-3 md:pb-3 cursor-pointer pointer-events-auto">
-          {% render 'eurus-button-label', button_label: button_label, show_button_primary: show_button_primary %}
+          {% render 'otsb-button-label', button_label: button_label, show_button_primary: show_button_primary %}
         </a>
       </div>
                         {% endif %}
