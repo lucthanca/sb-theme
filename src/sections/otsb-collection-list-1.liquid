@@ -251,21 +251,21 @@
 
 {% render 'otsb-section-divider' %}
 
-<div class="pt-[{{ section.settings.padding_top_mobile }}px] md:pt-[{{ section.settings.padding_top }}px] pb-[{{ section.settings.padding_bottom_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px]">
+<div class="otsb-pt-[{{ section.settings.padding_top_mobile }}px] md:otsb-pt-[{{ section.settings.padding_top }}px] otsb-pb-[{{ section.settings.padding_bottom_mobile }}px] md:otsb-pb-[{{ section.settings.padding_bottom }}px]">
   {%- unless section.settings.heading == blank -%}
-    <div class="text-center mb-5{% unless section.settings.heading_alignment contains 'center' %} flex items-center{% endunless %} heading-{{ section.settings.heading_alignment }} pr-5 pl-5{% unless section.settings.full_width %} page-width{% endunless %}">
-      <{{ section.settings.heading_tag }} class="heading--{{ section.id }} section-header h2 block leading-tight flex-auto p-break-words">
+    <div class="otsb-text-center otsb-mb-5{% unless section.settings.heading_alignment contains 'center' %} otsb-flex otsb-items-center{% endunless %} otsb-heading-{{ section.settings.heading_alignment }} otsb-pr-5 otsb-pl-5{% unless section.settings.full_width %} otsb-page-width{% endunless %}">
+      <{{ section.settings.heading_tag }} class="otsb-heading--{{ section.id }} otsb-section-header otsb-h2 otsb-block otsb-leading-tight otsb-flex-auto otsb-p-break-words">
         {{- section.settings.heading | escape -}}
       </{{ section.settings.heading_tag }}>
       {%- if section.settings.show_view_all -%}
-        <div class="flex justify-center pt-0.5 pb-0.5 md:pb-2.5 md:pt-2.5">
+        <div class="otsb-flex otsb-justify-center otsb-pt-0.5 otsb-pb-0.5 md:otsb-pb-2.5 md:otsb-pt-2.5">
           <a
             id="ViewAll-{{ section.id }}"
-            class="nav-link effect-inline relative flex items-center hover-text-link empty:hidden cursor-pointer"
+            class="otsb-nav-link otsb-effect-inline otsb-relative otsb-flex otsb-items-center otsb-hover-text-link otsb-empty:hidden otsb-cursor-pointer"
             href="{{ routes.collections_url }}"
             aria-labelledby="ViewAll-{{ section.id }} SectionHeading-{{ section.id }}"
           >
-            View all<span class="w-2 h-2 inline-block ml-1.5 mt-0.5">
+            View all<span class="otsb-w-2 otsb-h-2 otsb-inline-block otsb-ml-1.5 otsb-mt-0.5">
               {%- render 'otsb-icon-alls', icon: 'icon-double-arrow' -%}
             </span>
           </a>
@@ -273,12 +273,12 @@
       {%- endif -%}
     </div>
   {%- endunless -%}
-  <div class="mx-auto{% if swiper_on_mobile %} carousel-mobile carousel-tablet full-width-mobile{% endif %}{% if section.settings.full_width %} full-width{% else %} page-width{% endif %}">
-    <div class="{% if enable_desktop_slider %}lg:pl-24 lg:pr-24{% else %} lg:pl-0 lg:pr-0{% endif %}">
+  <div class="otsb-mx-auto{% if swiper_on_mobile %} otsb-carousel-mobile otsb-carousel-tablet otsb-full-width-mobile{% endif %}{% if section.settings.full_width %} otsb-full-width{% else %} otsb-page-width{% endif %}">
+    <div class="{% if enable_desktop_slider %}lg:otsb-pl-24 lg:otsb-pr-24{% else %} lg:otsb-pl-0 lg:otsb-pr-0{% endif %}">
       <div
         id="x-collection-{{ section.id }}-{{ block.id }}"
         {% if enable_desktop_slider or swiper_on_mobile -%}
-          class="{% if settings.lang_direction contains request.locale.iso_code and section.settings.transition_style == "fade" %}ltr {% endif %}x-splide splide visible"
+          class="{% if settings.lang_direction contains request.locale.iso_code and section.settings.transition_style == "fade" %}otsb-ltr {% endif %}x-splide splide otsb-visible"
           x-intersect.once.margin.200px='
             $store.xSplide.load($el, {
               "speed": 1000,
@@ -323,10 +323,10 @@
           '
         {%- endif -%}
       >
-        <div class="splide__track lg:pt-0.5 lg:pb-0.5{% if enable_desktop_slider %} md:cursor-grab{% endif %}{% if swiper_on_mobile %} pl-5 pr-5 lg:pl-0 lg:pr-0{% endif %}">
+        <div class="splide__track lg:otsb-pt-0.5 lg:otsb-pb-0.5{% if enable_desktop_slider %} md:otsb-cursor-grab{% endif %}{% if swiper_on_mobile %} otsb-pl-5 otsb-pr-5 lg:otsb-pl-0 lg:otsb-pr-0{% endif %}">
           <div
             class="
-              {%- if enable_desktop_slider == false -%}lg:grid lg:grid-cols-{{ columns_desktop }}{% else %}lg:flex lg:w-full lg:gap-0{% endif %} gap-{{ section.id }} splide__list
+              {%- if enable_desktop_slider == false -%}lg:otsb-grid lg:otsb-grid-cols-{{ columns_desktop }}{% else %}lg:otsb-flex lg:otsb-w-full lg:otsb-gap-0{% endif %} otsb-gap-{{ section.id }} splide__list
               {% if swiper_on_mobile %} flex w-full{% else %} !grid grid-cols-{{ columns_mobile }} md:grid md:grid-cols-4 gap-mobile-{{ section.id }}{%- if enable_desktop_slider %} lg:grid-cols-none lg:!flex{% endif %}{% endif %}
             "
           >
@@ -393,13 +393,13 @@
         {%- if enable_desktop_slider -%}
           <div class="splide__arrows">
             <button
-              class="splide__arrow splide__arrow--prev button-arrow lg:block absolute none_border z-10 w-8 h-8 lg:w-14 lg:h-14 rounded-full after:text-[20px] pt-2 pb-2 pl-2 pr-2 lg:pt-4 lg:pl-4 lg:pb-4 lg:pr-4 top-1/2 -translate-y-1/2 duration-100 opacity-60 hover:opacity-100 disabled:opacity-40 disabled:cursor-not-allowed{% if settings.lang_direction contains request.locale.iso_code %} right-0 lg:-right-24{% else %}  -rotate-180 left-0 lg:-left-24{% endif %}"
+              class="splide__arrow splide__arrow--prev button-arrow lg:otsb-block otsb-absolute otsb-none_border otsb-z-10 otsb-w-8 otsb-h-8 lg:otsb-w-14 lg:otsb-h-14 otsb-rounded-full after:otsb-text-[20px] otsb-pt-2 otsb-pb-2 otsb-pl-2 otsb-pr-2 lg:otsb-pt-4 lg:otsb-pl-4 lg:otsb-pb-4 lg:otsb-pr-4 otsb-top-1/2 otsb--translate-y-1/2 otsb-duration-100 otsb-opacity-60 hover:otsb-opacity-100 disabled:otsb-opacity-40 disabled:otsb-cursor-not-allowed{% if settings.lang_direction contains request.locale.iso_code %} otsb-right-0 lg:otsb--right-24{% else %}  otsb--rotate-180 otsb-left-0 lg:otsb--left-24{% endif %}"
               aria-label="previous slide"
             >
               {% render 'otsb-icon-alls', icon: 'icon-arrow' %}
             </button>
             <button
-              class="splide__arrow splide__arrow--next button-arrow lg:block absolute none_border z-10 w-8 h-8 lg:w-14 lg:h-14 rounded-full after:text-[20px] pt-2 pb-2 pl-2 pr-2 lg:pt-4 lg:pl-4 lg:pb-4 lg:pr-4 top-1/2 -translate-y-1/2 duration-100 opacity-60 hover:opacity-100 disabled:opacity-40 disabled:cursor-not-allowed{% if settings.lang_direction contains request.locale.iso_code %} -rotate-180 left-0 lg:-left-24{% else %} right-0 lg:-right-24{% endif %}"
+              class="splide__arrow splide__arrow--next button-arrow lg:otsb-block otsb-absolute otsb-none_border otsb-z-10 otsb-w-8 otsb-h-8 lg:otsb-w-14 lg:otsb-h-14 otsb-rounded-full after:otsb-text-[20px] otsb-pt-2 otsb-pb-2 otsb-pl-2 otsb-pr-2 lg:otsb-pt-4 lg:otsb-pl-4 lg:otsb-pb-4 lg:otsb-pr-4 otsb-top-1/2 otsb--translate-y-1/2 otsb-duration-100 otsb-opacity-60 hover:otsb-opacity-100 disabled:otsb-opacity-40 disabled:otsb-cursor-not-allowed{% if settings.lang_direction contains request.locale.iso_code %} otsb--rotate-180 otsb-left-0 lg:otsb--left-24{% else %} otsb-right-0 lg:otsb--right-24{% endif %}"
               aria-label="next slide"
             >
               {% render 'otsb-icon-alls', icon: 'icon-arrow' %}

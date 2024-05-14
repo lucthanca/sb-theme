@@ -13,29 +13,29 @@
 
     .rtl .heading-left,
     .heading-right {
-        @apply flex flex-wrap flex-row-reverse;
+        @apply otsb-flex otsb-flex-wrap otsb-flex-row-reverse;
     }
 
     .rtl .heading-left .section-header,
     .rtl .heading-left h2,
     .heading-right .section-header,
     .heading-right h2 {
-        @apply text-end;
+        @apply otsb-text-end;
     }
 
     .rtl .heading-right,
     .heading-left {
-        @apply flex flex-wrap flex-row;
+        @apply otsb-flex otsb-flex-wrap otsb-flex-row;
     }
 
     .rtl .heading-right .section-header,
     .rtl .heading-right h2,
     .heading-left .section-header,
     .heading-left h2 {
-        @apply text-start;
+        @apply otsb-text-start;
     }
 
     .image-overlay {
-        @apply !block;
+        @apply !otsb-block;
     }
 }
