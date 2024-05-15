@@ -5,37 +5,21 @@
         }
     }
 
-    @media screen and (min-width: 768px) {
-        .hidden.hide-divider {
-            display: block !important;
-        }
+    .otsb-heading-right {
+        @apply otsb-flex otsb-flex-wrap otsb-flex-row-reverse;
     }
 
-    .rtl .heading-left,
-    .heading-right {
-        @apply flex flex-wrap flex-row-reverse;
+    .otsb-heading-right .otsb-section-header,
+    .otsb-heading-right h2 {
+        @apply otsb-text-end;
     }
 
-    .rtl .heading-left .section-header,
-    .rtl .heading-left h2,
-    .heading-right .section-header,
-    .heading-right h2 {
-        @apply text-end;
+    .otsb-heading-left {
+        @apply otsb-flex otsb-flex-wrap otsb-flex-row;
     }
 
-    .rtl .heading-right,
-    .heading-left {
-        @apply flex flex-wrap flex-row;
-    }
-
-    .rtl .heading-right .section-header,
-    .rtl .heading-right h2,
-    .heading-left .section-header,
-    .heading-left h2 {
-        @apply text-start;
-    }
-
-    .image-overlay {
-        @apply !block;
+    .otsb-heading-left .otsb-section-header,
+    .otsb-heading-left h2 {
+        @apply otsb-text-start;
     }
 }
