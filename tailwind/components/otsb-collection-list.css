@@ -6,20 +6,28 @@
     }
 
     .otsb-heading-right {
-        @apply otsb-flex otsb-flex-wrap otsb-flex-row-reverse;
+        @apply flex flex-wrap flex-row-reverse;
     }
 
     .otsb-heading-right .otsb-section-header,
     .otsb-heading-right h2 {
-        @apply otsb-text-end;
+        @apply text-end;
     }
 
     .otsb-heading-left {
-        @apply otsb-flex otsb-flex-wrap otsb-flex-row;
+        @apply flex flex-wrap flex-row;
     }
 
     .otsb-heading-left .otsb-section-header,
     .otsb-heading-left h2 {
-        @apply otsb-text-start;
+        @apply text-start;
+    }
+
+    .otsb-hidden {
+        @apply hidden;
+    }
+
+    .otsb-grid {
+        @apply grid;
     }
 }
