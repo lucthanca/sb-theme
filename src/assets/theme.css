@@ -836,14 +836,14 @@ video {
   }
 
   .otsb-image-hover:hover{
-    --tw-scale-x:var(--image-zoom);
-    --tw-scale-y:var(--image-zoom);
+    --tw-scale-x:1.05;
+    --tw-scale-y:1.05;
     transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
   }
 
   .group:hover .otsb-image-hover{
-    --tw-scale-x:var(--image-zoom);
-    --tw-scale-y:var(--image-zoom);
+    --tw-scale-x:1.05;
+    --tw-scale-y:1.05;
     transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
   }
 }
@@ -862,9 +862,21 @@ video {
   }
 }
 
+.otsb-heading-right{
+  display:flex;
+  flex-direction:row-reverse;
+  flex-wrap:wrap
+}
+
 .otsb-heading-right .otsb-section-header,
     .otsb-heading-right h2{
   text-align:end
+}
+
+.otsb-heading-left{
+  display:flex;
+  flex-direction:row;
+  flex-wrap:wrap
 }
 
 .otsb-heading-left .otsb-section-header,
@@ -2404,14 +2416,14 @@ button.otsb-button-outline,
 .otsb-button.otsb-button-outline {
   background: rgba(var(--background-secondary-button), 1);
   color: rgb(var(--colors-secondary-button, 0, 0, 0)) !important;
-  box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button), 1);
+  box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button, 0, 0, 0), 1);
   border: none;
   transition: 0.3s;
 }
 
 .otsb-button.otsb-button-outline:hover,
 button.otsb-button-outline:hover {
-  box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button), 1);
+  box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button, 0, 0, 0), 1);
   background: rgba(var(--background-secondary-button), 1);
   transition: 0.3s;
 }
@@ -2831,7 +2843,7 @@ svg{
   button.otsb-button-outline,
   .otsb-button.otsb-button-outline {
     color: rgb(var(--colors-secondary-button));
-    box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button), 0.5);
+    box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button, 0, 0, 0), 0.5);
     background: rgba(var(--background-secondary-button), 0.7);
   }
 
@@ -2864,13 +2876,6 @@ svg{
   }
 }
 
-[role="button"],
-[type="button"],
-.otsb-button,
-.otsb-button .otsb-button-text {
-  color: rgb(var(--colors-button-text-hover));
-}
-
 button.otsb-button-solid,
 .otsb-button.otsb-button-solid {
   border: none;
@@ -2892,8 +2897,8 @@ button.otsb-button-solid,
   .otsb-button.otsb-button-solid:hover {
     transition-delay: 0.5s;
     transition-property: background-color;
-    background-color: rgb(var(--colors-button-hover, 255, 102, 0));
-    color: rgb(var(--colors-button-text-hover, 0, 0, 0));
+    background-color: var(--colors-button-hover, rgb(255, 102, 0)) ;
+    color: rgb(var(--colors-button-text-hover));
     background-origin: border-box;
   }
 
@@ -2908,7 +2913,7 @@ button.otsb-button-solid,
     left: 0;
     width: var(--button-width, 102%);
     height: var(--button-height, 500%);
-    background-color: rgb(var(--colors-button-hover, 255, 102, 0));
+    background-color: var(--colors-button-hover, rgb(255, 102, 0));
     backface-visibility: hidden;
     will-change: transform;
     transform: var(--button-transform, rotate3d(0, 0, 1, -10deg) translate3d(-130%, -10em, 0));
