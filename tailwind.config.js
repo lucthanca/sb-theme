@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  prefix: "otsb-",
   content: [
     "./src/**/*.{liquid,js}",
     "./tailwind/pre-process-template/**/*.liquid"
