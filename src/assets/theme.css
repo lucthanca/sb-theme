@@ -2391,9 +2391,9 @@ h1.color-text-header,
 h1,
 .h1,
 h2,
-.h2,
+.otsb-h2,
 h3,
-.h3,
+.otsb-h3,
 h4,
 .h4,
 h5,
@@ -2412,9 +2412,9 @@ h6,
 h1 *::-moz-selection,
 .h1 *::-moz-selection,
 h2 *::-moz-selection,
-.h2 *::-moz-selection,
+.otsb-h2 *::-moz-selection,
 h3 *::-moz-selection,
-.h3 *::-moz-selection,
+.otsb-h3 *::-moz-selection,
 h4 *::-moz-selection,
 .h4 *::-moz-selection,
 h5 *::-moz-selection,
@@ -2424,16 +2424,16 @@ h6 *::-moz-selection,
   background-color: rgba(var(--colors-heading), 0.2)
 }
 
-h1 *::-moz-selection, .h1 *::-moz-selection, h2 *::-moz-selection, .h2 *::-moz-selection, h3 *::-moz-selection, .h3 *::-moz-selection, h4 *::-moz-selection, .h4 *::-moz-selection, h5 *::-moz-selection, .h5 *::-moz-selection, h6 *::-moz-selection, .h6 *::-moz-selection {
+h1 *::-moz-selection, .h1 *::-moz-selection, h2 *::-moz-selection, .otsb-h2 *::-moz-selection, h3 *::-moz-selection, .otsb-h3 *::-moz-selection, h4 *::-moz-selection, .h4 *::-moz-selection, h5 *::-moz-selection, .h5 *::-moz-selection, h6 *::-moz-selection, .h6 *::-moz-selection {
   background-color: rgba(var(--colors-heading), 0.2)
 }
 
 h1 *::selection,
 .h1 *::selection,
 h2 *::selection,
-.h2 *::selection,
+.otsb-h2 *::selection,
 h3 *::selection,
-.h3 *::selection,
+.otsb-h3 *::selection,
 h4 *::selection,
 .h4 *::selection,
 h5 *::selection,
@@ -2446,9 +2446,9 @@ h6 *::selection,
 h1::-moz-selection,
 .h1::-moz-selection,
 h2::-moz-selection,
-.h2::-moz-selection,
+.otsb-h2::-moz-selection,
 h3::-moz-selection,
-.h3::-moz-selection,
+.otsb-h3::-moz-selection,
 h4::-moz-selection,
 .h4::-moz-selection,
 h5::-moz-selection,
@@ -2458,16 +2458,16 @@ h6::-moz-selection,
   background-color: rgba(var(--colors-heading), 0.2)
 }
 
-h1::-moz-selection, .h1::-moz-selection, h2::-moz-selection, .h2::-moz-selection, h3::-moz-selection, .h3::-moz-selection, h4::-moz-selection, .h4::-moz-selection, h5::-moz-selection, .h5::-moz-selection, h6::-moz-selection, .h6::-moz-selection {
+h1::-moz-selection, .h1::-moz-selection, h2::-moz-selection, .otsb-h2::-moz-selection, h3::-moz-selection, .otsb-h3::-moz-selection, h4::-moz-selection, .h4::-moz-selection, h5::-moz-selection, .h5::-moz-selection, h6::-moz-selection, .h6::-moz-selection {
   background-color: rgba(var(--colors-heading), 0.2)
 }
 
 h1::selection,
 .h1::selection,
 h2::selection,
-.h2::selection,
+.otsb-h2::selection,
 h3::selection,
-.h3::selection,
+.otsb-h3::selection,
 h4::selection,
 .h4::selection,
 h5::selection,
@@ -2483,12 +2483,12 @@ h1,
 }
 
 h2,
-.h2 {
+.otsb-h2 {
   font-size: var(--h2-font-size-mobile);
 }
 
 h3,
-.h3 {
+.otsb-h3 {
   font-size: var(--h3-font-size-mobile);
 }
 
@@ -2668,7 +2668,7 @@ p.otsb-effect-inline {
 
 parallax-movement {
   transition: all .25s ease;
-  height: var(--height-parallax);
+  height: var(--height-parallax, 110%);
   display: block;
   width: 100%;
 }
@@ -2876,12 +2876,12 @@ svg{
   }
 
   h2,
-  .h2 {
+  .otsb-h2 {
     font-size: var(--h2-font-size);
   }
 
   h3,
-  .h3 {
+  .otsb-h3 {
     font-size: var(--h3-font-size);
   }
 

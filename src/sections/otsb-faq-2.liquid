@@ -1,3 +1,63 @@
+<script>
+  requestAnimationFrame(() => {
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('xParallax', () => ({
+        debounce(func, wait) {
+          var timeout;
+          return function() {
+              var context = this, args = arguments;
+              var later = function() {
+                timeout = null;
+                func.apply(context, args);
+              };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+          };
+        },
+        load(disable) {
+          if (disable) return;
+  
+          if ("IntersectionObserver" in window && 'IntersectionObserverEntry' in window) {
+            const observerOptions = {
+              root: null,
+              rootMargin: '0px 0px',
+              threshold: 0
+            };
+  
+            var observer = new IntersectionObserver(handleIntersect, observerOptions);
+            var el;
+            function handleIntersect(entries) {
+              entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                  el = entry.target;
+                  window.addEventListener('scroll', parallax, {passive: true, capture: false});
+                } else {
+                  window.removeEventListener('scroll', parallax, {passive: true, capture: false});
+                }
+              });
+            }
+  
+            observer.observe(this.$el);
+            
+            var parallax = this.debounce(function() {
+              var rect = el.getBoundingClientRect();
+              var speed = (window.innerHeight / el.parentElement.offsetHeight) * 20;
+              var shiftDistance = (rect.top - window.innerHeight) / speed;
+              var maxShiftDistance = el.parentElement.offsetHeight / 11;
+              
+              if (shiftDistance < -maxShiftDistance || shiftDistance > maxShiftDistance) {
+                shiftDistance = -maxShiftDistance;
+              }
+              
+              el.style.transform = 'translate3d(0, '+ shiftDistance +'px, 0)';
+            }, 10);
+          }
+        }
+      }));
+    });
+  });
+</script>
+
 {% liquid
     if settings.heading_base_size != blank
       assign heading_base_size = settings.heading_base_size | times: 0.0225

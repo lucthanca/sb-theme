@@ -633,7 +633,7 @@ p.otsb-effect-inline {
 
 parallax-movement {
   transition: all .25s ease;
-  height: var(--height-parallax);
+  height: var(--height-parallax, 110%);
   display: block;
   width: 100%;
 }
