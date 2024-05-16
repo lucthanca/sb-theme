@@ -59,22 +59,22 @@
       {%- endif -%}
     }
   {%- endstyle -%}
-  <div class="ltr pt-[{{ section.settings.top_padding_mobile }}px] md:pt-[{{ section.settings.top_padding }}px] pb-[{{ section.settings.bottom_padding_mobile }}px] md:pb-[{{ section.settings.bottom_padding }}px]{% if section.settings.full_width %} md:pl-0 md:pr-0{% else %} page-width{% endif %}{% if section.settings.full_width_mobile %} full-width-mobile{% else %} pr-5 pl-5{% endif %}">
+  <div class="otsb-ltr pt-[{{ section.settings.top_padding_mobile }}px] md:pt-[{{ section.settings.top_padding }}px] pb-[{{ section.settings.bottom_padding_mobile }}px] md:pb-[{{ section.settings.bottom_padding }}px]{% if section.settings.full_width %} md:pl-0 md:pr-0{% else %} otsb-page-width{% endif %}{% if section.settings.full_width_mobile %} otsb-full-width-mobile{% else %} pr-5 pl-5{% endif %}">
     <div 
-      class="image-with-text text-[rgb(var(--colors-text))] desktop-{{ section.settings.desktop_image_width }} image-position-mobile-{{ section.settings.image_alignment_mobile }} image-position-{{ section.settings.image_alignment }} border-radius-{{ section.id }} {{ section.settings.image_layout }}{% if section.settings.content_layout != "overlap" %} iwt--{{ section.id }}{% endif %}"
+      class="otsb-image-with-text text-[rgb(var(--colors-text))] otsb-desktop-{{ section.settings.desktop_image_width }} otsb-image-position-mobile-{{ section.settings.image_alignment_mobile }} otsb-image-position-{{ section.settings.image_alignment }} border-radius-{{ section.id }} {{ section.settings.image_layout }}{% if section.settings.content_layout != "overlap" %} iwt--{{ section.id }}{% endif %}"
     >
       {% if video_type %}
-        <div class="iwt-image {{ iwt_image }} promotion w-full flex items-center{% if section.settings.content_layout == "overlap" %} self-{{ section.settings.text_position }}{% endif %}">
+        <div class="otsb-iwt-image {{ iwt_image }} promotion w-full flex items-center{% if section.settings.content_layout == "overlap" %} self-{{ section.settings.text_position }}{% endif %}">
           <div class="relative h-0 w-full pb-[56.25%]">
             <div class="absolute top-0 left-0 w-full h-full flex items-center"> 
       {% else %}
-        <div class="iwt-image {{ iwt_image }} promotion w-full flex{% if section.settings.content_layout == "overlap" %} self-{{ section.settings.text_position }}{% endif %}">
+        <div class="otsb-iwt-image {{ iwt_image }} promotion w-full flex{% if section.settings.content_layout == "overlap" %} self-{{ section.settings.text_position }}{% endif %}">
           <div class="promotion w-full relative md:h-auto min-h-[100%]{% if section.settings.desktop_height == "natural" %}{% if section.settings.image != blank %} md:h-0 desktop-{{ section.id }}-natural{% else %} md:promotion:h-[650px]{% endif %}{% else %} md:promotion:h-[{{ section.settings.desktop_height }}] md:promotion:pb-0{% endif %}
             {% if section.settings.mobile_height == "natural" %}{% if section.settings.image != blank %} h-0 mobile-{{ section.id }}-natural{% else %} h-[550px]{% endif %}{% else %} h-[{{ section.settings.mobile_height }}] md:h-auto{% endif %}">
             <div class="flex w-full h-full{% if section.settings.spacing_image %} gap-x-1{% endif %}{% if section.settings.mobile_height == 'natural' %} absolute top-0 left-0 bottom-0{% else %} relative{% endif %}{% if section.settings.desktop_height == "natural" %} md:absolute md:top-0 md:left-0 md:bottom-0{% else %} md:promotion:relative{% endif %}">
         {% endif %}
             {% if video_type %}
-              <div class="relative external-video h-full w-full rounded-none overflow-hidden{% if section.settings.enable_video_autoplay %} video-hero{% endif %}" 
+              <div class="relative otsb-external-video h-full w-full rounded-none overflow-hidden{% if section.settings.enable_video_autoplay %} otsb-video-hero{% endif %}" 
                 x-intersect:leave="$store.xVideo.pause($el)"
                 {% if section.settings.enable_video_autoplay %}
                 x-intersect="$store.xVideo.play($el)"
@@ -146,13 +146,17 @@
           </div>
         </div>
       </div>
-      <div class="{{ iwt_content }} w-full flex justify-center md:justify-start{% if section.settings.content_layout == "overlap" %} self-{{ section.settings.text_position }}{% else %} items-{{ section.settings.text_position }}{% endif %}{% if section.settings.image_alignment == "right" %} md:justify-end{% endif %} iwt-content-{{ section.settings.content_layout }}">
-        <div class="iwt-content iwt-{{ section.settings.content_layout }}{% unless section.settings.full_width %} md:flex-1{% endunless %}{% if section.settings.content_layout == "overlap" %} iwt--{{ section.id }} border-radius-{{ section.id }} w-11/12 md:w-full xl:w-11/12 md:max-w-2xl lg:pl-20 lg:pr-20{% else %} w-full md:max-w-xl{% endif %}">
+      <div class="{{ iwt_content }} w-full flex justify-center md:justify-start{% if section.settings.content_layout == "overlap" %} self-{{ section.settings.text_position }}{% else %} items-{{ section.settings.text_position }}{% endif %}{% if section.settings.image_alignment == "right" %} md:justify-end{% endif %} otsb-iwt-content-{{ section.settings.content_layout }}">
+        <div class="otsb-iwt-content otsb-iwt-{{ section.settings.content_layout }}{% unless section.settings.full_width %} md:flex-1{% endunless %}{% if section.settings.content_layout == "overlap" %} iwt--{{ section.id }} border-radius-{{ section.id }} w-11/12 md:w-full xl:w-11/12 md:max-w-2xl lg:pl-20 lg:pr-20{% else %} w-full md:max-w-xl{% endif %}">
           {%- for block in section.blocks -%}
             {% case block.type %}
               {%- when 'heading' -%}
                 {%- liquid
-                  assign base_size_heading = settings.heading_base_size | times: 0.0225
+                  if settings.heading_base_size != blank
+                    assign base_size_heading = settings.heading_base_size | times: 0.0225
+                  else
+                    assign base_size_heading = 100 | times: 0.0225
+                  endif
                   assign size_heading = block.settings.heading_base_size | times: 0.01 | times: base_size_heading
                   assign size_heading_mobile = size_heading | times: 0.6
                 -%}
@@ -191,12 +195,12 @@
                     <p class="font-medium">{{ block.settings.subheading | escape }}</p>
                   {% endif %}
                   {% if block.settings.heading != blank %}
-                    <{{ block.settings.heading_tag }} class="heading-size--{{ block.id }} h2 block mt-2 mb-1.5 md:mt-2.5 md:mb-3">
+                    <{{ block.settings.heading_tag }} class="heading-size--{{ block.id }} otsb-h2 block mt-2 mb-1.5 md:mt-2.5 md:mb-3">
                       {{ block.settings.heading | escape }}
                     </{{ block.settings.heading_tag }}>
                   {% endif %}
                   {% if block.settings.text != blank %}
-                    <div class="rte">
+                    <div class="otsb-rte">
                       {{ block.settings.text }}
                     </div>
                   {% endif %}
@@ -230,38 +234,64 @@
                     .dark .button-{{ block.id }}, .dark .button-{{ block.id }} *:before {
                       {% if block.settings.button_dark.alpha != 0.0 %}
                         --colors-button: {{ block.settings.button_dark.red }}, {{ block.settings.button_dark.green }}, {{ block.settings.button_dark.blue }};
-                      {% else %}  
-                        --colors-button: {{ settings.colors_dark_button.red }}, {{ settings.colors_dark_button.green }}, {{ settings.colors_dark_button.blue }};
+                      {% else %}
+                        {% if settings.colors_dark_button.red != blank and settings.colors_dark_button.green != blank and settings.colors_dark_button.blue != blank %}
+                          --colors-button: {{ settings.colors_dark_button.red }}, {{ settings.colors_dark_button.green }}, {{ settings.colors_dark_button.blue }};
+                        {% else %}
+                          --colors-button: 255, 255, 255;
+                        {% endif %}
                       {% endif %}
                       {% if block.settings.button_text_dark.alpha != 0.0 %}
                         --colors-button-text: {{ block.settings.button_text_dark.red }}, {{ block.settings.button_text_dark.green }}, {{ block.settings.button_text_dark.blue }};
-                      {% else %} 
-                        --colors-button-text: {{ settings.colors_dark_button_text.red }}, {{ settings.colors_dark_button_text.green }}, {{ settings.colors_dark_button_text.blue }}; 
+                      {% else %}
+                        {% if settings.colors_dark_button_text.red != blank and settings.colors_dark_button_text.green != blank and settings.colors_dark_button_text.blue != blank %}
+                          --colors-button-text: {{ settings.colors_dark_button_text.red }}, {{ settings.colors_dark_button_text.green }}, {{ settings.colors_dark_button_text.blue }};
+                        {% else %}
+                          --colors-button-text: 0, 0, 0;
+                        {% endif %}
                       {% endif %}
                       {% if block.settings.button_hover_dark.alpha != 0.0 %}
                         --colors-button-hover: rgb({{ block.settings.button_hover_dark.red }}, {{ block.settings.button_hover_dark.green }}, {{ block.settings.button_hover_dark.blue }});
                       {% else %}  
-                        --colors-button-hover: rgb({{ settings.colors_dark_button_hover.red }}, {{ settings.colors_dark_button_hover.green }}, {{ settings.colors_dark_button_hover.blue }});
+                        {% if settings.colors_dark_button_hover.red != blank and settings.colors_dark_button_hover.green != blank and settings.colors_dark_button_hover.blue != blank %}
+                          --colors-button-hover: rgb({{ settings.colors_dark_button_hover.red }}, {{ settings.colors_dark_button_hover.green }}, {{ settings.colors_dark_button_hover.blue }});
+                        {% else %}
+                          --colors-button-hover: rgb(255, 102, 0);
+                        {% endif %}
                       {% endif %}
                       {% if block.settings.button_text_hover_dark.alpha != 0.0 %}
                         --colors-button-text-hover: {{ block.settings.button_text_hover_dark.red }}, {{ block.settings.button_text_hover_dark.green }}, {{ block.settings.button_text_hover_dark.blue }};
-                      {% else %}  
-                        --colors-button-text-hover: {{ settings.colors_dark_button_text_hover.red }}, {{ settings.colors_dark_button_text_hover.green }}, {{ settings.colors_dark_button_text_hover.blue }};
+                      {% else %}
+                        {% if settings.colors_dark_button_text_hover.red != blank and settings.colors_dark_button_text_hover.green != blank and settings.colors_dark_button_text_hover.blue != blank %}
+                          --colors-button-text-hover: {{ settings.colors_dark_button_text_hover.red }}, {{ settings.colors_dark_button_text_hover.green }}, {{ settings.colors_dark_button_text_hover.blue }};
+                        {% else %}
+                          --colors-button-text-hover: 0, 0, 0;
+                        {% endif %}
                       {% endif %}
                       {% if block.settings.secondary_button_text_dark.alpha != 0.0 %}
                         --colors-secondary-button: {{ block.settings.secondary_button_text_dark.red }}, {{ block.settings.secondary_button_text_dark.green }}, {{ block.settings.secondary_button_text_dark.blue }};
                         --colors-line-secondary-button: {{ block.settings.secondary_button_text_dark.red }}, {{ block.settings.secondary_button_text_dark.green }}, {{ block.settings.secondary_button_text_dark.blue }};
                         --background-secondary-button: transparent;
-                      {% else %}  
+                      {% else %}
+                        {% if settings.colors_dark_button_secondary.red != blank and settings.colors_dark_button_secondary.green != blank and settings.colors_dark_button_secondary.blue != blank %}  
                         --colors-secondary-button: {{ settings.colors_dark_button_secondary.red }}, {{ settings.colors_dark_button_secondary.green }}, {{ settings.colors_dark_button_secondary.blue }};
                         --colors-line-secondary-button: {{ settings.colors_dark_button_secondary.red }}, {{ settings.colors_dark_button_secondary.green }}, {{ settings.colors_dark_button_secondary.blue }};
+                        {% else %}
+                        --colors-secondary-button: 255, 255, 255;
+                        --colors-line-secondary-button: 255, 255, 255;
+                        {% endif %}
                       {% endif %}
                       {% if block.settings.secondary_button_dark.alpha != 0.0 %}
                         --background-secondary-button: {{ block.settings.secondary_button_dark.red }}, {{ block.settings.secondary_button_dark.green }}, {{ block.settings.secondary_button_dark.blue }};
                         --colors-line-secondary-button: {{ block.settings.secondary_button_dark.red }}, {{ block.settings.secondary_button_dark.green }}, {{ block.settings.secondary_button_dark.blue }};
-                      {% elsif settings.background_dark_button_secondary.alpha != 0.0 %}  
+                      {% elsif settings.background_dark_button_secondary.alpha != 0.0 %}
+                        {% if settings.background_dark_button_secondary.red != blank and settings.background_dark_button_secondary.green != blank and settings.background_dark_button_secondary.blue != blank %}  
                         --background-secondary-button: {{ settings.background_dark_button_secondary.red }}, {{ settings.background_dark_button_secondary.green }}, {{ settings.background_dark_button_secondary.blue }};
                         --colors-line-secondary-button: {{ settings.background_dark_button_secondary.red }}, {{ settings.background_dark_button_secondary.green }}, {{ settings.background_dark_button_secondary.blue }};
+                        {% else %}
+                        --background-secondary-button: 42, 42,42;
+                        --colors-line-secondary-button: 42, 42, 42;
+                        {% endif %}
                       {% else %}
                         --background-secondary-button: transparent;
                       {% endif %}
@@ -269,11 +299,11 @@
                   {% endstyle %}
                   <div class="button-{{ block.id }} flex justify-{{ section.settings.text_alignment }} mt-4 mb-9 md:mt-8 md:mb-4"{{ block.shopify_attributes }}>
                     {% if block.settings.button_link == blank %}
-                      <p class="button{% if block.settings.button_primary %} button-solid{% else %} button-outline{% endif %} leading-normal empty:hidden text-center pl-7 pr-7 pt-2.5 pb-2.5 md:pl-8 md:pr-8 md:pt-3 md:pb-3 opacity-70 hover:cursor-not-allowed">
+                      <p class="otsb-button{% if block.settings.button_primary %} otsb-button-solid{% else %} otsb-button-outline{% endif %} leading-normal empty:otsb-hidden text-center pl-7 pr-7 pt-2.5 pb-2.5 md:pl-8 md:pr-8 md:pt-3 md:pb-3 opacity-70 hover:cursor-not-allowed">
                         {% render 'otsb-button-label', button_label: block.settings.button_label, show_button_primary: block.settings.button_primary %}
                       </p>
                     {% else %}
-                      <a class="button{% if block.settings.button_primary %} button-solid{% else %} button-outline{% endif %} leading-normal empty:hidden text-center pl-7 pr-7 pt-2.5 pb-2.5 md:pl-8 md:pr-8 md:pt-3 md:pb-3" href="{{ block.settings.button_link }}"{% if block.settings.open_new_window %} target="_blank"{% endif %}>
+                      <a class="otsb-button{% if block.settings.button_primary %} otsb-button-solid{% else %} otsb-button-outline{% endif %} leading-normal empty:otsb-hidden text-center pl-7 pr-7 pt-2.5 pb-2.5 md:pl-8 md:pr-8 md:pt-3 md:pb-3" href="{{ block.settings.button_link }}"{% if block.settings.open_new_window %} target="_blank"{% endif %}>
                         {% render 'otsb-button-label', button_label: block.settings.button_label, show_button_primary: block.settings.button_primary %}
                       </a>
                     {% endif %}

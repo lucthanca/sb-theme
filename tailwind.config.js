@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin')
 module.exports = {
   content: [
     "./src/**/*.{liquid,js}",
@@ -24,5 +25,9 @@ module.exports = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function({ addVariant }) {
+      addVariant("promotion", ".promotion&"); 
+    })
+  ],
 }

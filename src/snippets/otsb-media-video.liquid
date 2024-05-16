@@ -45,7 +45,7 @@
         }
       },
       mp4Thumbnail(el) {
-        const videoContainer = el.closest('.external-video');
+        const videoContainer = el.closest('.otsb-external-video');
         const imgThumbnail = videoContainer.getElementsByClassName('img-thumbnail')[0];
         const buttonPlay = videoContainer.getElementsByClassName('button-play')[0];
         const video = videoContainer.getElementsByClassName('video')[0];
@@ -73,7 +73,7 @@
           pointerEvent = " pointer-events-none";
         }
         requestAnimationFrame(() => {
-          const videoContainer = el.closest('.external-video');
+          const videoContainer = el.closest('.otsb-external-video');
           videoContainer.innerHTML = `<iframe data-video-loop="${loop}" class="iframe-video absolute w-full h-full video top-1/2 -translate-y-1/2 ${ pointerEvent }"
             frameborder="0" host="${host}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen playsinline
             src="${src}" title="${title}"></iframe>`;
@@ -203,12 +203,12 @@
   {%- else -%}
     {%- capture button_play -%}
       <button 
-        class="button-play absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16{% if columns_desktop > 1 %} md:w-24 md:h-24{% endif %} rounded-full p-5 bg-[rgba(var(--image-treatment-text),0.3)] bg-opacity-30 disabled:cursor-not-allowed"
+        class="otsb-button-play absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16{% if columns_desktop > 1 %} md:w-24 md:h-24{% endif %} rounded-full p-5 bg-[rgba(var(--image-treatment-text),0.3)] bg-opacity-30 disabled:cursor-not-allowed"
         {% if video_type == 'video_select' %}@click.prevent="$store.xVideo.mp4Thumbnail($el)"{% endif %}
         {% if video_type == 'youtube' or video_type == 'vimeo' %}@click.prevent="$store.xVideo.externalLoad($el, '{{ video_type }}', '{{ video_id }}', false, '{{ video_alt }}')"{% endif %}
         aria-label="image-video"
       >
-        <span class="pointer-events-none duration-200 bg-button-play absolute w-6 h-6{% if columns_desktop > 1 %} md:w-10 md:h-10{% endif %} top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-[rgba(var(--image-treatment-text))]">
+        <span class="pointer-events-none duration-200 otsb-bg-button-play absolute w-6 h-6{% if columns_desktop > 1 %} md:w-10 md:h-10{% endif %} top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-[rgba(var(--image-treatment-text))]">
           {% render 'otsb-icon-media', icon: 'icon-play', class: 'w-full h-full' %}
         </span>
       </button>
@@ -228,7 +228,7 @@
         sizes="100vw"
         src="{{ cover_image | image_url: width: 3840 }}"
         alt="{{ cover_image.alt | escape }}"
-        class="object-cover z-10 absolute top-0 left-0 h-full w-full img-thumbnail image-hover"
+        class="object-cover z-10 absolute top-0 left-0 h-full w-full otsb-img-thumbnail otsb-image-hover"
         loading="lazy"
         width="{{ cover_image.width }}"
         height="{{ cover_image.height }}"
@@ -244,7 +244,7 @@
                 loop: false,
                 controls: true,
                 muted: false,
-                class: "w-full h-full absolute top-0 left-0 video object-cover",
+                class: "w-full h-full absolute top-0 left-0 otsb-video object-cover",
                 alt: video.alt
             }}
           </template>
@@ -254,7 +254,7 @@
       {% if video_type == 'youtube' %}
         {% comment %}theme-check-disable RemoteAsset{% endcomment %}
         <div
-          class="absolute h-full w-full video"
+          class="absolute h-full w-full otsb-video"
           aria-label="image-video">
           <picture>
             <source type="image/webp" srcset="{{ video_id | prepend: 'https://i.ytimg.com/vi_webp/' | append: '/maxresdefault.webp' }}">
@@ -271,7 +271,7 @@
             'width': 1280
           }
         {%- endcapture -%}
-        <div class="external-video w-full h-full bg-black">
+        <div class="otsb-external-video w-full h-full bg-black">
           <div class="h-full w-full" x-init="$store.xVideo.renderVimeoFacade($el, '{{ video_id }}', {{ options }})"></div>
           {{ button_play }}
         </div>
@@ -284,7 +284,7 @@
               loop: false,
               controls: true,
               muted: false,
-              class: "w-full h-full absolute video object-cover",
+              class: "w-full h-full absolute otsb-video object-cover",
               alt: video.alt
           }}
         </template>
