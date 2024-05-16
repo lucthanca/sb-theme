@@ -117,7 +117,7 @@
                                   height="{{ image.height }}"
                                   width="{{ image.width }}"
                                   loading="lazy"
-                                  class="aspect-{{ image_ratio }} w-full h-full object-cover z-10 object-center image-hover{% if image_ratio == "round" %} rounded-full{% endif %}{% if corner_image and image_ratio != "round" %} md:rounded-[10px]{% unless card_full_width %} rounded-[10px]{% endunless %}{% endif %}"
+                                  class="aspect-{{ image_ratio }} w-full h-full object-cover z-10 object-center otsb-image-hover{% if image_ratio == "round" %} rounded-full{% endif %}{% if corner_image and image_ratio != "round" %} md:rounded-[10px]{% unless card_full_width %} rounded-[10px]{% endunless %}{% endif %}"
                                 >
                               </div>
                             {%- elsif card_collection.featured_image -%}
@@ -140,7 +140,7 @@
                                   height="{{ card_collection.featured_image.height }}"
                                   width="{{ card_collection.featured_image.width }}"
                                   loading="lazy"
-                                  class="aspect-{{ image_ratio }} w-full h-full object-cover z-10 object-center image-hover{% if image_ratio == "round" %} rounded-full{% endif %}{% if corner_image and image_ratio != "round" %} md:rounded-[10px]{% unless card_full_width %} rounded-[10px]{% endunless %}{% endif %}"
+                                  class="aspect-{{ image_ratio }} w-full h-full object-cover z-10 object-center otsb-image-hover{% if image_ratio == "round" %} rounded-full{% endif %}{% if corner_image and image_ratio != "round" %} md:rounded-[10px]{% unless card_full_width %} rounded-[10px]{% endunless %}{% endif %}"
                                 >
                               </div>
                             {%- else -%}
@@ -155,7 +155,7 @@
                           </div>
                         {%- endif -%}
                         {% if text_overlay %}
-                          <div class="image-overlay absolute top-0 bottom-0 h-full w-full image-treatment-overlay"></div>
+                          <div class="image-overlay absolute top-0 bottom-0 h-full w-full otsb-image-treatment-overlay"></div>
                         {% else %}
                           </div>
                         {% endif %}
@@ -168,20 +168,20 @@
                         {%- if collection_carousel %} text-color-{{ blockID }} md:pt-8 md:pb-8 flex flex-col justify-between h-full{% endif -%}"
                       >
                         <div class="collection-item-title leading-tight text-[rgba(var(--colors-heading))]
-                          {%- if columns_desktop <= 8 and collage == blank %} text-medium{% endif -%}
+                          {%- if columns_desktop <= 8 and collage == blank %} otsb-text-medium{% endif -%}
                           {%- if image_ratio == "round" %} mt-1{% endif -%}"
                         >
                           {%- if card_collection != blank -%}
                             <p
-                              class="text-[rgba(var(--colors-heading))] p-break-words transition duration-200">
+                              class="text-[rgba(var(--colors-heading))] otsb-p-break-words transition duration-200">
                               {%- if card_collection.title != blank -%}
                                 {{- card_collection.title | escape -}}
                               {%- else -%}
-                                {{ 'onboarding.collection_title' | t }}
+                                Example collection
                               {%- endif -%}
                             </p>
                             {%- if description != blank -%}
-                              <div class="rte text-default">
+                              <div class="otsb-rte otsb-text-default">
                                 {{- description -}}
                               </div>
                             {%- endif -%}
@@ -191,15 +191,15 @@
                         </div>
                         {{ settings.edges_type }}
                         {%- if card_collection != blank and section.settings.show_item_count or collage -%}
-                          <p class="text-[rgba(var(--colors-text))] {% if collage %} mt-2.5 leading-none{% else %} mt-1{% endif %}{% if columns_desktop > 8 %} text-normal{% endif %}">
+                          <p class="text-[rgba(var(--colors-text))] {% if collage %} mt-2.5 leading-none{% else %} mt-1{% endif %}{% if columns_desktop > 8 %} otsb-text-normal{% endif %}">
                             {{ card_collection.all_products_count }}{% if card_collection.all_products_count > 1 %} items{% else %} item{% endif %}
                           </p>
                         {%- endif -%}
                         {% if card_collection and collection_carousel and button_label != blank %}
                           {%- style -%}
                             {%- if show_button_primary -%}
-                              .button--{{ blockID }}.button-solid,
-                              .button--{{ blockID }}.button-solid:before { 
+                              .button--{{ blockID }}.otsb-button-solid,
+                              .button--{{ blockID }}.otsb-button-solid:before { 
                                 {%- unless color_button.alpha == 0.0 -%}
                                   --colors-line-and-border: {{ color_button.red }}, {{ color_button.green }}, {{ color_button.blue }};
                                   --colors-button: {{ color_button.red }}, {{ color_button.green }}, {{ color_button.blue }};
@@ -217,7 +217,7 @@
                                 {%- endunless -%}
                               }
                             {%- else -%}
-                              .button--{{ blockID }}.button-outline {
+                              .button--{{ blockID }}.otsb-button-outline {
                                 {%- if secondary_button_text.alpha != 0.0 -%} 
                                   --colors-secondary-button: {{ secondary_button_text.red }}, {{ secondary_button_text.green }}, {{ secondary_button_text.blue }}; 
                                   --colors-line-secondary-button: {{ secondary_button_text.red }}, {{ secondary_button_text.green }}, {{ secondary_button_text.blue }};
@@ -231,7 +231,7 @@
                             {%- endif -%}
                           {%- endstyle -%}
                           <div>
-        <a href="{{ card_collection.url }}"{% if open_new_window_button %} target="_blank"{% endif %} class="button{% if show_button_primary %} button-solid{% else %} button-outline{% endif %} button--{{ blockID }} p-break-words border inline-block empty:hidden mt-4 lg:mt-6 lg:mb-4 xl:mb-6 pl-4 pr-4 lg:pl-6 lg:pr-6 pt-2.5 pb-2.5 leading-normal md:pt-3 md:pb-3 cursor-pointer pointer-events-auto">
+        <a href="{{ card_collection.url }}"{% if open_new_window_button %} target="_blank"{% endif %} class="otsb-button{% if show_button_primary %} otsb-button-solid{% else %} otsb-button-outline{% endif %} button--{{ blockID }} otsb-p-break-words border inline-block empty:otsb-hidden mt-4 lg:mt-6 lg:mb-4 xl:mb-6 pl-4 pr-4 lg:pl-6 lg:pr-6 pt-2.5 pb-2.5 leading-normal md:pt-3 md:pb-3 cursor-pointer pointer-events-auto">
           {% render 'otsb-button-label', button_label: button_label, show_button_primary: show_button_primary %}
         </a>
       </div>

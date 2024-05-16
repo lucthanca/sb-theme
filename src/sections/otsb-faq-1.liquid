@@ -1,3 +1,63 @@
+<script>
+  requestAnimationFrame(() => {
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('xParallax', () => ({
+        debounce(func, wait) {
+          var timeout;
+          return function() {
+              var context = this, args = arguments;
+              var later = function() {
+                timeout = null;
+                func.apply(context, args);
+              };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+          };
+        },
+        load(disable) {
+          if (disable) return;
+  
+          if ("IntersectionObserver" in window && 'IntersectionObserverEntry' in window) {
+            const observerOptions = {
+              root: null,
+              rootMargin: '0px 0px',
+              threshold: 0
+            };
+  
+            var observer = new IntersectionObserver(handleIntersect, observerOptions);
+            var el;
+            function handleIntersect(entries) {
+              entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                  el = entry.target;
+                  window.addEventListener('scroll', parallax, {passive: true, capture: false});
+                } else {
+                  window.removeEventListener('scroll', parallax, {passive: true, capture: false});
+                }
+              });
+            }
+  
+            observer.observe(this.$el);
+            
+            var parallax = this.debounce(function() {
+              var rect = el.getBoundingClientRect();
+              var speed = (window.innerHeight / el.parentElement.offsetHeight) * 20;
+              var shiftDistance = (rect.top - window.innerHeight) / speed;
+              var maxShiftDistance = el.parentElement.offsetHeight / 11;
+              
+              if (shiftDistance < -maxShiftDistance || shiftDistance > maxShiftDistance) {
+                shiftDistance = -maxShiftDistance;
+              }
+              
+              el.style.transform = 'translate3d(0, '+ shiftDistance +'px, 0)';
+            }, 10);
+          }
+        }
+      }));
+    });
+  });
+</script>
+
 {% liquid
   if settings.heading_base_size != blank
     assign heading_base_size = settings.heading_base_size | times: 0.0225
@@ -35,7 +95,7 @@
 {% render 'otsb-section-divider' %}
 
 <div class="pb-[{{ section.settings.padding_bottom_mobile }}px] pt-[{{ section.settings.padding_top_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px] md:pt-[{{ section.settings.padding_top }}px]">
-  <div class="faq-container {% if section.settings.desktop_layout == "1" and section.settings.image == blank %}{% if section.settings.make_full_page_width %} page-width{% else %} max-w-3xl md:pl-0 md:pr-0{% endif %} pr-5 pl-5{% else %} page-width{% endif %} ml-auto mr-auto relative">
+  <div class="otsb-faq-container {% if section.settings.desktop_layout == "1" and section.settings.image == blank %}{% if section.settings.make_full_page_width %} otsb-page-width{% else %} max-w-3xl md:pl-0 md:pr-0{% endif %} pr-5 pl-5{% else %} otsb-page-width{% endif %} ml-auto mr-auto relative">
     {% if section.settings.image != blank %}
       <div class="flex gap-y-7{% if is_rtl %} ltr{% endif %}{% if section.settings.desktop_layout == "1" %} lg:gap-16{% else %} lg:gap-9{% endif %}{% if section.settings.image_alignment == "right" %} lg:flex-row-reverse{% else %} lg:flex-row{% endif %}{% if section.settings.image_alignment_mobile == "right" %} flex-col-reverse{% else %} flex-col{% endif %}">
         {%- style -%}
@@ -56,7 +116,7 @@
             }
           {% endif %}
         {%- endstyle -%}
-        <div class="faq-image{% if section.settings.desktop_layout == "1" %} lg:w-1/2{% else %} lg:w-1/3{% endif %}">
+        <div class="otsb-faq-image{% if section.settings.desktop_layout == "1" %} lg:w-1/2{% else %} lg:w-1/3{% endif %}">
           <div class="relative {% if section.settings.mobile_height == 'auto' %}natural-image-mobile-{{ section.id }}{% endif %}{% if section.settings.desktop_height == 'auto' %} natural-image-{{ section.id }}{% endif %} h-[{{ section.settings.mobile_height }}] lg:h-[{{ section.settings.desktop_height }}]{% if section.settings.desktop_height == 'adapt' %} lg:h-full{% endif %}">
             <div class="overflow-hidden absolute top-0 left-0 h-full w-full{% if section.settings.full_width %} md:rounded-none{% else %}{% if settings.edges_type == 'rounded_corners' %} md:rounded-[10px]{% endif %}{% endif %}{% unless section.settings.full_width_mobile %}{% if settings.edges_type == 'rounded_corners' %} rounded-[10px]{% endif %}{% endunless %}">
               <parallax-image class="h-full w-full">
@@ -88,10 +148,10 @@
           </div>
         </div>
     {% endif %}
-    <div class="faq-wrapper{% if is_rtl %} rtl{% endif %}{% if section.settings.image != blank %}{% if section.settings.desktop_layout == "1" %} lg:w-1/2{% else %} lg:w-2/3{% endif %}{% endif %}">
-      <div class="mb-5 text-{{ section.settings.heading_alignment }}{% unless section.settings.heading_alignment contains 'center' %} flex items-center{% endunless %} heading-{{ section.settings.heading_alignment }}">
+    <div class="otsb-faq-wrapper{% if is_rtl %} otsb-rtl{% endif %}{% if section.settings.image != blank %}{% if section.settings.desktop_layout == "1" %} lg:w-1/2{% else %} lg:w-2/3{% endif %}{% endif %}">
+      <div class="mb-5 text-{{ section.settings.heading_alignment }}{% unless section.settings.heading_alignment contains 'center' %} flex items-center{% endunless %} otsb-heading-{{ section.settings.heading_alignment }}">
         {%- if section.settings.heading != blank -%}
-          <{{ section.settings.heading_tag }} class="heading--{{ section.id }} section-header h2 block leading-tight flex-auto p-break-words">
+          <{{ section.settings.heading_tag }} class="heading--{{ section.id }} otsb-section-header otsb-h2 block leading-tight flex-auto otsb-p-break-words">
             {{- section.settings.heading | escape -}}
           </{{ section.settings.heading_tag }}>
         {%- endif -%}
@@ -104,7 +164,7 @@
               {% else %}
                 role="link" aria-disabled="true"
               {% endif %}
-              class="nav-link font-medium effect-inline relative flex items-center hover-text-link empty:hidden cursor-pointer{% if section.settings.button_link == blank %} opacity-70 hover:cursor-not-allowed{% endif %}"
+              class="otsb-nav-link font-medium otsb-effect-inline relative flex items-center otsb-hover-text-link empty:otsb-hidden cursor-pointer{% if section.settings.button_link == blank %} opacity-70 hover:cursor-not-allowed{% endif %}"
             >
               View all FAQs<span class="w-2 h-2 inline-block ml-1.5 mt-0.5 rtl:rotate-180 rtl:mr-1.5 rtl:ml-0 rtl:mt-0">
                 {% render 'otsb-icon-alls' , icon: 'icon-double-arrow' %}
@@ -114,11 +174,11 @@
         {%- endif -%}
       </div>
 
-      <div class="{% if section.settings.desktop_layout == "2" %}md:grid md:grid-cols-2 gap-x-7{% endif %}">
+      <div class="{% if section.settings.desktop_layout == "2" %}md:otsb-grid md:grid-cols-2 gap-x-7{% endif %}">
         {%- for block in section.blocks -%}
           {% if block.settings.heading and block.settings.row_content %}
             <div
-              class="faq-item{% unless section.settings.row_background %} border-b md:pt-0{% unless forloop.index > 1 %} border-t{% endunless %}{% if forloop.index == 2 and section.settings.desktop_layout == "2" %} md:border-t{% endif %}{% endunless %}"
+              class="otsb-faq-item{% unless section.settings.row_background %} border-b md:pt-0{% unless forloop.index > 1 %} border-t{% endunless %}{% if forloop.index == 2 and section.settings.desktop_layout == "2" %} md:border-t{% endif %}{% endunless %}"
               x-data="{open: false}"
               {% if section.settings.collapsible %}
                 :class="open && 'border-[rgba(var(--colors-heading))]'"
@@ -127,7 +187,7 @@
             >
               <div class="p-3 md:px-4 lg:px-5 lg:py-[22px]{% if section.settings.row_background %} border-0 bg-[rgba(var(--colors-text),0.05)] md:mt-4{% endif %}">
                 <button
-                  class="faq-collapsible relative text-left block w-full{% if section.settings.collapsible %} cursor-pointer{% endif %} flex items-center"
+                  class="otsb-faq-collapsible relative text-left block w-full{% if section.settings.collapsible %} cursor-pointer{% endif %} flex items-center"
                   {% if section.settings.collapsible %}
                     @click="open = !open"
                   {% endif %}
@@ -143,7 +203,7 @@
                       </span>
                     </div>
                   {%- endunless -%}
-                  <p class="{% if section.settings.desktop_layout == "1" and section.settings.image == blank and section.settings.make_full_page_width %} h3{% else %}md:text-[110%]{% endif %} min-h-[20px] md:min-h-[28px] flex items-center max-w-full{% if section.settings.collapsible %} pr-6 rtl:pl-6 rtl:pr-0{% endif %} font-medium">
+                  <p class="{% if section.settings.desktop_layout == "1" and section.settings.image == blank and section.settings.make_full_page_width %} otsb-h3{% else %}md:text-[110%]{% endif %} min-h-[20px] md:min-h-[28px] flex items-center max-w-full{% if section.settings.collapsible %} pr-6 rtl:pl-6 rtl:pr-0{% endif %} font-medium">
                     {{ block.settings.heading | default: block.settings.page.title }}
                   </p>
                   {%- if section.settings.collapsible -%}
@@ -156,14 +216,14 @@
                   {%- endif -%}
                 </button>
                 <div
-                  class="faq-content"
+                  class="otsb-faq-content"
                   {% if section.settings.collapsible %}
                     x-show="open"
                     x-cloak
                     x-collapse
                   {% endif %}
                 >
-                  <div class="rte leading-normal pt-2 rte">
+                  <div class="otsb-rte leading-normal pt-2 otsb-rte">
                     {{ block.settings.row_content }}
                   </div>
                 </div>
@@ -182,7 +242,7 @@
             {% else %}
               role="link" aria-disabled="true"
             {% endif %}
-            class="nav-link font-medium effect-inline relative flex items-center hover-text-link empty:hidden cursor-pointer{% if section.settings.button_link == blank %} opacity-70 hover:cursor-not-allowed{% endif %}"
+            class="otsb-nav-link font-medium otsb-effect-inline relative flex items-center otsb-hover-text-link empty:otsb-hidden cursor-pointer{% if section.settings.button_link == blank %} opacity-70 hover:cursor-not-allowed{% endif %}"
           >
             View all FAQs<span class="w-2 h-2 inline-block ml-1.5 mt-0.5 rtl:rotate-180 rtl:mr-1.5 rtl:ml-0 rtl:mt-0">
               {% render 'otsb-icon-alls' , icon: 'icon-double-arrow' %}

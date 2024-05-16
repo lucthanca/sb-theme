@@ -68,8 +68,8 @@
     font-size: {{ text_size | times: 0.9 }}rem;
   }
   {%- if show_button_primary -%}
-    .button--{{ block.id }}.button-solid,
-    .button--{{ block.id }}.button-solid:before {
+    .button--{{ block.id }}.otsb-button-solid,
+    .button--{{ block.id }}.otsb-button-solid:before {
       {%- unless color_button.alpha == 0.0 -%}
         --colors-line-and-border: {{ color_button.red }}, {{ color_button.green }}, {{ color_button.blue }};
         --colors-button: {{ color_button.red }}, {{ color_button.green }}, {{ color_button.blue }};
@@ -87,7 +87,7 @@
       {%- endunless -%}
     }
   {%- endif -%}
-  .button--{{ block.id }}.button-outline {
+  .button--{{ block.id }}.otsb-button-outline {
     {%- if secondary_button_text.alpha != 0.0 -%}
       --colors-secondary-button: {{ secondary_button_text.red }}, {{ secondary_button_text.green }}, {{ secondary_button_text.blue }};
       --colors-line-secondary-button: {{ secondary_button_text.red }}, {{ secondary_button_text.green }}, {{ secondary_button_text.blue }};
@@ -118,13 +118,13 @@
                       endif
                     -%}
                     {% unless is_menu %}
-                    <div class="{{ class_tall_mobile }} {{ class_tall_desktop }} md:list-layout:col-span-1 relative promotion-block promotion group{% unless image_ratio == "round" %} promotion-block-{{ block.id }}{% endunless %}{% unless image_ratio == "round" or image_ratio == "auto" %} flex items-{{ content_position | default: 'center' }} h-full min-h-[200px]{% endunless %} md:list-layout:min-h-[200px]{% if settings.edges_type == 'rounded_corners' %} rounded-[10px]{% endif %}">
+                    <div class="{{ class_tall_mobile }} {{ class_tall_desktop }} md:list-layout:col-span-1 relative otsb-promotion-block promotion group{% unless image_ratio == "round" %} promotion-block-{{ block.id }}{% endunless %}{% unless image_ratio == "round" or image_ratio == "auto" %} flex items-{{ content_position | default: 'center' }} h-full min-h-[200px]{% endunless %} md:list-layout:min-h-[200px]{% if settings.edges_type == 'rounded_corners' %} rounded-[10px]{% endif %}">
                       {%- if image != blank -%}
                         {%- capture sizes -%}
                           (min-width: {{ settings.page_width }}px) {% if enable_desktop_slider %}{{ settings.page_width | plus: 100 | divided_by: columns_desktop }}px{% else %}calc((100vw - 10rem) / {{ columns_desktop }}){% endif %}, (min-width: 768px) {% if columns_desktop > 1 %}calc((100vw - 5rem) / 2){% else %}calc(100vw - 5rem){% endif %}, calc((100vw) / {{ columns_mobile }})
                         {%- endcapture -%}
                         {%- if loading == 'eager' -%}
-                          <div class="hidden">
+                          <div class="otsb-hidden">
                             {{ image | image_url: width: 1780 | image_tag: widths: '375, 450, 750, 900, 1100, 1500, 1780', preload: true, loading: 'lazy', sizes: sizes }}
                           </div>
                         {%- endif -%}
@@ -148,7 +148,7 @@
                                 width="{{ image.width }}"
                                 height="{{ image.width | divided_by: image.aspect_ratio }}"
                                 style="object-position: {{ image.presentation.focal_point }};"
-                                class="md:list-layout:hidden aspect-{{ image_ratio }} image-hover w-full h-full object-cover duration-300 transition ease-out{% if image_ratio == "round" %} rounded-full{% endif %}{% if corner_image and image_ratio != "round" %} rounded-[10px]{% endif %}"
+                                class="md:list-layout:hidden aspect-{{ image_ratio }} otsb-image-hover w-full h-full object-cover duration-300 transition ease-out{% if image_ratio == "round" %} rounded-full{% endif %}{% if corner_image and image_ratio != "round" %} rounded-[10px]{% endif %}"
                               >
                               {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
                               {% if list_layout %}
@@ -168,11 +168,11 @@
                                   width="{{ image.width }}"
                                   height="{{ image.width | divided_by: image.aspect_ratio }}"
                                   style="object-position: {{ image.presentation.focal_point }};"
-                                  class="aspect-{{ image_ratio }} hidden md:list-layout:block image-hover w-full h-full object-cover duration-300 transition ease-out{% if image_ratio == "round" %} rounded-full{% endif %}"
+                                  class="aspect-{{ image_ratio }} otsb-hidden md:list-layout:block otsb-image-hover w-full h-full object-cover duration-300 transition ease-out{% if image_ratio == "round" %} rounded-full{% endif %}"
                                 >
                               {% endif %}
                             </div>
-                            <span class="absolute top-0 left-0 bottom-0 right-0 z-10 image-treatment-overlay opacity-{{ image_overlay_opacity }}"></span>
+                            <span class="absolute top-0 left-0 bottom-0 right-0 z-10 otsb-image-treatment-overlay opacity-{{ image_overlay_opacity }}"></span>
                           </div>
                         </div>
                       {% endif %}
@@ -195,11 +195,11 @@
                           width="{{ image.width }}"
                           height="{{ image.width | divided_by: image.aspect_ratio }}"
                           style="object-position: {{ image.presentation.focal_point }};"
-                          class="aspect-{{ image_ratio }} image-hover w-full h-full object-cover z-10 duration-300 transition ease-out{% if image_ratio == "round" %} rounded-full{% endif %}"
+                          class="aspect-{{ image_ratio }} otsb-image-hover w-full h-full object-cover z-10 duration-300 transition ease-out{% if image_ratio == "round" %} rounded-full{% endif %}"
                         >
                     {% endunless %}
                     
-                      <div class="w-full overflow-hidden pl-5 pr-5 md:pl-10 md:pr-10 z-10{% if image_ratio == "round" %}{% if image == blank %} flex relative pb-[100.0%] rounded-full items-center promotion-block-{{ block.id }} text-center{% else %} hidden{% endif %}{% else %}{% if image == blank %} relative{% else %} absolute{% endif %} top-0 right-0 bottom-0 left-0 {{ classLayout }} pt-6 pb-6 lg:pt-8 lg:pb-8 text-{{ alignment }}{% endif %}">
+                      <div class="w-full overflow-hidden pl-5 pr-5 md:pl-10 md:pr-10 z-10{% if image_ratio == "round" %}{% if image == blank %} flex relative pb-[100.0%] rounded-full items-center promotion-block-{{ block.id }} text-center{% else %} otsb-hidden{% endif %}{% else %}{% if image == blank %} relative{% else %} absolute{% endif %} top-0 right-0 bottom-0 left-0 {{ classLayout }} pt-6 pb-6 lg:pt-8 lg:pb-8 text-{{ alignment }}{% endif %}">
                         <div class="text-color--{{ block.id }}{% if image_ratio == "round" %} absolute top-1/2 -translate-y-1/2 left-4 right-4{% else %} w-full{% endif %}">
                           {%- if icon != 'none' -%}
                             {% style %}
@@ -225,7 +225,7 @@
                             </div>
                           {%- endif -%}
                           {%- if subheading != blank and image_ratio != "round" -%}
-                            <div class="subheading-{{ block.id }} mb-2 rte text-[rgb(var(--colors-text))] truncate whitespace-normal p-break-words">
+                            <div class="subheading-{{ block.id }} mb-2 otsb-rte text-[rgb(var(--colors-text))] truncate whitespace-normal otsb-p-break-words">
                               {{ subheading }}
                             </div>
                           {%- endif -%}
@@ -233,19 +233,19 @@
                             <h3 class="title-{{ block.id }} text-color--{{ block.id }} mb-1 lg:mb-3 leading-tight">{{ heading }}</h3>
                           {%- endif -%}
                           {%- if content != blank and image_ratio != "round" -%}
-                            <div class="text-{{ block.id }} rte text-[rgb(var(--colors-text))] truncate whitespace-normal p-break-words{% if button_label != blank %} mb-3 lg:mb-5{% endif %}">
+                            <div class="text-{{ block.id }} otsb-rte text-[rgb(var(--colors-text))] truncate whitespace-normal otsb-p-break-words{% if button_label != blank %} mb-3 lg:mb-5{% endif %}">
                               {{ content }}
                             </div>
                           {%- endif -%}
                           {%- if button_label != blank -%}
-                            {% if button_link %}<a href="{{ button_link }}" aria-label="{{ button_label }}"{% if open_new_window %} target="_blank"{% endif %}{% else %}<p{% endif %} class="button{% if show_button_primary %} button-solid{% else %} button-outline{% endif %} button--{{ block.id }} inline-block empty:hidden pl-4 pr-4 lg:pl-6 lg:pr-6 pt-2.5 pb-2.5 leading-normal md:pt-3 md:pb-3 cursor-pointer p-break-words{% if content == blank and image_ratio != "round" %} mt-3{% endif %}{% if button_link == blank %} hover:cursor-not-allowed opacity-70{%- endif -%}">
+                            {% if button_link %}<a href="{{ button_link }}" aria-label="{{ button_label }}"{% if open_new_window %} target="_blank"{% endif %}{% else %}<p{% endif %} class="otsb-button{% if show_button_primary %} otsb-button-solid{% else %} otsb-button-outline{% endif %} button--{{ block.id }} inline-block empty:otsb-hidden pl-4 pr-4 lg:pl-6 lg:pr-6 pt-2.5 pb-2.5 leading-normal md:pt-3 md:pb-3 cursor-pointer otsb-p-break-words{% if content == blank and image_ratio != "round" %} mt-3{% endif %}{% if button_link == blank %} hover:cursor-not-allowed opacity-70{%- endif -%}">
                               {% render 'otsb-button-label', button_label: button_label, show_button_primary: show_button_primary %}
                             {% if button_link %}</a>{% else %}</p>{% endif %}
                           {%- endif -%}
                         </div>
                       </div>
                       {%- if heading != blank and image_ratio == "round" -%}
-                        <p class="text-color--{{ block.id }} text-center leading-tight pt-4 pb-4{% if columns_desktop <= 8 %} text-medium{% endif %}">
+                        <p class="text-color--{{ block.id }} text-center leading-tight pt-4 pb-4{% if columns_desktop <= 8 %} otsb-text-medium{% endif %}">
                           {{ heading }}
                         </p>
                       {%- endif -%}

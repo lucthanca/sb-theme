@@ -1,10 +1,10 @@
 {% if x_text_quickview %}
-  <span class="button-text" x-text="$store.xQuickView && $store.xQuickView.buttonLabel"></span>
+  <span class="otsb-button-text" x-text="$store.xQuickView && $store.xQuickView.buttonLabel"></span>
 {% else %}
-  <span class="button-text is-focus-button:opacity-0">{{ button_label | escape }}</span>
+  <span class="otsb-button-text is-focus-button:opacity-0">{{ button_label | escape }}</span>
 {% endif %}
 {% if settings.buttons_animation == 'sliced' and show_button_primary %}
-  <span class="button-icon opacity-0 w-5 -translate-x-[4px]">
+  <span class="otsb-button-icon opacity-0 w-5 -translate-x-[4px]">
     {% if settings.custom_icon_button != blank %}
       {{ settings.custom_icon_button }}
     {% else %}
