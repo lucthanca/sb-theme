@@ -65,6 +65,16 @@ module.exports = {
         'shimmerX_10s': 'shimmerX 10s ease-out',
         'slideDown': 'slideDown 3s ease-out'
       },
+      width: {
+        '250px': '250px',
+        '300px': '300px',
+        '400px': '400px',
+        '450px': '450px',
+        '550px': '550px'
+      },
+      flex: {
+        '2': '2 2 0%'
+      }
     },
   },
   plugins: [],
