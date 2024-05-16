@@ -817,6 +817,10 @@ video {
   }
 }
 
+.otsb-rtl {
+  direction: rtl;
+}
+
 .otsb-ltr {
   direction: ltr;
 }
