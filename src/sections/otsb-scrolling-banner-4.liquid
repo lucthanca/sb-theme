@@ -1,0 +1,1073 @@
+{% liquid 
+  assign num_loop = 20
+  if section.blocks.size > 3
+    assign num_loop = 10
+  endif
+  if section.blocks.size > 8
+    assign num_loop = 6
+  endif
+  assign duration = section.settings.speed | times: num_loop
+%}
+{% style %}
+  .section-{{ section.id }} {
+    --duration : {{ duration }}s;
+    --direction: {% if section.settings.direction == 'left' %}reverse{% else %}normal{% endif %};
+    {%- unless section.settings.color_text_light.alpha == 0.0 -%}
+      --colors-text: {{ section.settings.color_text_light.red }},{{ section.settings.color_text_light.green }},{{ section.settings.color_text_light.blue }};
+    {% endunless %}
+  }
+  .dark .section-{{ section.id }} {
+    {%- unless section.settings.color_text_dark.alpha == 0.0 -%}
+      --colors-text: {{ section.settings.color_text_dark.red }},{{ section.settings.color_text_dark.green }},{{ section.settings.color_text_dark.blue }};
+    {% else %}  
+      --colors-text: transparent;
+    {% endunless %}
+  }  
+  .section-{{ section.id }} .text-color-secondary {
+    {%- unless section.settings.color_text_light_2.alpha == 0.0 -%}
+      color: {{ section.settings.color_text_light_2 }};
+    {% else %}
+      color: #898989;
+    {% endunless %}
+  }
+  .dark .section-{{ section.id }} .text-color-secondary {
+    {%- unless section.settings.color_text_dark_2.alpha == 0.0 -%}
+      color: {{ section.settings.color_text_dark_2 }};
+    {% else %}
+      color: #ffffff;
+    {% endunless %}
+  }
+  {% if section.settings.pause_hover %}
+    .section-{{ section.id }}:hover .el_animate {
+      animation-play-state: paused;
+    }
+  {% endif %}
+  .space-blocks-{{ section.id }} {
+    padding-inline-end: {{ section.settings.space_block_mobile }}px;
+  }
+  .bg-{{ section.id }} {
+    background: {{ section.settings.bg_light }};
+  }
+  .dark .bg-{{ section.id }} {
+    {% if section.settings.bg_dark == blank %}
+      background: transparent;
+    {% else %}
+      background: {{ section.settings.bg_dark }};
+    {% endif %}
+  }
+  @media (min-width: 767px){
+    .space-blocks-{{ section.id }} {
+      padding-inline-end: {{ section.settings.space_block }}px;
+    }
+  }
+{% endstyle %}
+{% for block in section.blocks %}
+  {%- case block.type -%}
+    {%- when 'icon' -%}
+      {% style %}
+        .icon-{{ block.id }} {
+          width: {{ block.settings.height_icon | times: 0.7 }}px;
+          height: {{ block.settings.height_icon | times: 0.7 }}px;
+        }
+        .space-block-{{ block.id }} {
+          margin-left: {{ block.settings.spacing_left_mobile }}px;
+          margin-right: {{ block.settings.spacing_right_mobile }}px;
+        }
+        @media (min-width: 767px) {
+          .icon-{{ block.id }} {
+            width: {{ block.settings.height_icon }}px;
+            height: {{ block.settings.height_icon }}px;
+          }
+          .space-block-{{ block.id }} {
+            margin-left: {{ block.settings.spacing_left }}px;
+            margin-right: {{ block.settings.spacing_right }}px;
+          }
+        }
+      {% endstyle %}
+    {%- when 'image' -%}
+      {% if block.settings.image != blank %}
+        {% liquid
+          assign w_img = block.settings.image.aspect_ratio | times: block.settings.height_image
+        %}
+        {% style %}
+          .img-{{ block.id }} {
+            width: {{ w_img }}px;
+            height: {{ block.settings.height_image }}px;
+          }
+          .space-block-{{ block.id }} {
+            margin-left: {{ block.settings.spacing_left_mobile }}px;
+            margin-right: {{ block.settings.spacing_right_mobile }}px;
+          }
+          @media (min-width: 767px) {
+            .space-block-{{ block.id }} {
+              margin-left: {{ block.settings.spacing_left }}px;
+              margin-right: {{ block.settings.spacing_right }}px;
+            }
+          }
+        {% endstyle %}
+      {% endif %}
+    {%- when 'text' -%}
+      {% if block.settings.text != blank %}
+        {%- liquid
+          assign base_size = 100 | times: 0.00875
+          assign font_size = block.settings.text_size | times: 0.01 | times: base_size
+        -%}
+        {%- style -%}
+          .text--{{ block.id }} {
+            font-size:{{ font_size | times: 0.9 }}rem; 
+          }
+          .space-block-{{ block.id }} {
+            margin-left: {{ block.settings.spacing_left_mobile }}px;
+            margin-right: {{ block.settings.spacing_right_mobile }}px;
+          }
+          @media (min-width: 767px){
+            .text--{{ block.id }} {
+              font-size: {{ font_size }}rem;
+            }
+            .space-block-{{ block.id }} {
+              margin-left: {{ block.settings.spacing_left }}px;
+              margin-right: {{ block.settings.spacing_right }}px;
+            }
+          }
+        {%- endstyle -%}
+      {% endif %}
+    {%- when 'button' -%}
+      {% style %}
+        .button--{{ block.id }}.otsb-button-solid,
+        .button--{{ block.id }}.otsb-button-solid:before { 
+          {%- unless block.settings.color_button.alpha == 0.0 -%}
+            --colors-line-and-border: {{ block.settings.color_button.red }}, {{ block.settings.color_button.green }}, {{ block.settings.color_button.blue }};
+            --colors-button: {{ block.settings.color_button.red }}, {{ block.settings.color_button.green }}, {{ block.settings.color_button.blue }};
+          {%- else -%}
+            --colors-line-and-border: var(--colors-button);
+          {%- endunless -%}
+          {%- unless block.settings.color_button_hover.alpha == 0.0 -%}
+            --colors-button-hover: rgb({{ block.settings.color_button_hover.red }}, {{ block.settings.color_button_hover.green }}, {{ block.settings.color_button_hover.blue }});
+          {%- endunless -%}
+          {%- unless block.settings.color_text_button.alpha == 0.0 -%}
+            --colors-button-text: {{ block.settings.color_text_button.red }}, {{ block.settings.color_text_button.green }}, {{ block.settings.color_text_button.blue }};
+          {%- endunless -%}
+          {%- unless block.settings.color_text_button_hover.alpha == 0.0 -%}
+            --colors-button-text-hover: {{ block.settings.color_text_button_hover.red }}, {{ block.settings.color_text_button_hover.green }}, {{ block.settings.color_text_button_hover.blue }};
+          {%- endunless -%}
+        }
+        .button--{{ block.id }}.otsb-button-outline {
+          {%- if block.settings.secondary_button_text.alpha != 0.0 -%} 
+            --colors-secondary-button: {{ block.settings.secondary_button_text.red }}, {{ block.settings.secondary_button_text.green }}, {{ block.settings.secondary_button_text.blue }}; 
+            --colors-line-secondary-button: {{ block.settings.secondary_button_text.red }}, {{ block.settings.secondary_button_text.green }}, {{ block.settings.secondary_button_text.blue }}; 
+            --background-secondary-button: transparent;
+          {% endif %}
+          {%- if block.settings.color_button_secondary.alpha != 0.0 -%} 
+            --background-secondary-button: {{ block.settings.color_button_secondary.red }}, {{ block.settings.color_button_secondary.green }}, {{ block.settings.color_button_secondary.blue }}; 
+            --colors-line-secondary-button: {{ block.settings.color_button_secondary.red }}, {{ block.settings.color_button_secondary.green }}, {{ block.settings.color_button_secondary.blue }}; 
+          {% endif %}
+        }
+        .space-block-{{ block.id }} {
+          margin-left: {{ block.settings.spacing_left_mobile }}px;
+          margin-right: {{ block.settings.spacing_right_mobile }}px;
+        }
+        @media (min-width: 767px) {
+          .space-block-{{ block.id }} {
+            margin-left: {{ block.settings.spacing_left }}px;
+            margin-right: {{ block.settings.spacing_right }}px;
+          }
+        }
+      {% endstyle %}
+  {% endcase %}
+{% endfor %}
+{% capture content %}
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when 'icon' -%}
+        <div class="space-blocks-{{ section.id }} space-block-{{ block.id }} flex whitespace-nowrap">
+          <span class="inline-block icon-{{ block.id }}">
+            {% if block.settings.custom_icon == blank %}
+              {% render 'otsb-icon-labels-bags', icon: block.settings.icon %}
+            {% else %}
+              {{ block.settings.custom_icon }}
+            {% endif %}
+          </span>
+        </div>
+      {%- when 'image' -%}
+        {% liquid
+          assign w_img = block.settings.image.aspect_ratio | times: block.settings.height_image
+        %}
+        <div class="h-full w-max flex items-center space-blocks-{{ section.id }} space-block-{{ block.id }} whitespace-nowrap">
+          <div class="img-{{ block.id }} overflow-hidden relative{% if settings.edges_type == 'rounded_corners' %} rounded-[10px]{% endif %}">
+            {% if block.settings.image != blank %}
+              <img
+                class="w-full h-full absolute top-0 left-0"
+                src="{{ block.settings.image | image_url: width: w_img }}"
+                alt="{{ block.settings.image.alt | escape }}"
+                loading="lazy"  
+                width="{{ w_img }}"
+                height="{{ block.settings.height_image }}"
+              >
+            {% else %}
+              {% style %}
+                .image-block-{{ block.id }} {
+                  height: {{  block.settings.height_image }}px;
+                }
+              {% endstyle %}
+              {% assign class = 'w-[120px] bg-[#C9C9C9] text-[#acacac] image-block-' | append: block.id %}
+              {{ 'image' | placeholder_svg_tag: class }}
+            {% endif %}
+          </div>
+        </div>
+      {%- when 'text' -%}
+        {% if block.settings.text != blank %}
+          <div class="min-w-max space-blocks-{{ section.id }} space-block-{{ block.id }} whitespace-nowrap text-color-{{ block.settings.text_color }}">
+            <p class="empty:otsb-hidden text--{{ block.id }} font-medium">{{ block.settings.text | escape }}</p>
+          </div>
+        {% endif %}
+      {%- when 'button' -%}
+        {% if block.settings.button_label != blank %}
+          <div class="min-w-max space-blocks-{{ section.id }} space-block-{{ block.id }} whitespace-nowrap">
+            {%- if block.settings.button_link != blank -%}
+              <a 
+                href="{{ block.settings.button_link }}"
+                class="disable-effect" 
+                tabindex="-1"
+                {% if block.settings.open_new_window %}target="_blank"{% endif %}
+              >
+            {%- endif -%}
+              <div class="otsb-button button--{{ block.id }}{% if block.settings.primary_button %} otsb-button-solid{% else %} otsb-button-outline{% endif %} empty:otsb-hidden leading-normal text-center mt-1 mb-1 lg:mt-0 lg:mb-0 lg:ml-0 lg:mr-0 h-full pl-7 pr-7 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3{% unless block.settings.button_link != blank %} opacity-70 hover:cursor-not-allowed{% endunless %}">
+                {% render 'otsb-button-label', button_label: block.settings.button_label, show_button_primary: block.settings.primary_button %}
+              </div>
+            {%- if block.settings.button_link != blank -%}
+              </a>
+            {%- endif -%}
+          </div>
+        {% endif %}
+    {% endcase %}
+  {% endfor %}
+{% endcapture %}
+
+<div x-data x-intersect.once.margin.200px="$store.xScrollPromotion.load($el)" class="bg-{{ section.id }} text-[rgb(var(--colors-text))] section-{{ section.id }}{% if section.settings.show_border %} border-y border-solid{% endif %} pb-[{{ section.settings.padding_bottom_mobile }}px] pt-[{{ section.settings.padding_top_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px] md:pt-[{{ section.settings.padding_top }}px] ltr">
+  <div class="w-full overflow-hidden">
+    <div class="flex flex-nowrap whitespace-nowrap min-w-full">
+      {% for i in (1..2) %}
+        <div class="flex shrink-0 min-w-full whitespace-nowrap items-center el_animate">
+          {% for i in (1..num_loop) %}
+            {{ content }}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+  requestAnimationFrame(() => {
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('xScrollPromotion', {
+        load(el) {
+          let scroll = el.getElementsByClassName('el_animate');
+          for (let i = 0; i < scroll.length; i++) {
+            scroll[i].classList.add('animate-scroll-banner');
+          }
+        }
+      });
+    })
+  });
+</script>
+
+{% schema %}
+{
+  "name": "OT - Scroll promotion #4",
+  "class": "section section-scroll-banner x-section",
+  "tag": "section",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_border",
+      "default": true,
+      "label": "Show section borders"
+    },
+    {
+      "type": "header",
+      "content": "Scrolling"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 6,
+      "max": 50,
+      "step": 2,
+      "unit": "s",
+      "label": "Speed",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "direction",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left to right"
+        },
+        {
+          "value": "right",
+          "label": "Right to left"
+        }
+      ],
+      "default": "right",
+      "label": "Direction"
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_hover",
+      "default": true,
+      "label": "Pause on hover"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "bg_light",
+      "label": "Background color (light)",
+      "default": "rgb(242, 242, 242)"
+    },
+    {
+      "type": "color",
+      "id": "color_text_light",
+      "label": "Primary text color (light)",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "color_text_light_2",
+      "label": "Secondary text color (light)",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "bg_dark",
+      "label": "Background color (dark)",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "color_text_dark",
+      "label": "Primary text color (dark)",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "color_text_dark_2",
+      "label": "Secondary text color (dark)",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "header",
+      "content": "Desktop layout"
+    },
+    {
+      "type": "range",
+      "id": "space_block",
+      "min": 10,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Block spacing",
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Mobile layout"
+    },
+    {
+      "type": "range",
+      "id": "space_block_mobile",
+      "min": 10,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Block spacing",
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 12
+    }
+  ],
+  "max_blocks": 16,
+  "blocks": [
+    {
+      "type": "icon",
+      "name": "Icon",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "options": [
+            {
+              "value": "activity",
+              "label": "Activity"
+            },
+            {
+              "value": "archive",
+              "label": "Archive"
+            },
+            {
+              "value": "arrow-down-cricle",
+              "label": "Arrow down circle"
+            },
+            {
+              "value": "arrow-left",
+              "label": "Arrow left"
+            },
+            {
+              "value": "arrow-left-circle",
+              "label": "Arrow left circle"
+            },
+            {
+              "value": "arrow-right",
+              "label": "Arrow right"
+            },
+            {
+              "value": "arrow-right-circle",
+              "label": "Arrow right circle"
+            },
+            {
+              "value": "arrow-up-circle",
+              "label": "Arrow up circle"
+            },
+            {
+              "value": "chevron-left",
+              "label": "Chevron left"
+            },
+            {
+              "value": "trending-down",
+              "label": "Trending down"
+            },
+            {
+              "value": "tv",
+              "label": "TV"
+            },
+            {
+              "value": "trending-up",
+              "label": "Trending up"
+            },
+            {
+              "value": "zap",
+              "label": "Zap"
+            },
+            {
+              "value": "1st-medal",
+              "label": "1st medal"
+            },
+            {
+              "value": "award",
+              "label": "Award"
+            },
+            {
+              "value": "bicycle",
+              "label": "Bicycle"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "briefcase",
+              "label": "Briefcase"
+            },
+            {
+              "value": "calendar",
+              "label": "Calendar"
+            },
+            {
+              "value": "camera",
+              "label": "Camera"
+            },
+            {
+              "value": "chat-bubble",
+              "label": "Chat bubble"
+            },
+            {
+              "value": "check-mark",
+              "label": "Check mark"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "cloud-rain",
+              "label": "Cloud rain"
+            },
+            {
+              "value": "coffee",
+              "label": "Coffee"
+            },
+            {
+              "value": "coin",
+              "label": "Coin"
+            },
+            {
+              "value": "credit-card",
+              "label": "Credit card"
+            },
+            {
+              "value": "delivery-truck",
+              "label": "Delivery truck"
+            },
+            {
+              "value": "dollar-sign",
+              "label": "Dollar sign"
+            },
+            {
+              "value": "earth",
+              "label": "Earth"
+            },
+            {
+              "value": "eye",
+              "label": "Eye"
+            },
+            {
+              "value": "feather",
+              "label": "Feather"
+            },
+            {
+              "value": "fire",
+              "label": "Fire"
+            },
+            {
+              "value": "flower",
+              "label": "Flower"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "globe",
+              "label": "Globe"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "iron",
+              "label": "Iron"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "map-pin",
+              "label": "Map pin"
+            },
+            {
+              "value": "megaphone",
+              "label": "Megaphone"
+            },
+            {
+              "value": "message-text",
+              "label": "Message text"
+            },
+            {
+              "value": "music",
+              "label": "Music"
+            },
+            {
+              "value": "packages",
+              "label": "Packages"
+            },
+            {
+              "value": "pants",
+              "label": "Pants"
+            },
+            {
+              "value": "percent",
+              "label": "Percent"
+            },
+            {
+              "value": "piggy-bank",
+              "label": "Piggy bank"
+            },
+            {
+              "value": "plane",
+              "label": "Plane"
+            },
+            {
+              "value": "planet",
+              "label": "Planet"
+            },
+            {
+              "value": "question-mark",
+              "label": "Question mark"
+            },
+            {
+              "value": "rocket",
+              "label": "Rocket"
+            },
+            {
+              "value": "rules",
+              "label": "Rules"
+            },
+            {
+              "value": "scissors",
+              "label": "Scissors"
+            },
+            {
+              "value": "settings",
+              "label": "Settings"
+            },
+            {
+              "value": "shirt",
+              "label": "Shirt"
+            },
+            {
+              "value": "shop-alt",
+              "label": "Shop"
+            },
+            {
+              "value": "shopping-bag",
+              "label": "Shopping bag"
+            },
+            {
+              "value": "shopping-cart",
+              "label": "Shopping cart"
+            },
+            {
+              "value": "smile",
+              "label": "Smile"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "sun",
+              "label": "Sun"
+            },
+            {
+              "value": "tag",
+              "label": "Tag"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "wallet",
+              "label": "Wallet"
+            },
+            {
+              "value": "washing",
+              "label": "Washing"
+            },
+            {
+              "value": "yoga",
+              "label": "Yoga"
+            }
+          ],
+          "default": "zap",
+          "label": "Icon"
+        },
+        {
+          "type": "html",
+          "id": "custom_icon",
+          "label": "Custom icon (SVG code)",
+          "info": "For assistance with custom SVG code or fixing issues that arise from custom SVG code, please [contact our support](https://support.bsscommerce.com/support/tickets/new)."
+        },
+        {
+          "type": "range",
+          "id": "height_icon",
+          "min": 20,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Icon height",
+          "default": 35
+        },
+        {
+          "type": "header",
+          "content": "Desktop layout"
+        },
+        {
+          "type": "range",
+          "id": "spacing_left",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Left spacing",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "spacing_right",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Right spacing",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Mobile layout"
+        },
+        {
+          "type": "range",
+          "id": "spacing_left_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Left spacing",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "spacing_right_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Right spacing",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "default": "NEW ARRIVALS",
+          "label": "Text"
+        },
+        {
+          "type": "range",
+          "id": "text_size",
+          "min": 50,
+          "max": 200,
+          "unit": "%",
+          "step": 10,
+          "default": 150,
+          "label": "Text size"
+        },
+        {
+          "type": "radio",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "primary",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary color"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary color"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Desktop layout"
+        },
+        {
+          "type": "range",
+          "id": "spacing_left",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Left spacing",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "spacing_right",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Right spacing",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Mobile layout"
+        },
+        {
+          "type": "range",
+          "id": "spacing_left_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Left spacing",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "spacing_right_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Right spacing",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "range",
+          "id": "height_image",
+          "min": 20,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Image height",
+          "default": 80
+        },
+        {
+          "type": "header",
+          "content": "Desktop layout"
+        },
+        {
+          "type": "range",
+          "id": "spacing_left",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Left spacing",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "spacing_right",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Right spacing",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Mobile layout"
+        },
+        {
+          "type": "range",
+          "id": "spacing_left_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Left spacing",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "spacing_right_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Right spacing",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Discover More",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_new_window",
+          "default": false,
+          "label": "Open this link in a new window"
+        },
+        {
+          "type": "checkbox",
+          "id": "primary_button",
+          "default": true,
+          "label": "Show as primary button"
+        },
+        {
+          "type": "color",
+          "id": "color_button",
+          "label": "Button color",
+          "default": "rgb(249, 111, 150)"
+        },
+        {
+          "type": "color",
+          "id": "color_button_hover",
+          "label": "Button hover color",
+          "default": "#F97FA2"
+        },
+        {
+          "type": "color",
+          "id": "color_text_button",
+          "label": "Button text color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "color_text_button_hover",
+          "label": "Button text hover color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "color_button_secondary",
+          "label": "Secondary button color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "secondary_button_text",
+          "default": "rgba(0,0,0,0)",
+          "label": "Secondary button text color"
+        },
+        {
+          "type": "header",
+          "content": "Desktop layout"
+        },
+        {
+          "type": "range",
+          "id": "spacing_left",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Left spacing",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "spacing_right",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Right spacing",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Mobile layout"
+        },
+        {
+          "type": "range",
+          "id": "spacing_left_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Left spacing",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "spacing_right_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Right spacing",
+          "default": 0
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "OT - Scrolling promotion #4",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

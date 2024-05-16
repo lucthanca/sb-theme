@@ -1119,3 +1119,7 @@ button.otsb-button-solid,
 .border-\[rgba\(var\(--colors-heading\)\)\] {
   border-color: rgba(var(--colors-heading, 0, 0, 0))
 }
+
+.animate-scroll-banner {
+  animation: scrollX var(--duration, 10s) linear infinite var(--play-state, running) var(--direction);
+}

@@ -21,7 +21,17 @@ module.exports = {
       },
       flex: {
         '2': '2 2 0%'
-      }
+      },
+      keyframes: theme => ({
+        scrollX: {
+          '0%': {
+            transform: 'translateX(0%)'
+          },
+          '100%': {
+            transform: 'translateX(-100%)'
+          } 
+        },
+      }),
     },
   },
   plugins: [],
