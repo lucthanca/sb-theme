@@ -254,7 +254,7 @@
 <div class="pt-[{{ section.settings.padding_top_mobile }}px] md:pt-[{{ section.settings.padding_top }}px] pb-[{{ section.settings.padding_bottom_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px]">
   {%- unless section.settings.heading == blank -%}
     <div class="text-center mb-5{% unless section.settings.heading_alignment contains 'center' %} flex items-center{% endunless %} otsb-heading-{{ section.settings.heading_alignment }} pr-5 pl-5{% unless section.settings.full_width %} otsb-page-width{% endunless %}">
-      <{{ section.settings.heading_tag }} class="heading--{{ section.id }} otsb-section-header h2 block leading-tight flex-auto otsb-p-break-words">
+      <{{ section.settings.heading_tag }} class="heading--{{ section.id }} otsb-section-header otsb-h2 block leading-tight flex-auto otsb-p-break-words">
         {{- section.settings.heading | escape -}}
       </{{ section.settings.heading_tag }}>
       {%- if section.settings.show_view_all -%}
