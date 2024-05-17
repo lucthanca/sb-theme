@@ -309,6 +309,12 @@
       <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
     </ul>
 
+    {%- if request.design_mode -%}
+      <!--<script src="{{ 'theme-editor-alpine-custom.js' | asset_url }}" defer></script>-->
+      <!--<script src="{{ 'theme-editor.js' | asset_url }}" defer></script>-->
+    {%- endif -%}
+    <!--<script src="{{ 'theme.js' | asset_url }}" defer></script>-->
+
     <script>
       window.shopUrl = '{{ request.origin }}';
       window.routes = {

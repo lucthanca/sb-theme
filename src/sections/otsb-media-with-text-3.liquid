@@ -1,0 +1,928 @@
+<script>
+    requestAnimationFrame(() => {
+      document.addEventListener('alpine:init', () => {
+        Alpine.data('xParallax', () => ({
+          debounce(func, wait) {
+            var timeout;
+            return function() {
+                var context = this, args = arguments;
+                var later = function() {
+                  timeout = null;
+                  func.apply(context, args);
+                };
+              clearTimeout(timeout);
+              timeout = setTimeout(later, wait);
+            };
+          },
+          load(disable) {
+            if (disable) return;
+    
+            if ("IntersectionObserver" in window && 'IntersectionObserverEntry' in window) {
+              const observerOptions = {
+                root: null,
+                rootMargin: '0px 0px',
+                threshold: 0
+              };
+    
+              var observer = new IntersectionObserver(handleIntersect, observerOptions);
+              var el;
+              function handleIntersect(entries) {
+                entries.forEach(function(entry) {
+                  if (entry.isIntersecting) {
+                    el = entry.target;
+                    window.addEventListener('scroll', parallax, {passive: true, capture: false});
+                  } else {
+                    window.removeEventListener('scroll', parallax, {passive: true, capture: false});
+                  }
+                });
+              }
+    
+              observer.observe(this.$el);
+              
+              var parallax = this.debounce(function() {
+                var rect = el.getBoundingClientRect();
+                var speed = (window.innerHeight / el.parentElement.offsetHeight) * 20;
+                var shiftDistance = (rect.top - window.innerHeight) / speed;
+                var maxShiftDistance = el.parentElement.offsetHeight / 11;
+                
+                if (shiftDistance < -maxShiftDistance || shiftDistance > maxShiftDistance) {
+                  shiftDistance = -maxShiftDistance;
+                }
+                
+                el.style.transform = 'translate3d(0, '+ shiftDistance +'px, 0)';
+              }, 10);
+            }
+          }
+        }));
+      });
+    });
+  </script>
+  
+  {%-liquid
+      if section.settings.desktop_image_width == "medium"
+        assign iwt_content = "md:w-1/2"
+        assign iwt_image = "md:w-1/2"
+      else
+        assign iwt_content = "md:w-1/3"
+        assign iwt_image = "md:w-2/3"
+      endif
+      assign border_image = section.settings.image_corner_radius | minus: 1
+      
+      assign video_alt = section.settings.video_alt_text
+      if section.settings.video_url.type == 'youtube'
+        assign video_type = 'youtube'
+        assign video_id = section.settings.video_url.id
+      endif
+      if section.settings.video_url.type == 'vimeo'
+        assign video_type = 'vimeo'
+        assign video_id = section.settings.video_url.id
+      endif
+     
+      if section.settings.video != null 
+        assign video_type = 'video_select'
+      endif 
+      if section.settings.image != blank 
+        assign cover_img = section.settings.image
+      endif
+      if  section.settings.image == blank and section.settings.image_second != blank 
+        assign cover_img = section.settings.image_second
+      endif
+    -%}
+    {%- style -%}
+      .iwt--{{ section.id }} {
+        {% if section.settings.background_color_light.alpha != 0.0 %}
+          background: {{ section.settings.background_color_light }};
+        {% else %}
+          background: rgb(var(--colors-background-secondary, 246, 246, 246));
+        {% endif %}
+      }
+      .dark .iwt--{{ section.id }} {
+        {% if section.settings.background_color_dark.alpha != 0.0 %}
+          background: {{ section.settings.background_color_dark }};
+        {% else %}
+          background: rgb(var(--colors-background-secondary, 246, 246, 246));
+        {% endif %}
+      }
+      {%- if section.settings.image != blank -%} 
+        .mobile-{{ section.id }}-natural {
+          padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%; 
+        }
+      {%- endif -%}
+      .border-radius-{{ section.id }} {
+          border-radius: {{ border_image }}px;
+      }
+      @media screen and (min-width: 768px) {
+        {%- if section.settings.image != blank -%} 
+          .desktop-{{ section.id }}-natural {
+            padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%; 
+          } 
+        {%- endif -%}
+      }
+    {%- endstyle -%}
+    <div class="otsb-ltr pt-[{{ section.settings.top_padding_mobile }}px] md:pt-[{{ section.settings.top_padding }}px] pb-[{{ section.settings.bottom_padding_mobile }}px] md:pb-[{{ section.settings.bottom_padding }}px]{% if section.settings.full_width %} md:pl-0 md:pr-0{% else %} otsb-page-width{% endif %}{% if section.settings.full_width_mobile %} otsb-full-width-mobile{% else %} pr-5 pl-5{% endif %}">
+      <div 
+        class="otsb-image-with-text text-[rgb(var(--colors-text))] otsb-desktop-{{ section.settings.desktop_image_width }} otsb-image-position-mobile-{{ section.settings.image_alignment_mobile }} otsb-image-position-{{ section.settings.image_alignment }} border-radius-{{ section.id }} {{ section.settings.image_layout }}{% if section.settings.content_layout != "overlap" %} iwt--{{ section.id }}{% endif %}"
+      >
+        {% if video_type %}
+          <div class="otsb-iwt-image {{ iwt_image }} promotion w-full flex items-center{% if section.settings.content_layout == "overlap" %} self-{{ section.settings.text_position }}{% endif %}">
+            <div class="relative h-0 w-full pb-[56.25%]">
+              <div class="absolute top-0 left-0 w-full h-full flex items-center"> 
+        {% else %}
+          <div class="otsb-iwt-image {{ iwt_image }} promotion w-full flex{% if section.settings.content_layout == "overlap" %} self-{{ section.settings.text_position }}{% endif %}">
+            <div class="promotion w-full relative md:h-auto min-h-[100%]{% if section.settings.desktop_height == "natural" %}{% if section.settings.image != blank %} md:h-0 desktop-{{ section.id }}-natural{% else %} md:promotion:h-[650px]{% endif %}{% else %} md:promotion:h-[{{ section.settings.desktop_height }}] md:promotion:pb-0{% endif %}
+              {% if section.settings.mobile_height == "natural" %}{% if section.settings.image != blank %} h-0 mobile-{{ section.id }}-natural{% else %} h-[550px]{% endif %}{% else %} h-[{{ section.settings.mobile_height }}] md:h-auto{% endif %}">
+              <div class="flex w-full h-full{% if section.settings.spacing_image %} gap-x-1{% endif %}{% if section.settings.mobile_height == 'natural' %} absolute top-0 left-0 bottom-0{% else %} relative{% endif %}{% if section.settings.desktop_height == "natural" %} md:absolute md:top-0 md:left-0 md:bottom-0{% else %} md:promotion:relative{% endif %}">
+          {% endif %}
+              {% if video_type %}
+                <div class="relative otsb-external-video h-full w-full rounded-none overflow-hidden{% if section.settings.enable_video_autoplay %} otsb-video-hero{% endif %}" 
+                  x-intersect:leave="$store.xVideo.pause($el)"
+                  {% if section.settings.enable_video_autoplay %}
+                  x-intersect="$store.xVideo.play($el)"
+                  {% endif %}
+                >
+                  {%- render 'otsb-media-video', 
+                    enable_video_autoplay: section.settings.enable_video_autoplay,
+                    video_type: video_type,
+                    video_id: video_id,
+                    video_alt: video_alt,
+                    video: section.settings.video,
+                    columns_desktop: 2,
+                    cover_image: cover_img
+                  -%}
+                </div>
+              {% else %}
+                {% if section.settings.image != blank %}
+                  <div class="border-radius-{{ section.id }} w-full overflow-hidden{% if section.settings.image_layout == "stacked" and section.settings.image_second != blank %} h-[calc(100%-2rem)] md:h-[calc(100%-5rem)]{% else %} h-full{% endif %}">
+                    <parallax-image class="block h-full w-full">
+                      <parallax-movement x-data="xParallax" x-intersect.once.margin.200px="load({{ settings.disable_parallax_effect }})">
+                        <img
+                          class="h-full w-full object-cover border-radius-{{ section.id }}"
+                          srcset="{{ section.settings.image | image_url: width: 450 }} 450w,
+                          {{ section.settings.image | image_url: width: 750 }} 750w,
+                          {{ section.settings.image | image_url: width: 900 }} 900w,
+                          {{ section.settings.image | image_url: width: 1100 }} 1100w,
+                          {{ section.settings.image | image_url: width: 1500 }} 1500w,
+                          {{ section.settings.image | image_url }} {{ section.settings.image.width }}w"
+                          src="{{ section.settings.image | image_url: width: 1500 }}"
+                          alt="{{ section.settings.image.alt | escape }}"
+                          loading="lazy"
+                          sizes="(min-width: 1024px){% if section.settings.full_width %} 50vw{% else %} {{ settings.page_width | divided_by: 2 }}px{% endif %}, (min-width: 768px) 50vw, 100vw"
+                          width="{{ section.settings.image.width }}"
+                          height="{{ section.settings.image.height }}"
+                          style="object-position: {{ section.settings.image.presentation.focal_point }}"
+                        >
+                      </parallax-movement>
+                    </parallax-image>
+                  </div>
+                {% endif %}
+                {% if section.settings.image_second != blank %}
+                  <div class="border-radius-{{ section.id }} h-full w-full overflow-hidden{% if section.settings.image_layout == "stacked" and section.settings.image != blank %} mt-8 md:mt-20 h-[calc(100%-2rem)] md:h-[calc(100%-5rem)]{% else %} h-full{% endif %}">
+                    <parallax-image class="block h-full w-full">
+                      <parallax-movement x-data="xParallax" x-intersect.once.margin.200px="load({{ settings.disable_parallax_effect }})">
+                        <img
+                          class="h-full w-full object-cover border-radius-{{ section.id }}"
+                          srcset="{{ section.settings.image_second | image_url: width: 450 }} 450w,
+                          {{ section.settings.image_second | image_url: width: 750 }} 750w,
+                          {{ section.settings.image_second | image_url: width: 900 }} 900w,
+                          {{ section.settings.image_second | image_url: width: 1100 }} 1100w,
+                          {{ section.settings.image_second | image_url: width: 1500 }} 1500w,
+                          {{ section.settings.image_second | image_url }} {{ section.settings.image_second.width }}w"
+                          src="{{ section.settings.image_second | image_url: width: 1500 }}"
+                          alt="{{ section.settings.image_second.alt | escape }}"
+                          loading="lazy"
+                          sizes="(min-width: 1024px){% if section.settings.full_width %} 50vw{% else %} {{ settings.page_width | divided_by: 2 }}px{% endif %}, (min-width: 768px) 50vw, 100vw"
+                          width="{{ section.settings.image_second.width }}"
+                          height="{{ section.settings.image_second.height }}"
+                          style="object-position: {{ section.settings.image_second.presentation.focal_point }}"
+                        >
+                      </parallax-movement>
+                    </parallax-image>
+                  </div>
+                {% endif %}
+                {% if section.settings.image == blank and section.settings.image_second == blank %}
+                      {{ 'image' | placeholder_svg_tag: 'absolute w-full h-full bg-[#C9C9C9] text-[#acacac] otsb-rounded-svg' }}
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="{{ iwt_content }} w-full flex justify-center md:justify-start{% if section.settings.content_layout == "overlap" %} self-{{ section.settings.text_position }}{% else %} items-{{ section.settings.text_position }}{% endif %}{% if section.settings.image_alignment == "right" %} md:justify-end{% endif %} otsb-iwt-content-{{ section.settings.content_layout }}">
+          <div class="otsb-iwt-content otsb-iwt-{{ section.settings.content_layout }}{% unless section.settings.full_width %} md:flex-1{% endunless %}{% if section.settings.content_layout == "overlap" %} iwt--{{ section.id }} border-radius-{{ section.id }} w-11/12 md:w-full xl:w-11/12 md:max-w-2xl lg:pl-20 lg:pr-20{% else %} w-full md:max-w-xl{% endif %}">
+            {%- for block in section.blocks -%}
+              {% case block.type %}
+                {%- when 'heading' -%}
+                  {%- liquid
+                    if settings.heading_base_size != blank
+                      assign base_size_heading = settings.heading_base_size | times: 0.0225
+                    else
+                      assign base_size_heading = 100 | times: 0.0225
+                    endif
+                    assign size_heading = block.settings.heading_base_size | times: 0.01 | times: base_size_heading
+                    assign size_heading_mobile = size_heading | times: 0.6
+                  -%}
+                  {%- style -%}
+                    .heading-size--{{ block.id }} {
+                      font-size: {{ size_heading_mobile }}rem;
+                    }
+                    .color-text-{{ block.id }} {
+                      {% if block.settings.heading_light.alpha != 0.0 %}
+                        --colors-heading: {{ block.settings.heading_light.red }}, {{ block.settings.heading_light.green }}, {{ block.settings.heading_light.blue }};
+                      {% endif %}
+                      {% if block.settings.text_light.alpha != 0.0 %}
+                        --colors-text: {{ block.settings.text_light.red }}, {{ block.settings.text_light.green }}, {{ block.settings.text_light.blue }};
+                      {% endif %}
+                    }
+                    .dark .color-text-{{ block.id }} {
+                      {% if block.settings.heading_dark.alpha != 0.0 %}
+                        --colors-heading: {{ block.settings.heading_dark.red }}, {{ block.settings.heading_dark.green }}, {{ block.settings.heading_dark.blue }};
+                      {% else %}
+                        --colors-heading: var(--colors-heading-secondary);
+                      {% endif %}
+                      {% if block.settings.text_dark.alpha != 0.0 %}
+                        --colors-text: {{ block.settings.text_dark.red }}, {{ block.settings.text_dark.green }}, {{ block.settings.text_dark.blue }};
+                      {% else %}
+                        --colors-text: var(--colors-text-secondary);
+                      {% endif %}
+                    }
+                    @media (min-width: 768px) {
+                      .heading-size--{{ block.id }} {
+                        font-size: {{ size_heading }}rem;
+                      }
+                    }
+                  {%- endstyle -%}
+                  <div class="color-text-{{ block.id }} text-[rgb(var(--colors-text))] w-full mt-4 text-{{ section.settings.text_alignment }}"{{ block.shopify_attributes }}>
+                    {% if block.settings.subheading != blank %}
+                      <p class="font-medium">{{ block.settings.subheading | escape }}</p>
+                    {% endif %}
+                    {% if block.settings.heading != blank %}
+                      <{{ block.settings.heading_tag }} class="heading-size--{{ block.id }} otsb-h2 block mt-2 mb-1.5 md:mt-2.5 md:mb-3">
+                        {{ block.settings.heading | escape }}
+                      </{{ block.settings.heading_tag }}>
+                    {% endif %}
+                    {% if block.settings.text != blank %}
+                      <div class="otsb-rte">
+                        {{ block.settings.text }}
+                      </div>
+                    {% endif %}
+                  </div>
+                {%- when 'button' -%}
+                  {% if block.settings.button_label != blank %}
+                    {% style %}
+                      .button-{{ block.id }}, .button-{{ block.id }} *:before {
+                        {% if block.settings.button_light.alpha != 0.0 %}
+                          --colors-button: {{ block.settings.button_light.red }}, {{ block.settings.button_light.green }}, {{ block.settings.button_light.blue }};
+                        {% endif %}
+                        {% if block.settings.button_text_light.alpha != 0.0 %}
+                          --colors-button-text: {{ block.settings.button_text_light.red }}, {{ block.settings.button_text_light.green }}, {{ block.settings.button_text_light.blue }};
+                        {% endif %}
+                        {% if block.settings.button_hover_light.alpha != 0.0 %}
+                          --colors-button-hover: rgb({{ block.settings.button_hover_light.red }}, {{ block.settings.button_hover_light.green }}, {{ block.settings.button_hover_light.blue }});
+                        {% endif %}
+                        {% if block.settings.button_text_hover_light.alpha != 0.0 %}
+                          --colors-button-text-hover: {{ block.settings.button_text_hover_light.red }}, {{ block.settings.button_text_hover_light.green }}, {{ block.settings.button_text_hover_light.blue }};
+                        {% endif %}
+                        {% if block.settings.secondary_button_text_light.alpha != 0.0 %}
+                          --colors-secondary-button: {{ block.settings.secondary_button_text_light.red }}, {{ block.settings.secondary_button_text_light.green }}, {{ block.settings.secondary_button_text_light.blue }};
+                          --colors-line-secondary-button: {{ block.settings.secondary_button_text_light.red }}, {{ block.settings.secondary_button_text_light.green }}, {{ block.settings.secondary_button_text_light.blue }};
+                          --background-secondary-button: transparent;
+                        {% endif %}
+                        {% if block.settings.secondary_button_light.alpha != 0.0 %}
+                          --background-secondary-button: {{ block.settings.secondary_button_light.red }}, {{ block.settings.secondary_button_light.green }}, {{ block.settings.secondary_button_light.blue }};
+                          --colors-line-secondary-button: {{ block.settings.secondary_button_light.red }}, {{ block.settings.secondary_button_light.green }}, {{ block.settings.secondary_button_light.blue }};
+                        {% endif %}
+                      }
+                      .dark .button-{{ block.id }}, .dark .button-{{ block.id }} *:before {
+                        {% if block.settings.button_dark.alpha != 0.0 %}
+                          --colors-button: {{ block.settings.button_dark.red }}, {{ block.settings.button_dark.green }}, {{ block.settings.button_dark.blue }};
+                        {% else %}
+                          {% if settings.colors_dark_button.red != blank and settings.colors_dark_button.green != blank and settings.colors_dark_button.blue != blank %}
+                            --colors-button: {{ settings.colors_dark_button.red }}, {{ settings.colors_dark_button.green }}, {{ settings.colors_dark_button.blue }};
+                          {% else %}
+                            --colors-button: 255, 255, 255;
+                          {% endif %}
+                        {% endif %}
+                        {% if block.settings.button_text_dark.alpha != 0.0 %}
+                          --colors-button-text: {{ block.settings.button_text_dark.red }}, {{ block.settings.button_text_dark.green }}, {{ block.settings.button_text_dark.blue }};
+                        {% else %}
+                          {% if settings.colors_dark_button_text.red != blank and settings.colors_dark_button_text.green != blank and settings.colors_dark_button_text.blue != blank %}
+                            --colors-button-text: {{ settings.colors_dark_button_text.red }}, {{ settings.colors_dark_button_text.green }}, {{ settings.colors_dark_button_text.blue }};
+                          {% else %}
+                            --colors-button-text: 0, 0, 0;
+                          {% endif %}
+                        {% endif %}
+                        {% if block.settings.button_hover_dark.alpha != 0.0 %}
+                          --colors-button-hover: rgb({{ block.settings.button_hover_dark.red }}, {{ block.settings.button_hover_dark.green }}, {{ block.settings.button_hover_dark.blue }});
+                        {% else %}  
+                          {% if settings.colors_dark_button_hover.red != blank and settings.colors_dark_button_hover.green != blank and settings.colors_dark_button_hover.blue != blank %}
+                            --colors-button-hover: rgb({{ settings.colors_dark_button_hover.red }}, {{ settings.colors_dark_button_hover.green }}, {{ settings.colors_dark_button_hover.blue }});
+                          {% else %}
+                            --colors-button-hover: rgb(255, 102, 0);
+                          {% endif %}
+                        {% endif %}
+                        {% if block.settings.button_text_hover_dark.alpha != 0.0 %}
+                          --colors-button-text-hover: {{ block.settings.button_text_hover_dark.red }}, {{ block.settings.button_text_hover_dark.green }}, {{ block.settings.button_text_hover_dark.blue }};
+                        {% else %}
+                          {% if settings.colors_dark_button_text_hover.red != blank and settings.colors_dark_button_text_hover.green != blank and settings.colors_dark_button_text_hover.blue != blank %}
+                            --colors-button-text-hover: {{ settings.colors_dark_button_text_hover.red }}, {{ settings.colors_dark_button_text_hover.green }}, {{ settings.colors_dark_button_text_hover.blue }};
+                          {% else %}
+                            --colors-button-text-hover: 0, 0, 0;
+                          {% endif %}
+                        {% endif %}
+                        {% if block.settings.secondary_button_text_dark.alpha != 0.0 %}
+                          --colors-secondary-button: {{ block.settings.secondary_button_text_dark.red }}, {{ block.settings.secondary_button_text_dark.green }}, {{ block.settings.secondary_button_text_dark.blue }};
+                          --colors-line-secondary-button: {{ block.settings.secondary_button_text_dark.red }}, {{ block.settings.secondary_button_text_dark.green }}, {{ block.settings.secondary_button_text_dark.blue }};
+                          --background-secondary-button: transparent;
+                        {% else %}
+                          {% if settings.colors_dark_button_secondary.red != blank and settings.colors_dark_button_secondary.green != blank and settings.colors_dark_button_secondary.blue != blank %}  
+                          --colors-secondary-button: {{ settings.colors_dark_button_secondary.red }}, {{ settings.colors_dark_button_secondary.green }}, {{ settings.colors_dark_button_secondary.blue }};
+                          --colors-line-secondary-button: {{ settings.colors_dark_button_secondary.red }}, {{ settings.colors_dark_button_secondary.green }}, {{ settings.colors_dark_button_secondary.blue }};
+                          {% else %}
+                          --colors-secondary-button: 255, 255, 255;
+                          --colors-line-secondary-button: 255, 255, 255;
+                          {% endif %}
+                        {% endif %}
+                        {% if block.settings.secondary_button_dark.alpha != 0.0 %}
+                          --background-secondary-button: {{ block.settings.secondary_button_dark.red }}, {{ block.settings.secondary_button_dark.green }}, {{ block.settings.secondary_button_dark.blue }};
+                          --colors-line-secondary-button: {{ block.settings.secondary_button_dark.red }}, {{ block.settings.secondary_button_dark.green }}, {{ block.settings.secondary_button_dark.blue }};
+                        {% elsif settings.background_dark_button_secondary.alpha != 0.0 %}
+                          {% if settings.background_dark_button_secondary.red != blank and settings.background_dark_button_secondary.green != blank and settings.background_dark_button_secondary.blue != blank %}  
+                          --background-secondary-button: {{ settings.background_dark_button_secondary.red }}, {{ settings.background_dark_button_secondary.green }}, {{ settings.background_dark_button_secondary.blue }};
+                          --colors-line-secondary-button: {{ settings.background_dark_button_secondary.red }}, {{ settings.background_dark_button_secondary.green }}, {{ settings.background_dark_button_secondary.blue }};
+                          {% else %}
+                          --background-secondary-button: 42, 42,42;
+                          --colors-line-secondary-button: 42, 42, 42;
+                          {% endif %}
+                        {% else %}
+                          --background-secondary-button: transparent;
+                        {% endif %}
+                      }
+                    {% endstyle %}
+                    <div class="button-{{ block.id }} flex justify-{{ section.settings.text_alignment }} mt-4 mb-9 md:mt-8 md:mb-4"{{ block.shopify_attributes }}>
+                      {% if block.settings.button_link == blank %}
+                        <p class="otsb-button{% if block.settings.button_primary %} otsb-button-solid{% else %} otsb-button-outline{% endif %} leading-normal empty:otsb-hidden text-center pl-7 pr-7 pt-2.5 pb-2.5 md:pl-8 md:pr-8 md:pt-3 md:pb-3 opacity-70 hover:cursor-not-allowed">
+                          {% render 'otsb-button-label', button_label: block.settings.button_label, show_button_primary: block.settings.button_primary %}
+                        </p>
+                      {% else %}
+                        <a class="otsb-button{% if block.settings.button_primary %} otsb-button-solid{% else %} otsb-button-outline{% endif %} leading-normal empty:otsb-hidden text-center pl-7 pr-7 pt-2.5 pb-2.5 md:pl-8 md:pr-8 md:pt-3 md:pb-3" href="{{ block.settings.button_link }}"{% if block.settings.open_new_window %} target="_blank"{% endif %}>
+                          {% render 'otsb-button-label', button_label: block.settings.button_label, show_button_primary: block.settings.button_primary %}
+                        </a>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+              {% endcase %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% schema %}
+    {
+      "name": "OT - Media with text #3",
+      "class": "section section-image-with-text x-section",
+      "tag": "section",
+      "disabled_on": {
+        "groups": [
+          "header",
+          "footer",
+          "aside"
+        ]
+      },
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "First image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_second",
+          "label": "Second image"
+        },
+        {
+          "type": "header",
+          "content": "Shopify-hosted video"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "header",
+          "content": "Or embed video from url"
+        },
+        {
+          "type": "paragraph",
+          "content": "Shows when no Shopify-hosted video is selected."
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "accept": [
+            "youtube",
+            "vimeo"
+          ],
+          "label": "URL",
+          "info": "Supports YouTube and Vimeo."
+        },
+        {
+          "type": "text",
+          "id": "video_alt_text",
+          "label": "Video alt text"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_video_autoplay",
+          "default": false,
+          "label": "Enable video autoplay",
+          "info": "Video will be muted when autoplay is on."
+        },
+        {
+          "type": "select",
+          "id": "desktop_height",
+          "options": [
+            {
+              "value": "450px",
+              "label": "450px"
+            },
+            {
+              "value": "550px",
+              "label": "550px"
+            },
+            {
+              "value": "650px",
+              "label": "650px"
+            },
+            {
+              "value": "750px",
+              "label": "750px"
+            },
+            {
+              "value": "natural",
+              "label": "Adapt to first image"
+            },
+            {
+              "value": "100vh",
+              "label": "Fullscreen"
+            }
+          ],
+          "default": "550px",
+          "label": "Desktop image height"
+        },
+        {
+          "type": "select",
+          "id": "mobile_height",
+          "options": [
+            {
+              "value": "250px",
+              "label": "250px"
+            },
+            {
+              "value": "300px",
+              "label": "300px"
+            },
+            {
+              "value": "400px",
+              "label": "400px"
+            },
+            {
+              "value": "500px",
+              "label": "500px"
+            },
+            {
+              "value": "natural",
+              "label": "Adapt to first image"
+            },
+            {
+              "value": "100vh",
+              "label": "Fullscreen"
+            }
+          ],
+          "default": "400px",
+          "label": "Mobile image height"
+        },
+        {
+          "type": "select",
+          "id": "desktop_image_width",
+          "options": [
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "value": "large",
+              "label": "Large"
+            }
+          ],
+          "default": "large",
+          "label": "Desktop image width"
+        },
+        {
+          "type": "select",
+          "id": "image_layout",
+          "options": [
+            {
+              "value": "normal",
+              "label": "Normal"
+            },
+            {
+              "value": "stacked",
+              "label": "Stacked"
+            }
+          ],
+          "default": "normal",
+          "label": "Image style"
+        },
+        {
+          "type": "range",
+          "id": "image_corner_radius",
+          "min": 0,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Corner radius",
+          "default": 10
+        },
+        {
+          "type": "select",
+          "id": "content_layout",
+          "options": [
+            {
+              "value": "no-overlap",
+              "label": "No overlap"
+            },
+            {
+              "value": "overlap",
+              "label": "Overlap"
+            }
+          ],
+          "default": "overlap",
+          "label": "Content layout"
+        },
+        {
+          "type": "checkbox",
+          "id": "spacing_image",
+          "default": false,
+          "label": "Add spacing between images"
+        },
+        {
+          "type": "select",
+          "id": "text_position",
+          "options": [
+            {
+              "value": "start",
+              "label": "Top"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "end",
+              "label": "Bottom"
+            }
+          ],
+          "default": "center",
+          "label": "Text position",
+          "info": "Only applies to desktop display."
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "options": [
+            {
+              "value": "start",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "end",
+              "label": "Right"
+            }
+          ],
+          "default": "start",
+          "label": "Text alignment"
+        },
+        {
+          "type": "color",
+          "id": "background_color_light",
+          "default": "rgba(0,0,0,0)",
+          "label": "Background color (light)"
+        },
+        {
+          "type": "color",
+          "id": "background_color_dark",
+          "default": "rgba(0,0,0,0)",
+          "label": "Background color (dark)"
+        },
+        {
+          "type": "header",
+          "content": "Desktop layout"
+        },
+        {
+          "type": "select",
+          "id": "image_alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left",
+          "label": "Image alignment"
+        },
+        {
+          "type": "checkbox",
+          "id": "full_width",
+          "default": false,
+          "label": "Make section full width"
+        },
+        {
+          "type": "range",
+          "id": "top_padding",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "Top padding",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "bottom_padding",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "Bottom padding",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Mobile layout"
+        },
+        {
+          "type": "select",
+          "id": "image_alignment_mobile",
+          "options": [
+            {
+              "value": "left",
+              "label": "Image first"
+            },
+            {
+              "value": "right",
+              "label": "Image second"
+            }
+          ],
+          "default": "left",
+          "label": "Image alignment"
+        },
+        {
+          "type": "checkbox",
+          "id": "full_width_mobile",
+          "default": false,
+          "label": "Make section full width"
+        },
+        {
+          "type": "range",
+          "id": "top_padding_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "Top padding",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "bottom_padding_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "Bottom padding",
+          "default": 0
+        }
+      ],
+      "blocks": [
+        {
+          "type": "heading",
+          "name": "Heading",
+          "limit": 1,
+          "settings": [
+            {
+              "type": "text",
+              "id": "subheading",
+              "default": "Example subheading",
+              "label": "Subheading"
+            },
+            {
+              "type": "text",
+              "id": "heading",
+              "default": "Image with text",
+              "label": "Heading"
+            },
+            {
+              "type": "range",
+              "id": "heading_base_size",
+              "min": 50,
+              "max": 200,
+              "step": 10,
+              "unit": "%",
+              "label": "Heading size",
+              "default": 100
+            },
+            {
+              "type": "select",
+              "id": "heading_tag",
+              "default": "h2",
+              "label": "Heading tag",
+              "options": [
+                {
+                  "value": "h1",
+                  "label": "H1"
+                },
+                {
+                  "value": "h2",
+                  "label": "H2"
+                },
+                {
+                  "value": "h3",
+                  "label": "H3"
+                },
+                {
+                  "value": "h4",
+                  "label": "H4"
+                },
+                {
+                  "value": "h5",
+                  "label": "H5"
+                },
+                {
+                  "value": "h6",
+                  "label": "H6"
+                },
+                {
+                  "value": "p",
+                  "label": "p"
+                }
+              ]
+            },
+            {
+              "type": "richtext",
+              "id": "text",
+              "default": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+              "label": "Text"
+            },
+            {
+              "type": "color",
+              "id": "heading_light",
+              "label": "Heading color (light)",
+              "default": "rgba(0,0,0,0)"
+            },
+            {
+              "type": "color",
+              "id": "text_light",
+              "label": "Text color (light)",
+              "default": "rgba(0,0,0,0)"
+            },
+            {
+              "type": "color",
+              "id": "heading_dark",
+              "label": "Heading color (dark)",
+              "default": "rgba(0,0,0,0)"
+            },
+            {
+              "type": "color",
+              "id": "text_dark",
+              "label": "Text color (dark)",
+              "default": "rgba(0,0,0,0)"
+            }
+          ]
+        },
+        {
+          "type": "button",
+          "name": "Button",
+          "limit": 1,
+          "settings": [
+            {
+              "type": "text",
+              "id": "button_label",
+              "default": "Button label",
+              "label": "Button label"
+            },
+            {
+              "type": "url",
+              "id": "button_link",
+              "label": "Button link"
+            },
+            {
+              "type": "checkbox",
+              "id": "open_new_window",
+              "default": false,
+              "label": "Open this link in a new window"
+            },
+            {
+              "type": "checkbox",
+              "id": "button_primary",
+              "default": true,
+              "label": "Show as primary button"
+            },
+            {
+              "type": "color",
+              "id": "button_light",
+              "label": "Primary button (light)",
+              "default": "rgba(0,0,0,0)"
+            },
+            {
+              "type": "color",
+              "id": "button_text_light",
+              "label": "Primary button text (light)",
+              "default": "rgba(0,0,0,0)"
+            },
+            {
+              "type": "color",
+              "id": "button_hover_light",
+              "label": "Primary button hover (light)",
+              "default": "rgba(0,0,0,0)"
+            },
+            {
+              "type": "color",
+              "id": "button_text_hover_light",
+              "label": "Primary button hover text (light)",
+              "default": "rgba(0,0,0,0)"
+            },
+            {
+              "type": "color",
+              "id": "secondary_button_light",
+              "label": "Secondary button color (light)",
+              "default": "rgba(0,0,0,0)"
+            },
+            {
+              "type": "color",
+              "id": "secondary_button_text_light",
+              "label": "Secondary button text color (light)",
+              "default": "rgba(0,0,0,0)"
+            },
+            {
+              "type": "color",
+              "id": "button_dark",
+              "label": "Primary button (dark)",
+              "default": "rgba(0,0,0,0)"
+            },
+            {
+              "type": "color",
+              "id": "button_text_dark",
+              "label": "Primary button text (dark)",
+              "default": "rgba(0,0,0,0)"
+            },
+            {
+              "type": "color",
+              "id": "button_hover_dark",
+              "label": "Primary button hover (dark)",
+              "default": "rgba(0,0,0,0)"
+            },
+            {
+              "type": "color",
+              "id": "button_text_hover_dark",
+              "label": "Primary button hover text (dark)",
+              "default": "rgba(0,0,0,0)"
+            },
+            {
+              "type": "color",
+              "id": "secondary_button_dark",
+              "label": "Secondary button color (dark)",
+              "default": "rgba(0,0,0,0)"
+            },
+            {
+              "type": "color",
+              "id": "secondary_button_text_dark",
+              "label": "Secondary button text color (dark)",
+              "default": "rgba(0,0,0,0)"
+            }
+          ]
+        }
+      ],
+      "presets": [
+        {
+          "name": "OT - Media with text #3",
+          "blocks": [
+            {
+              "type": "heading"
+            },
+            {
+              "type": "button"
+            }
+          ]
+        }
+      ]
+    }
+    {% endschema %}
+    
