@@ -7,5 +7,6 @@
 @import url(components/theme-settings.css);
 @import url(components/otsb-collection-list.css);
 @import url(components/otsb-promotion-banner.css);
+@import url(components/otsb-slideshow.css);
 
 [x-cloak] { display: none !important; }
