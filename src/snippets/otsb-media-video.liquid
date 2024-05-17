@@ -20,8 +20,8 @@
       externalListened: false,
       play(el) {
         let video = el.getElementsByClassName('otsb-video')[0];
-        if (!video && el.closest('.contain-video')) {
-          video = el.closest('.contain-video').getElementsByClassName('otsb-video')[0];
+        if (!video && el.closest('.otsb-contain-video')) {
+          video = el.closest('.otsb-contain-video').getElementsByClassName('otsb-video')[0];
         }
         if (video) {
           if (video.tagName == 'IFRAME') {
@@ -33,8 +33,8 @@
       },
       pause(el) {
         let video = el.getElementsByClassName('otsb-video')[0];
-        if (!video && el.closest('.contain-video')) {
-          video = el.closest('.contain-video').getElementsByClassName('otsb-video')[0];
+        if (!video && el.closest('.otsb-contain-video')) {
+          video = el.closest('.otsb-contain-video').getElementsByClassName('otsb-video')[0];
         }
         if (video) {
           if (video.tagName == 'IFRAME') {
