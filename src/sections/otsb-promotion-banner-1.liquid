@@ -1,0 +1,1910 @@
+{%- liquid
+  assign count = 0 
+  assign title = ""
+  assign imageUrl = "" 
+  assign class_img_1 = ''
+  assign class_img_2 = ''
+  assign class_img_3 = ''
+
+  if section.settings.heading != blank
+    assign title = section.settings.heading
+  elsif section.blocks[0].type == 'image_banner' and section.blocks[0].settings.heading != blank
+    assign title = section.blocks[0].settings.heading
+  elsif section.blocks[1].type == 'image_banner' and section.blocks[1].settings.heading != blank    
+    assign title = section.blocks[1].settings.heading
+  endif
+
+  if section.settings.image_3 != blank
+    assign imageUrl = section.settings.image_3
+    assign count = count | plus: 1
+  endif
+  if section.settings.image_2 != blank
+    assign class_img_3 = ' otsb-hidden md:block'
+    assign imageUrl = section.settings.image_2
+    assign count = count | plus: 1
+  endif
+  if section.settings.image != blank 
+    assign class_img_2 = ' otsb-hidden md:block'
+    assign class_img_3 = ' otsb-hidden md:block'
+    assign imageUrl = section.settings.image
+    assign count = count | plus: 1
+  endif
+  assign imageUrlMobile = imageUrl
+  if section.settings.image_mobile != blank 
+    assign imageUrlMobile = section.settings.image_mobile
+    if request.design_mode
+      assign class_img_1 = ' otsb-hidden md:block'
+      assign class_img_3 = ' otsb-hidden md:block'
+      assign class_img_2 = ' otsb-hidden md:block'
+    endif
+  endif
+  
+-%}
+
+{%- style -%}
+  {%- if section.settings.image_mobile != blank -%}
+    .mobile-{{ section.id }}-natural {
+      padding-bottom: {{ 1 | divided_by: section.settings.image_mobile.aspect_ratio | times: 100 }}%; 
+    }
+  {%- endif -%}
+  .image-{{ section.id }}-1, .image-{{ section.id }}-2, .image-{{ section.id }}-3 {
+    object-position: {{ imageUrlMobile.presentation.focal_point }};
+  }
+  
+  @media screen and (min-width: 768px) {
+    {%- if section.settings.image != blank -%} 
+      .desktop-{{ section.id }}-natural {
+        padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%; 
+      } 
+    {%- endif -%}
+    .image-{{ section.id }}-1 {
+      object-position: {{ section.settings.image.presentation.focal_point }};
+    }
+    .image-{{ section.id }}-2 {
+      object-position: {{ section.settings.image_2.presentation.focal_point }};
+    }
+    .image-{{ section.id }}-3 {
+      object-position: {{ section.settings.image_3.presentation.focal_point }};
+    }
+  }
+  {%- if section.settings.content_position == "custom" -%}
+    @media screen and (min-width: 1024px) {
+      .promotion-banner--{{ section.id }} {
+        left:{{ section.settings.content_horizontal }}%;
+        top:{{ section.settings.content_vertical }}%;
+        transform: translate(-{{ section.settings.content_horizontal }}%,-{{ section.settings.content_vertical }}%);
+      }
+    }
+  {%- endif -%}
+{%- endstyle -%}
+<div class="pt-[{{ section.settings.padding_top_mobile }}px] md:pt-[{{ section.settings.padding_top }}px] pb-[{{ section.settings.padding_bottom_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px]{% if section.settings.full_width %} {% if section.settings.padding_full_width %} md:pl-5 md:pr-5{% else %} md:pl-0 md:pr-0{% endif %}{% else %} page-width{% endif %}{% if section.settings.full_width_mobile %} full-width-mobile{% else %} pl-5 pr-5{% endif %}">
+  <div class="promotion bg-[#c9c9c9] section--{{ section.id }} w-full flex relative overflow-hidden{% if section.settings.desktop_height == "natural" %}{% if section.settings.image != blank %} md:h-0 desktop-{{ section.id }}-natural{% else %} md:promotion:h-[650px]{% endif %}{% else %} md:promotion:h-[{{ section.settings.desktop_height }}] md:promotion:pb-0{% endif %}{% if section.settings.rounded_corner_image %} md:rounded-[10px] z-20{% else %} md:rounded-none{% endif %}{% if section.settings.rounded_corner_image_mobile %}  z-20 rounded-[10px]{% endif %}
+    {% if section.settings.mobile_height == "natural" %}{% if section.settings.image_mobile != blank %} h-0 mobile-{{ section.id }}-natural{% else %} h-[550px]{% endif %}{% else %}h-[{{ section.settings.mobile_height }}] md:h-auto{% endif %}"
+    x-data='{
+      data: {
+        promotion: {
+          source: "promotion-banner",
+          title: "{{ title | escape }}",
+          image: "{{ imageUrl | image_url | split: '//cdn.shopify.com/s/files' }}",
+          image_host: "//cdn.shopify.com/s/files"
+        }
+      },
+      setData(data) {
+        this.data = data;
+      }
+    }'
+    x-intersect.once.threshold.70='$store.xCustomerEvent.fire("promotion_viewed", $el, data)'
+    {% if section.settings.image_mobile != blank %}
+      x-init='$nextTick(() => {
+        if (screen.width < 768) {
+          setData({
+            promotion: {
+              source: "promotion-banner",
+              title: "{{ title | escape }}",
+              image: "{{ imageUrlMobile | image_url | split: '//cdn.shopify.com/s/files' }}",
+              image_host: "//cdn.shopify.com/s/files"
+            }
+          })
+        }
+      })'
+    {% endif %}>
+    <div class="w-full h-full{% if section.settings.mobile_height == 'natural' %} absolute top-0 left-0 bottom-0{% else %} relative{% endif %}{% if section.settings.desktop_height == "natural" %} md:absolute md:top-0 md:left-0 md:bottom-0{% else %} md:promotion:relative{% endif %}">
+      <div class="absolute top-0 left-0 bottom-0 right-0 flex z-0">
+        {% if section.settings.image_link != blank %}
+          <a 
+            href="{{ section.settings.image_link }}" 
+            aria-label="Banner link"
+            class="z-10 absolute top-0 left-0 bottom-0 right-0 disable-effect"
+            {% if section.settings.open_new_window %}target="_blank"{% endif %}
+          >
+        {% endif %}
+        <div class="z-10 absolute top-0 left-0 bottom-0 right-0 image-treatment-overlay opacity-{{ section.settings.image_overlay_opacity }}"></div>
+        {% if section.settings.image_link != blank %}
+          </a>
+        {% endif %}
+        {%- if section.settings.image == blank and section.settings.image_2 == blank and section.settings.image_3 == blank -%}
+          <div class="w-full md:block text-[#acacac]{% if section.settings.image_mobile != blank %} otsb-hidden{%- endif -%}">
+            {{ 'lifestyle-2' | placeholder_svg_tag: 'w-full h-full' }}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.image != blank -%}
+          {% if section.settings.show_hero %}
+            <div class="otsb-hidden">
+              {%- if section.settings.image_mobile != blank -%}
+                {{ imageUrlMobile | image_url: width: 1500 | image_tag: widths: '375, 450, 750, 900, 1100, 1500', preload: true, loading: 'lazy' }}
+              {%- endif -%}
+              {{ section.settings.image | image_url: width: 3840 | image_tag: widths: '750, 900, 1100, 1500, 1780, 2000, 3000, 3840', preload: true, loading: 'lazy' }}
+            </div>
+          {% endif %}
+          <div class="w-full{{ class_img_1 }}">
+            <parallax-image class="block h-full w-full">
+              <parallax-movement x-data="xParallax" x-intersect.once.margin.200px="load({{ settings.disable_parallax_effect }})">
+                {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+                <picture>
+                  <source 
+                    srcset="{{ imageUrlMobile | image_url: width: 375 }} 375w,
+                      {{ imageUrlMobile | image_url: width: 450 }} 450w,
+                      {{ imageUrlMobile | image_url: width: 750 }} 750w,
+                      {{ imageUrlMobile | image_url: width: 900 }} 900w,
+                      {{ imageUrlMobile | image_url: width: 1100 }} 1100w,
+                      {{ imageUrlMobile | image_url: width: 1500 }} 1500w"
+                    media="(max-width: 767px)"
+                    width="{{ imageUrlMobile.width }}"
+                    height="{{ imageUrlMobile.height }}"
+                  >
+                  <img
+                    srcset="{{ section.settings.image | image_url: width: 750 }} 750w,
+                      {{ section.settings.image | image_url: width: 900 }} 900w,
+                      {{ section.settings.image | image_url: width: 1100 }} 1100w,
+                      {{ section.settings.image | image_url: width: 1500 }} 1500w,
+                      {{ section.settings.image | image_url: width: 1780 }} 1780w,
+                      {{ section.settings.image | image_url: width: 2000 }} 2000w,
+                      {{ section.settings.image | image_url: width: 3000 }} 3000w,
+                      {{ section.settings.image | image_url: width: 3840 }} 3840w"
+                    {% unless section.settings.show_hero %}
+                      loading="lazy"
+                    {% else %}
+                      loading="eager"
+                      fetchpriority="high"
+                      decoding="sync"
+                    {% endunless %}
+                    src="{{ section.settings.image | image_url: width: 3840 }}"
+                    {% if section.settings.image_mobile != blank %}
+                      :alt="(screen.width < 768) ? '{{ section.settings.image_mobile.alt }}' : '{{ section.settings.image.alt }}'"
+                    {% else %}
+                      alt="{{ section.settings.image.alt | escape }}"
+                    {% endif %}
+                    sizes="(min-width: 767px) calc(100vw / {{ count }}), 100vw"
+                    width="{{ section.settings.image.width }}"
+                    height="{{ section.settings.image.height }}"
+                    class="w-full h-full object-cover z-0 image-{{ section.id }}-1"
+                    style="(min-width: 767px) { object-position: {{ section.settings.image.presentation.focal_point }}; } 
+                    object-position: {{ imageUrlMobile.presentation.focal_point }}"
+                  >
+                  {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
+                  </picture>   
+              </parallax-movement>
+            </parallax-image>
+          </div>
+        {%- endif -%}
+        {%- if section.settings.image_2 != blank -%}
+          {% if section.settings.show_hero %}
+            <div class="otsb-hidden">
+              {{ imageUrlMobile | image_url: width: 1500 | image_tag: widths: '375, 450, 750, 900, 1100, 1500', preload: true }}
+              {{ section.settings.image_2 | image_url: width: 3840 | image_tag: widths: '750, 900, 1100, 1500, 1780, 2000, 3000, 3840', preload: true }}
+            </div>
+          {% endif %}
+          <div class="w-full{{ class_img_2 }}">
+            <parallax-image class="block h-full w-full">
+              <parallax-movement x-data="xParallax" x-intersect.once.margin.200px="load({{ settings.disable_parallax_effect }})">
+                {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+                <picture>
+                  <source
+                    srcset="{{ imageUrlMobile | image_url: width: 375 }} 375w,
+                      {{ imageUrlMobile | image_url: width: 450 }} 450w,
+                      {{ imageUrlMobile | image_url: width: 750 }} 750w,
+                      {{ imageUrlMobile | image_url: width: 900 }} 900w,
+                      {{ imageUrlMobile | image_url: width: 1100 }} 1100w,
+                      {{ imageUrlMobile | image_url: width: 1500 }} 1500w"
+                    media="(max-width: 767px)"
+                    width="{{ imageUrlMobile.width }}"
+                    height="{{ imageUrlMobile.height }}"
+                  >
+                  <img
+                    srcset="{{ section.settings.image_2 | image_url: width: 750 }} 750w,
+                      {{ section.settings.image_2 | image_url: width: 900 }} 900w,
+                      {{ section.settings.image_2 | image_url: width: 1100 }} 1100w,
+                      {{ section.settings.image_2 | image_url: width: 1500 }} 1500w,
+                      {{ section.settings.image_2 | image_url: width: 1780 }} 1780w,
+                      {{ section.settings.image_2 | image_url: width: 2000 }} 2000w,
+                      {{ section.settings.image_2 | image_url: width: 3000 }} 3000w,
+                      {{ section.settings.image_2 | image_url: width: 3840 }} 3840w"
+                    {% unless section.settings.show_hero %}
+                      loading="lazy"
+                    {% else %}
+                      loading="eager"
+                      fetchpriority="high"
+                      decoding="sync"
+                    {% endunless %}
+                    src="{{ section.settings.image_2 | image_url: width: 3840 }}"
+                    {% if section.settings.image_mobile != blank %}
+                      :alt="(screen.width < 768) ? '{{ section.settings.image_mobile.alt }}' : '{{ section.settings.image_2.alt }}'"
+                    {% else %}
+                      alt="{{ section.settings.image_2.alt | escape }}"
+                    {% endif %}
+                    sizes="(min-width: 767px) calc(100vw / {{ count }}), 100vw"
+                    width="{{ section.settings.image_2.width }}"
+                    height="{{ section.settings.image_2.height }}"
+                    class="w-full h-full object-cover z-0 image-{{ section.id }}-2"
+                    style="(min-width: 767px) { object-position: {{ section.settings.image_2.presentation.focal_point }}; } 
+                    object-position: {{ imageUrlMobile.presentation.focal_point }}"
+                  >
+                  <picture>
+                {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
+              </parallax-movement>
+            </parallax-image>
+          </div>
+        {%- endif -%}
+        {%- if section.settings.image_3 != blank -%}
+          {% if section.settings.show_hero %}
+            <div class="otsb-hidden">
+              {{ imageUrlMobile | image_url: width: 1500 | image_tag: widths: '375, 450, 750, 900, 1100, 1500', preload: true }}
+              {{ section.settings.image_3 | image_url: width: 3840 | image_tag: widths: '750, 900, 1100, 1500, 1780, 2000, 3000, 3840', preload: true }}
+            </div>
+          {% endif %}
+          <div class="w-full{{ class_img_3 }}">
+            <parallax-image class="block h-full w-full">
+              <parallax-movement x-data="xParallax" x-intersect.once.margin.200px="load({{ settings.disable_parallax_effect }})">
+                {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+                <source
+                  srcset="{{ imageUrlMobile | image_url: width: 375 }} 375w,
+                    {{ imageUrlMobile | image_url: width: 450 }} 450w,
+                    {{ imageUrlMobile | image_url: width: 750 }} 750w,
+                    {{ imageUrlMobile | image_url: width: 900 }} 900w,
+                    {{ imageUrlMobile | image_url: width: 1100 }} 1100w,
+                    {{ imageUrlMobile | image_url: width: 1500 }} 1500w"
+                  media="(max-width: 767px)"
+                  width="{{ imageUrlMobile.width }}"
+                  height="{{ imageUrlMobile.height }}"
+                >
+                <img
+                  srcset="{{ section.settings.image_3 | image_url: width: 750 }} 750w,
+                    {{ section.settings.image_3 | image_url: width: 900 }} 900w,
+                    {{ section.settings.image_3 | image_url: width: 1100 }} 1100w,
+                    {{ section.settings.image_3 | image_url: width: 1500 }} 1500w,
+                    {{ section.settings.image_3 | image_url: width: 1780 }} 1780w,
+                    {{ section.settings.image_3 | image_url: width: 2000 }} 2000w,
+                    {{ section.settings.image_3 | image_url: width: 3000 }} 3000w,
+                    {{ section.settings.image_3 | image_url: width: 3840 }} 3840w"
+                  {% unless section.settings.show_hero %}
+                    loading="lazy"
+                  {% else %}
+                    loading="eager"
+                    fetchpriority="high"
+                    decoding="sync"
+                  {% endunless %}
+                  src="{{ section.settings.image_3 | image_url: width: 3840 }}"
+                  {% if section.settings.image_mobile != blank %}
+                    :alt="(screen.width < 768) ? '{{ section.settings.image_mobile.alt }}' : '{{ section.settings.image_3.alt }}'"
+                  {% else %}
+                    alt="{{ section.settings.image_3.alt | escape }}"
+                  {% endif %}
+                  sizes="(min-width: 767px) calc(100vw / {{ count }}), 100vw"
+                  width="{{ section.settings.image_3.width }}"
+                  height="{{ section.settings.image_3.height }}"
+                  class="w-full h-full object-cover z-0 image-{{ section.id }}-3"
+                  style="(min-width: 767px) { object-position: {{ section.settings.image_3.presentation.focal_point }}; } 
+                  object-position: {{ imageUrlMobile.presentation.focal_point }}"
+                > 
+                {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
+              </parallax-movement>
+            </parallax-image>
+          </div>
+        {%- endif -%}
+        {%- if section.settings.image_mobile != blank and count == 0 or request.design_mode -%}
+          <div class="w-full md:otsb-hidden">
+            <parallax-image class="block h-full w-full">
+              <parallax-movement x-data="xParallax" x-intersect.once.margin.200px="load({{ settings.disable_parallax_effect }})">
+                {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+                <img
+                  srcset="{{ section.settings.image_mobile | image_url: width: 540 }} 540w,
+                  {{ section.settings.image_mobile | image_url: width: 767 }} 767w,
+                  {{ section.settings.image_mobile | image_url }} {{ section.settings.image_moblie.width }}w"
+                  src="{{ section.settings.image_mobile | image_url: width: 767 }}"
+                  alt="{{ section.settings.image_mobile.alt | escape }}"
+                  {% unless section.settings.show_hero and forloop.first %}
+                    loading="lazy"
+                  {% else %}
+                    loading="eager"
+                    fetchpriority="high"
+                    decoding="sync"
+                  {% endunless %}
+                  width="{{ section.settings.image_mobile.width }}"
+                  height="{{ section.settings.image_mobile.height }}"
+                  class="w-full h-full object-cover z-0"
+                  style="object-position: {{ section.settings.image_mobile.presentation.focal_point }};"
+                >
+                {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
+              </parallax-movement>
+            </parallax-image>
+          </div>
+        {%- endif -%} 
+      </div>
+      <div class="{% if section.settings.content_position != "custom" %}page-width ml-5 mr-5 lg:mx-auto absolute top-0 left-0 bottom-0 right-0{% else %} w-full h-full{% endif %}">
+        {%- if section.settings.image_link != blank -%}
+          <a href="{{ section.settings.image_link }}"{% if section.settings.open_new_window %} target="_blank"{% endif %} class="absolute top-0 left-0 right-0 bottom-0 disable-effect" aria-label="Banner link"></a>
+        {%- endif -%}
+        <div class="promotion-banner--{{ section.id }} w-11/12 overflow-hidden h-fit promotion-alignment--{{ section.settings.position_content_mobile }} absolute lg:max-w-3xl lg:w-3/5{% if section.settings.content_position != "custom" %} lg:promotion-alignment--{{ section.settings.content_position }}{% else %} p-5{% endif %}">
+          {%- if section.settings.image_link != blank -%}
+            <a
+              href="{{ section.settings.image_link }}" 
+              class="absolute top-0 left-0 right-0 bottom-0 disable-effect"
+              aria-label="Banner link"
+              {% if section.settings.open_new_window %}target="_blank"{% endif %}
+            >
+            </a>
+          {%- endif -%}
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'image_banner' -%}
+                {%- liquid 
+                  assign heading_size =  block.settings.heading_size | times: 100 | times: 0.000225
+                  assign size_text =  block.settings.text_size | times: 100 | times: 0.0000875
+
+                  assign add_class_light = false
+                  assign add_class_dark = false
+                  if block.settings.color_content_box_light.alpha != 0.0 or block.settings.add_frame
+                    assign add_class_light = true
+                  endif
+
+                  if block.settings.color_content_box_dark.alpha != 0.0 or block.settings.add_frame
+                    assign add_class_dark = true
+                  endif
+                -%}
+                {%- style -%}
+                  {% unless block.settings.color_content_box_light.alpha == 0.0 %}
+                    .content--{{ block.id }} {  
+                      background:{{ block.settings.color_content_box_light }}; 
+                    }
+                  {% endunless %}
+                  .dark .content--{{ block.id }} {
+                    {% if block.settings.color_content_box_dark.alpha == 0.0 %}
+                      background: transparent;  
+                    {% else %}
+                      background:{{ block.settings.color_content_box_dark }}; 
+                    {% endif %}
+                  }
+                  .content--{{ block.id }}:after {
+                    border-color: #ffffff;
+                  }
+                  .dark .content--{{ block.id }}:after {
+                    border-color: #ffffff;
+                  }
+                  .heading--{{ block.id }}{
+                    font-size: {{ heading_size | times: 0.5 }}rem;
+                  }
+                  .sub-heading-{{ block.id }} {
+                    font-size: {{ heading_size | times: 0.3 }}rem;
+                  } 
+                  .content-text-{{ block.id }} {
+                    font-size: {{ size_text | times: 0.9 }}rem;
+                  }
+                  @media screen and (min-width: 768px) { 
+                    .sub-heading-{{ block.id }} {
+                      font-size: {{ heading_size | times: 0.58 }}rem;
+                    }
+                    .content-text-{{ block.id }} {
+                      font-size: {{ size_text }}rem;
+                    }
+                    .heading--{{ block.id }}{
+                      font-size: {{ heading_size }}rem;
+                    }
+                  }
+                {%- endstyle -%} 
+                {%- if block.settings.heading != blank or block.settings.text != blank or block.settings.subheading != blank -%}
+                  <div class="text-white content--{{ block.id }} relative mx-auto mt-2 mb-2 z-20 lg:max-w-3xl w-full lg:block lg:w-full lg:static lg:translate-x-0 lg:translate-y-0
+                    {% if add_class_light %} pt-5 pb-5 pl-5 pr-5{% endif %}
+                    {% if add_class_dark %} dark:pt-5 dark:pb-5 dark:pl-5 dark:pr-5{% else %} dark:pt-0 dark:pb-0 dark:pr-0 dark:pl-0{% endif %}
+                    {%- if block.settings.content_box_type == "round" %} rounded-full{% endif -%}
+                    {%- if block.settings.add_frame %} pt-5 pb-5 pl-5 pr-5 after:-z-10 after:top-1 after:left-1 after:right-1 after:bottom-1 after:border after:solid after:absolute after:{{ block.settings.content_box_type }}{% endif %}"
+                  >
+                    <div class="promotion-box-content--{{ block.settings.content_box_type }}{%- if add_class_light and block.settings.content_box_type == "round" %} pl-8 pb-8 pt-8 pr-8{% else %} pb-1 md:pb-2{% endif %}{%- if add_class_dark and block.settings.content_box_type == "round" %} dark:pl-8 dark:pb-8 dark:pt-8 dark:pr-8{% else %} dark:pl-0 dark:pr-0 dark:pt-0 dark:pb-1 md:dark:pb-2{% endif %} text-{{ section.settings.content_alignment }}"{{ block.shopify_attributes }}>
+                      {%- if block.settings.subheading != blank -%}
+                        <p class="sub-heading-{{ block.id }} leading-tight empty:otsb-hidden italic mt-1 p-break-words image-treatment-text">
+                          {{ block.settings.subheading | escape }}
+                        </p>
+                      {%- endif -%}
+                      {%- if block.settings.heading != blank -%}
+                        <{{ block.settings.heading_tag }} class="empty:otsb-hidden h2 block leading-tight mt-1 image-treatment-text p-break-words heading--{{ block.id }}">
+                          {{ block.settings.heading | escape }}
+                        </{{ block.settings.heading_tag }}>
+                      {%- endif -%}
+                      {%- if block.settings.text != blank -%} 
+                        <p class="content-text-{{ block.id }} p-break-words empty:otsb-hidden leading-tight image-treatment-text{% if block.settings.heading != blank %} mt-3 lg:mt-4{% endif %}">
+                          {{ block.settings.text | escape }}
+                        </p>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                {%- endif -%}
+              {%- when 'buttons' -%}
+                {%- style -%}
+                  .button--{{ block.id }}.otsb-button-solid,
+                  .button--{{ block.id }}.otsb-button-solid:before { 
+                    {%- unless block.settings.color_button.alpha == 0.0 -%}
+                      --colors-line-and-border: {{ block.settings.color_button.red }}, {{ block.settings.color_button.green }}, {{ block.settings.color_button.blue }};
+                      --colors-button: {{ block.settings.color_button.red }}, {{ block.settings.color_button.green }}, {{ block.settings.color_button.blue }};
+                    {%- else -%}
+                      --colors-line-and-border: var(--colors-button);
+                    {%- endunless -%}
+                    {%- unless block.settings.color_button_hover.alpha == 0.0 -%}
+                      --colors-button-hover: rgb({{ block.settings.color_button_hover.red }}, {{ block.settings.color_button_hover.green }}, {{ block.settings.color_button_hover.blue }});
+                    {%- endunless -%}
+                    {%- unless block.settings.color_text_button.alpha == 0.0 -%}
+                      --colors-button-text: {{ block.settings.color_text_button.red }}, {{ block.settings.color_text_button.green }}, {{ block.settings.color_text_button.blue }};
+                    {%- endunless -%}
+                    {%- unless block.settings.color_text_button_hover.alpha == 0.0 -%}
+                      --colors-button-text-hover: {{ block.settings.color_text_button_hover.red }}, {{ block.settings.color_text_button_hover.green }}, {{ block.settings.color_text_button_hover.blue }};
+                    {%- endunless -%}
+                  }
+                  .button--{{ block.id }}.otsb-button-outline {
+                    {%- if block.settings.secondary_button_text.alpha != 0.0 -%} 
+                      --colors-secondary-button: {{ block.settings.secondary_button_text.red }}, {{ block.settings.secondary_button_text.green }}, {{ block.settings.secondary_button_text.blue }}; 
+                      --colors-line-secondary-button: {{ block.settings.secondary_button_text.red }}, {{ block.settings.secondary_button_text.green }}, {{ block.settings.secondary_button_text.blue }}; 
+                      --background-secondary-button: transparent;
+                    {% endif %}
+                    {%- if block.settings.color_button_secondary.alpha != 0.0 -%} 
+                      --background-secondary-button: {{ block.settings.color_button_secondary.red }}, {{ block.settings.color_button_secondary.green }}, {{ block.settings.color_button_secondary.blue }}; 
+                      --colors-line-secondary-button: {{ block.settings.color_button_secondary.red }}, {{ block.settings.color_button_secondary.green }}, {{ block.settings.color_button_secondary.blue }}; 
+                    {% endif %}
+                  }
+                {%- endstyle -%}
+                {%- if block.settings.button_label != blank or block.settings.button_label_2 != blank -%}
+                  <div class="selection:bg-[rgba(var(--image-treatment-text),0.2)] z-20 mt-3 lg:mt-9 mb-2 mx-auto ltr">
+                    <div class="flex lg:justify-{{ section.settings.content_alignment }} items-{{ section.settings.content_alignment }} lg:flex-row flex-col gap-x-2" {{ block.shopify_attributes }}>
+                      {%- if block.settings.button_label != blank -%}
+                        {%- if block.settings.button_link != blank -%}
+                          <a 
+                            href="{{ block.settings.button_link }}"
+                            class="disable-effect" 
+                            @click='$store.xCustomerEvent.fire("promotion_selected", $el, data)'
+                            aria-label="{{ block.settings.button_label | escape }}"
+                            {% if block.settings.open_new_window_button %}target="_blank"{% endif %}
+                          >
+                        {%- endif -%}
+                          <div class="otsb-button p-break-words button--{{ block.id }}{% if block.settings.primary_button_1 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} empty:otsb-hidden leading-normal text-center mt-1 mb-1 lg:mt-0 lg:mb-0 lg:ml-0 lg:mr-0 h-full pl-7 pr-7 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3{% unless block.settings.button_link != blank %} opacity-70 hover:cursor-not-allowed{% endunless %}">
+                            {% render 'otsb-button-label', button_label: block.settings.button_label, show_button_primary: block.settings.primary_button_1 %}
+                          </div>
+                        {%- if block.settings.button_link != blank -%}
+                          </a>
+                        {%- endif -%}
+                      {%- endif -%}
+                      {%- if block.settings.button_label_2 != blank -%}
+                        {%- if block.settings.button_link_2 != blank -%}
+                          <a 
+                            href="{{ block.settings.button_link_2 }}" 
+                            class="disable-effect" 
+                            @click='$store.xCustomerEvent.fire("promotion_selected", $el, data)' 
+                            aria-label="{{ block.settings.button_label_2 | escape }}"
+                            {% if block.settings.open_new_window_button_2 %}target="_blank"{% endif %}
+                          >
+                        {%- endif -%}
+                          <div class="otsb-button p-break-words button--{{ block.id }}{% if block.settings.primary_button_2 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} empty:otsb-hidden leading-normal text-center mt-1 mb-1 lg:mt-0 lg:mb-0 lg:ml-0 lg:mr-0 h-full pl-7 pr-7 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3{% unless block.settings.button_link_2 != blank %} opacity-70 hover:cursor-not-allowed{% endunless %}">
+                            {% render 'otsb-button-label', button_label: block.settings.button_label_2, show_button_primary: block.settings.primary_button_2 %}
+                          </div>
+                        {%- if block.settings.button_link_2 != blank -%}
+                          </a>
+                        {%- endif -%} 
+                      {%- endif -%}
+                    </div>
+                  </div>
+                {%- endif -%}
+              {%- when 'countdown_timer' -%}
+                {% style %}
+                  .timer--{{ block.id }} {
+                    font-size: {{ 100 | times: 0.013 }}rem;
+                    {% unless block.settings.timer_color_countdown.alpha == 0.0 %}
+                      color: {{ block.settings.timer_color_countdown }};
+                    {% else %}
+                      color: var(--colors-button-hover);
+                    {% endunless %}
+                  }
+                  .dark .timer--{{ block.id }} {
+                    {% unless block.settings.timer_color_countdown.alpha == 0.0 %}
+                      color: {{ block.settings.timer_color_countdown }};
+                    {% else %}
+                      color: var(--colors-button-hover);
+                    {% endunless %}
+                  }
+                  .x-countdown-{{ block.id }} {
+                    margin-left: -{{ block.settings.spacing_col_mobile | times: 0.5 }}px;
+                    margin-right: -{{ block.settings.spacing_col_mobile | times: 0.5 }}px;
+                  }
+                  .countdown--{{ block.id }} { 
+                    margin-left: {{ block.settings.spacing_col_mobile | times: 0.5 }}px;
+                    margin-right: {{ block.settings.spacing_col_mobile | times: 0.5 }}px;
+                  }
+                  @media screen and (min-width: 768px) {
+                    .timer--{{ block.id }} {
+                      font-size: {{ 100 | times: 0.019 }}rem;
+                    }
+                    .x-countdown-{{ block.id }} {
+                      margin-left: -{{ block.settings.spacing_col | times: 0.5 }}px;
+                      margin-right: -{{ block.settings.spacing_col | times: 0.5 }}px;
+                    }
+                    .countdown--{{ block.id }} {
+                      margin-left: {{ block.settings.spacing_col | times: 0.5 }}px;
+                      margin-right: {{ block.settings.spacing_col | times: 0.5 }}px;
+                    }
+                  }
+                  .countdown--{{ block.id }} {
+                    {% if block.settings.bg_color_countdown.alpha != 0.0 %}
+                      background-color: rgba({{ block.settings.bg_color_countdown.red }}, {{ block.settings.bg_color_countdown.green }}, {{ block.settings.bg_color_countdown.blue }}, {{ block.settings.overlay_opacity }}%);
+                    {% endif %}
+                    {% unless block.settings.text_color_countdown.alpha == 0.0 %}
+                      color: {{ block.settings.text_color_countdown }};
+                      border-color: rgba({{ block.settings.text_color_countdown.red }}, {{ block.settings.text_color_countdown.green }}, {{ block.settings.text_color_countdown.blue }});
+                    {% else %}
+                      color: rgba(var(--image-treatment-text));
+                      border-color: rgba(var(--image-treatment-text));
+                    {% endunless %}
+                  }
+                  .dark .countdown--{{ block.id }} {
+                    {% unless block.settings.text_color_countdown.alpha == 0.0 %}
+                      color: {{ block.settings.text_color_countdown }};
+                      border-color: rgba({{ block.settings.text_color_countdown.red }}, {{ block.settings.text_color_countdown.green }}, {{ block.settings.text_color_countdown.blue }});
+                    {% else %}
+                      color: rgba(var(--image-treatment-text));
+                      border-color: rgba(var(--image-treatment-text));
+
+                    {% endunless %}
+                  }
+                {% endstyle %}
+                <div 
+                  id="x-countdown-banner"
+                  class="block-promotion-banner pb-1.5 mt-4 mb-2.5 md:mb-5"
+                  x-data="{ loading: true, textLoad: '-', days: 0, hours: 0, minutes: 0, seconds: 0 }"
+                  x-intersect.once.margin.200px='$nextTick(() => {
+                    $store.xHelper.countdown({
+                      "id": "{{ block.id }}",
+                      "timezone": {{ block.settings.timezone | default: 0 }},
+                      "end_year": {{ block.settings.end_year | default: 0 }},
+                      "end_month": {{ block.settings.end_month | default: 0 }},
+                      "end_day": {{ block.settings.end_day | default: 0 }},
+                      "end_hour": {{ block.settings.end_hour | default: 0 }},
+                      "end_minute": {{ block.settings.end_minute | default: 0 }},
+                      "justify": "{{ section.settings.content_alignment }}"
+                    }, (canShow, s, m, h, d) => {
+                      days = d;
+                      hours = h;
+                      minutes = m;
+                      seconds = s;
+                      loading = false;
+                    })
+                  })'
+                  {{ block.shopify_attributes }}
+                >
+                  <div class="x-countdown-promo-banner x-countdown-{{ block.id }} justify-{{ section.settings.content_alignment }} flex rtl:flex-row-reverse">
+                    <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
+                      <div class="flex flex-col items-center justify-center absolute top-0 left-0 h-full w-full">
+                        <span x-html="loading?textLoad:days" class="h2 timer--{{ block.id }}"></span>
+                        <span>Days</span>
+                      </div>
+                    </div>
+                    <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
+                      <div class="flex flex-col items-center justify-center absolute top-0 left-0 h-full w-full">
+                        <span x-html="loading?textLoad:hours" class="h2 timer--{{ block.id }}"></span>
+                        <span>Hours</span>
+                      </div>
+                    </div>
+                    <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
+                      <div class="flex flex-col items-center justify-center absolute top-0 left-0 h-full w-full">
+                        <span x-html="loading?textLoad:minutes" class="h2 timer--{{ block.id }}"></span>
+                        <span>Minutes</span>
+                      </div>
+                    </div>
+                    <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
+                      <div class="flex flex-col items-center justify-center absolute top-0 left-0 h-full w-full">
+                        <span x-html="loading?textLoad:seconds" class="h2 timer--{{ block.id }}"></span>
+                        <span>Seconds</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {%- when 'menu' -%}
+                {% liquid  
+                  assign menu_text_size =  block.settings.menu_text_size | times: 100 | times: 0.000225
+                %}
+                <style>
+                  .menu--{{ block.id }} {
+                    font-size: {{ menu_text_size | times: 0.3 }}rem;
+                  }
+                  .menu--{{ block.id }} .link-active {
+                    border-bottom: 1px solid rgba(var(--colors-text-link), 1);
+                  }
+                  @media screen and (min-width: 768px) { 
+                    .menu--{{ block.id }} {
+                      font-size: {{ menu_text_size | times: 0.58 }}rem;
+                    }
+                  }
+                </style>
+                <nav class="menu--{{ block.id }} image-treatment-text justify-{{ section.settings.content_alignment }} {% if block.settings.display_mobile %} flex {% else %} otsb-hidden lg:flex {% endif %}">
+                  <ul class="list-menu inline-flex flex-wrap items-center gap-4 lg:gap-12">
+                    {%- for link in block.settings.menu.links -%}
+                        <li class="py-1">
+                          <a
+                            href="{{ link.url }}"
+                            class="relative p-break-words flex items-center hover-text-link font-bold is-focus:link-active{% if link.current or link.child_active %} link-active {% else %} nav-link {% endif %}"
+                          >
+                            <span>{{ link.title | escape }}</span>
+                          </a>
+                        </li>
+                    {%- endfor -%}
+                  </ul>
+                </nav>
+              {%- endcase -%}
+            {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  requestAnimationFrame(() => {
+  document.addEventListener('alpine:init', () => {
+    Alpine.store('xCustomerEvent', {
+      fire(eventName, el, data) {
+        if (Shopify.designMode) return;
+        
+        const formatedData = data ? data : xParseJSON(el.getAttribute('x-customer-event-data'));
+        Shopify.analytics.publish(eventName, formatedData);
+      }
+    });
+
+    Alpine.store('xHelper', {
+      countdown(configs, callback) {
+        let endDate = new Date(
+          configs.end_year,
+          configs.end_month - 1,
+          configs.end_day,
+          configs.end_hour,
+          configs.end_minute
+        );
+        const endTime = endDate.getTime() + (-1 * configs.timezone * 60 - endDate.getTimezoneOffset()) * 60 * 1000;
+        
+        let startTime;
+        if (configs.start_year) {
+          let startDate = new Date(
+            configs.start_year,
+            configs.start_month - 1,
+            configs.start_day,
+            configs.start_hour,
+            configs.start_minute
+          );
+          startTime = startDate.getTime() + (-1 * configs.timezone * 60 - startDate.getTimezoneOffset()) * 60 * 1000;
+        } else {
+          startTime = new Date().getTime();
+        }
+
+        let x = setInterval(function() {
+          let now = new Date().getTime();
+          let distance = endTime - now;
+
+          if (distance < 0 || startTime > now) {
+            callback(false, 0, 0, 0, 0);
+            clearInterval(x);
+          } else {
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            callback(true, seconds, minutes, hours, days);
+          }
+        }, 1000);
+      },
+      canShow(configs) {
+        let endDate = new Date(
+          configs.end_year,
+          configs.end_month - 1,
+          configs.end_day,
+          configs.end_hour,
+          configs.end_minute
+        );
+        const endTime = endDate.getTime() + (-1 * configs.timezone * 60 - endDate.getTimezoneOffset()) * 60 * 1000;
+        
+        let startTime;
+        if (configs.start_year) {
+          let startDate = new Date(
+            configs.start_year,
+            configs.start_month - 1,
+            configs.start_day,
+            configs.start_hour,
+            configs.start_minute
+          );
+          startTime = startDate.getTime() + (-1 * configs.timezone * 60 - startDate.getTimezoneOffset()) * 60 * 1000;
+        } else {
+          startTime = new Date().getTime();
+        }
+        let now = new Date().getTime();
+        let distance = endTime - now;
+        if (distance < 0 || startTime > now) {
+          return false;
+        } 
+        return true;
+      },
+      handleTime(configs) {
+        let endDate = new Date(
+          configs.end_year,
+          configs.end_month - 1,
+          configs.end_day,
+          configs.end_hour,
+          configs.end_minute
+        );
+        const endTime = endDate.getTime() + (-1 * configs.timezone * 60 - endDate.getTimezoneOffset()) * 60 * 1000;
+        
+        let startTime;
+        if (configs.start_year) {
+          let startDate = new Date(
+            configs.start_year,
+            configs.start_month - 1,
+            configs.start_day,
+            configs.start_hour,
+            configs.start_minute
+          );
+          startTime = startDate.getTime() + (-1 * configs.timezone * 60 - startDate.getTimezoneOffset()) * 60 * 1000;
+        } else {
+          startTime = new Date().getTime();
+        }
+        let now = new Date().getTime();
+        let distance = endTime - now;
+        return { "startTime": startTime, "endTime": endTime, "now": now, "distance": distance};
+      }
+    });
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "OT - Promotion banner #1",
+  "tag": "section",
+  "class": "section section-promotion-banner",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "label": "Heading",
+      "id": "heading",
+      "default": "Promotion Banner",
+      "info": "Used for tracking purpose."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "First image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Second image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_3",
+      "label": "Third image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile image"
+    },
+    {
+      "type": "url",
+      "id": "image_link",
+      "label": "Banner link"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_new_window",
+      "default": false,
+      "label": "Open this link in a new window"
+    },
+    {
+      "type": "range",
+      "id": "image_overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "label": "Image overlay opacity",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "options": [
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-center",
+          "label": "Top center"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "center-left",
+          "label": "Middle left"
+        },
+        {
+          "value": "center",
+          "label": "Middle center"
+        },
+        {
+          "value": "center-right",
+          "label": "Middle right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "center",
+      "label": "Desktop position"
+    },
+    {
+      "type": "range",
+      "id": "content_horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Custom horizontal position",
+      "default": 50,
+      "info": "Used with Custom position only"
+    },
+    {
+      "type": "range",
+      "id": "content_vertical",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Custom vertical position",
+      "default": 50,
+      "info": "Used with Custom position only"
+    },
+    {
+      "type": "select",
+      "id": "position_content_mobile",
+      "options": [
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-center",
+          "label": "Top center"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "center-left",
+          "label": "Middle left"
+        },
+        {
+          "value": "center",
+          "label": "Middle center"
+        },
+        {
+          "value": "center-right",
+          "label": "Middle right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "center",
+      "label": "Mobile position"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "label": "Content alignment"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hero",
+      "default": false,
+      "label": "Used as Hero",
+      "info": "Enable if this section is used as hero, disable if not."
+    },
+    {
+      "type": "header",
+      "content": "Desktop layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "default": true,
+      "label": "Make section full width"
+    },
+    {
+      "type": "checkbox",
+      "id": "padding_full_width",
+      "default": false,
+      "label": "Enable side padding",
+      "info": "Add left and right padding when section is full-width."
+    },
+    {
+      "type": "checkbox",
+      "id": "rounded_corner_image",
+      "default": false,
+      "label": "Enable rounded corner images"
+    },
+    {
+      "type": "select",
+      "id": "desktop_height",
+      "options": [
+        {
+          "value": "450px",
+          "label": "450 px"
+        },
+        {
+          "value": "550px",
+          "label": "550 px"
+        },
+        {
+          "value": "650px",
+          "label": "650 px"
+        },
+        {
+          "value": "750px",
+          "label": "750 px"
+        },
+        {
+          "value": "natural",
+          "label": "Adapt to first image"
+        },
+        {
+          "value": "90vh",
+          "label": "Fullscreen"
+        }
+      ],
+      "default": "550px",
+      "label": "Desktop height"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "unit": "px",
+      "step": 4,
+      "default": 0,
+      "label": "Top padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "unit": "px",
+      "step": 4,
+      "default": 28,
+      "label": "Bottom padding"
+    },
+    {
+      "type": "header",
+      "content": "Mobile layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width_mobile",
+      "default": true,
+      "label": "Make section full width"
+    },
+    {
+      "type": "checkbox",
+      "id": "rounded_corner_image_mobile",
+      "default": false,
+      "label": "Enable rounded corner images"
+    },
+    {
+      "type": "select",
+      "id": "mobile_height",
+      "options": [
+        {
+          "value": "250px",
+          "label": "250 px"
+        },
+        {
+          "value": "300px",
+          "label": "300 px"
+        },
+        {
+          "value": "400px",
+          "label": "400 px"
+        },
+        {
+          "value": "500px",
+          "label": "500 px"
+        },
+        {
+          "value": "natural",
+          "label": "Adapt to first image"
+        },
+        {
+          "value": "90vh",
+          "label": "Fullscreen"
+        }
+      ],
+      "default": "400px",
+      "label": "Mobile height"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "unit": "px",
+      "step": 4,
+      "default": 0,
+      "label": "Top padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "unit": "px",
+      "step": 4,
+      "default": 20,
+      "label": "Bottom padding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image_banner",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "New Arrivals & Restock",
+          "label": "Heading"
+        },
+        {
+          "type": "range",
+          "id": "heading_size",
+          "min": 50,
+          "max": 200,
+          "step": 10,
+          "unit": "%",
+          "label": "Heading size",
+          "default": 180
+        },
+        {
+          "type": "select",
+          "id": "heading_tag",
+          "default": "h2",
+          "label": "Heading tag",
+          "options": [
+            {
+              "value": "h1",
+              "label": "H1"
+            },
+            {
+              "value": "h2",
+              "label": "H2"
+            },
+            {
+              "value": "h3",
+              "label": "H3"
+            },
+            {
+              "value": "h4",
+              "label": "H4"
+            },
+            {
+              "value": "h5",
+              "label": "H5"
+            },
+            {
+              "value": "h6",
+              "label": "H6"
+            },
+            {
+              "value": "p",
+              "label": "p"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "default": "A Statement Piece For Every Occasion",
+          "label": "Text"
+        },
+        {
+          "type": "range",
+          "id": "text_size",
+          "min": 50,
+          "max": 200,
+          "step": 10,
+          "unit": "%",
+          "label": "Text size",
+          "default": 150
+        },
+        {
+          "type": "select",
+          "id": "content_box_type",
+          "options": [
+            {
+              "value": "square",
+              "label": "Square"
+            },
+            {
+              "value": "round",
+              "label": "Round"
+            }
+          ],
+          "default": "square",
+          "label": "Content box type"
+        },
+        {
+          "type": "checkbox",
+          "id": "add_frame",
+          "default": false,
+          "label": "Add frame"
+        },
+        {
+          "type": "color",
+          "id": "color_content_box_light",
+          "default": "rgba(0,0,0,0)",
+          "label": "Content box color (light)"
+        },
+        {
+          "type": "color",
+          "id": "color_content_box_dark",
+          "default": "rgba(0,0,0,0)",
+          "label": "Content box color (dark)"
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Browse All Collections",
+          "label": "First button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "First button link"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_new_window_button",
+          "default": false,
+          "label": "Open this link in a new window"
+        },
+        {
+          "type": "checkbox",
+          "id": "primary_button_1",
+          "default": true,
+          "label": "Show as primary button"
+        },
+        {
+          "type": "text",
+          "id": "button_label_2",
+          "default": "Shop Silver Jewelry",
+          "label": "Second button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link_2",
+          "label": "Second button link"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_new_window_button_2",
+          "default": false,
+          "label": "Open this link in a new window"
+        },
+        {
+          "type": "checkbox",
+          "id": "primary_button_2",
+          "default": false,
+          "label": "Show as primary button"
+        },
+        {
+          "type": "header",
+          "content": "Styles"
+        },
+        {
+          "type": "color",
+          "id": "color_button",
+          "label": "Button color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "color_button_hover",
+          "label": "Button hover color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "color_text_button",
+          "label": "Button text color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "color_text_button_hover",
+          "label": "Button text hover color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "color_button_secondary",
+          "label": "Secondary button color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "secondary_button_text",
+          "default": "rgba(0,0,0,0)",
+          "label": "Secondary button text color"
+        }
+      ]
+    },
+    {
+      "type": "countdown_timer",
+      "name": "Countdown timer",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Add a countdown timer to instill a sense of urgency among your customers and encourages them to buy a product."
+        },
+        {
+          "type": "select",
+          "id": "timezone",
+          "options": [
+            {
+              "value": "-12",
+              "label": "GMT -12:00"
+            },
+            {
+              "value": "-11",
+              "label": "GMT -11:00"
+            },
+            {
+              "value": "-10",
+              "label": "GMT -10:00"
+            },
+            {
+              "value": "-9",
+              "label": "GMT -9:00"
+            },
+            {
+              "value": "-8",
+              "label": "GMT -8:00"
+            },
+            {
+              "value": "-7",
+              "label": "GMT -7:00"
+            },
+            {
+              "value": "-6",
+              "label": "GMT -6:00"
+            },
+            {
+              "value": "-5",
+              "label": "GMT -5:00"
+            },
+            {
+              "value": "-4",
+              "label": "GMT -4:00"
+            },
+            {
+              "value": "-3",
+              "label": "GMT -3:00"
+            },
+            {
+              "value": "-2",
+              "label": "GMT -2:00"
+            },
+            {
+              "value": "-1",
+              "label": "GMT -1:00"
+            },
+            {
+              "value": "0",
+              "label": "GMT"
+            },
+            {
+              "value": "1",
+              "label": "GMT +1:00"
+            },
+            {
+              "value": "2",
+              "label": "GMT +2:00"
+            },
+            {
+              "value": "3",
+              "label": "GMT +3:00"
+            },
+            {
+              "value": "4",
+              "label": "GMT +4:00"
+            },
+            {
+              "value": "5",
+              "label": "GMT +5:00"
+            },
+            {
+              "value": "6",
+              "label": "GMT +6:00"
+            },
+            {
+              "value": "7",
+              "label": "GMT +7:00"
+            },
+            {
+              "value": "8",
+              "label": "GMT +8:00"
+            },
+            {
+              "value": "9",
+              "label": "GMT +9:00"
+            },
+            {
+              "value": "10",
+              "label": "GMT +10:00"
+            },
+            {
+              "value": "11",
+              "label": "GMT +11:00"
+            },
+            {
+              "value": "12",
+              "label": "GMT +12:00"
+            },
+            {
+              "value": "13",
+              "label": "GMT +13:00"
+            },
+            {
+              "value": "14",
+              "label": "GMT +14:00"
+            }
+          ],
+          "default": "-4",
+          "label": "Time zone"
+        },
+        {
+          "type": "number",
+          "id": "end_year",
+          "default": 2023,
+          "label": "Year"
+        },
+        {
+          "type": "select",
+          "id": "end_month",
+          "options": [
+            {
+              "value": "1",
+              "label": "January"
+            },
+            {
+              "value": "2",
+              "label": "February"
+            },
+            {
+              "value": "3",
+              "label": "March"
+            },
+            {
+              "value": "4",
+              "label": "April"
+            },
+            {
+              "value": "5",
+              "label": "May"
+            },
+            {
+              "value": "6",
+              "label": "June"
+            },
+            {
+              "value": "7",
+              "label": "July"
+            },
+            {
+              "value": "8",
+              "label": "August"
+            },
+            {
+              "value": "9",
+              "label": "September"
+            },
+            {
+              "value": "10",
+              "label": "October"
+            },
+            {
+              "value": "11",
+              "label": "November"
+            },
+            {
+              "value": "12",
+              "label": "December"
+            }
+          ],
+          "default": "1",
+          "label": "Month"
+        },
+        {
+          "type": "select",
+          "id": "end_day",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            },
+            {
+              "value": "5",
+              "label": "5"
+            },
+            {
+              "value": "6",
+              "label": "6"
+            },
+            {
+              "value": "7",
+              "label": "7"
+            },
+            {
+              "value": "8",
+              "label": "8"
+            },
+            {
+              "value": "9",
+              "label": "9"
+            },
+            {
+              "value": "10",
+              "label": "10"
+            },
+            {
+              "value": "11",
+              "label": "11"
+            },
+            {
+              "value": "12",
+              "label": "12"
+            },
+            {
+              "value": "13",
+              "label": "13"
+            },
+            {
+              "value": "14",
+              "label": "14"
+            },
+            {
+              "value": "15",
+              "label": "15"
+            },
+            {
+              "value": "16",
+              "label": "16"
+            },
+            {
+              "value": "17",
+              "label": "17"
+            },
+            {
+              "value": "18",
+              "label": "18"
+            },
+            {
+              "value": "19",
+              "label": "19"
+            },
+            {
+              "value": "20",
+              "label": "20"
+            },
+            {
+              "value": "21",
+              "label": "21"
+            },
+            {
+              "value": "22",
+              "label": "22"
+            },
+            {
+              "value": "23",
+              "label": "23"
+            },
+            {
+              "value": "24",
+              "label": "24"
+            },
+            {
+              "value": "25",
+              "label": "25"
+            },
+            {
+              "value": "26",
+              "label": "26"
+            },
+            {
+              "value": "27",
+              "label": "27"
+            },
+            {
+              "value": "28",
+              "label": "28"
+            },
+            {
+              "value": "29",
+              "label": "29"
+            },
+            {
+              "value": "30",
+              "label": "30"
+            },
+            {
+              "value": "31",
+              "label": "31"
+            }
+          ],
+          "default": "1",
+          "label": "Day"
+        },
+        {
+          "type": "select",
+          "id": "end_hour",
+          "options": [
+            {
+              "value": "0",
+              "label": "12 AM"
+            },
+            {
+              "value": "1",
+              "label": "01 AM"
+            },
+            {
+              "value": "2",
+              "label": "02 AM"
+            },
+            {
+              "value": "3",
+              "label": "03 AM"
+            },
+            {
+              "value": "4",
+              "label": "04 AM"
+            },
+            {
+              "value": "5",
+              "label": "05 AM"
+            },
+            {
+              "value": "6",
+              "label": "06 AM"
+            },
+            {
+              "value": "7",
+              "label": "07 AM"
+            },
+            {
+              "value": "8",
+              "label": "08 AM"
+            },
+            {
+              "value": "9",
+              "label": "09 AM"
+            },
+            {
+              "value": "10",
+              "label": "10 AM"
+            },
+            {
+              "value": "11",
+              "label": "11 AM"
+            },
+            {
+              "value": "12",
+              "label": "12 PM"
+            },
+            {
+              "value": "13",
+              "label": "01 PM"
+            },
+            {
+              "value": "14",
+              "label": "02 PM"
+            },
+            {
+              "value": "15",
+              "label": "03 PM"
+            },
+            {
+              "value": "16",
+              "label": "04 PM"
+            },
+            {
+              "value": "17",
+              "label": "05 PM"
+            },
+            {
+              "value": "18",
+              "label": "06 PM"
+            },
+            {
+              "value": "19",
+              "label": "07 PM"
+            },
+            {
+              "value": "20",
+              "label": "08 PM"
+            },
+            {
+              "value": "21",
+              "label": "09 PM"
+            },
+            {
+              "value": "22",
+              "label": "10 PM"
+            },
+            {
+              "value": "23",
+              "label": "11 PM"
+            }
+          ],
+          "default": "0",
+          "label": "Hour"
+        },
+        {
+          "type": "select",
+          "id": "end_minute",
+          "options": [
+            {
+              "value": "0",
+              "label": "00"
+            },
+            {
+              "value": "15",
+              "label": "15"
+            },
+            {
+              "value": "30",
+              "label": "30"
+            },
+            {
+              "value": "45",
+              "label": "45"
+            }
+          ],
+          "default": "0",
+          "label": "Minute"
+        },
+        {
+          "type": "select",
+          "id": "timer_style",
+          "options": [
+            {
+              "value": "square",
+              "label": "Square"
+            },
+            {
+              "value": "rounded",
+              "label": "Round"
+            }
+          ],
+          "default": "square",
+          "label": "Timer style"
+        },
+        {
+          "type": "select",
+          "id": "border_style",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "border",
+              "label": "Border"
+            }
+          ],
+          "default": "border",
+          "label": "Line and border"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "min": 0,
+          "max": 100,
+          "step": 10,
+          "unit": "%",
+          "label": "Overlay opacity",
+          "default": 100
+        },
+        {
+          "type": "header",
+          "content": "Styles"
+        },
+        {
+          "type": "color",
+          "id": "timer_color_countdown",
+          "label": "Timer color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "text_color_countdown",
+          "label": "Text color",
+          "default": "#525151"
+        },
+        {
+          "type": "color",
+          "id": "bg_color_countdown",
+          "label": "Background color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "header",
+          "content": "Desktop layout"
+        },
+        {
+          "type": "range",
+          "id": "spacing_col",
+          "min": 0,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Column spacing",
+          "default": 12
+        },
+        {
+          "type": "header",
+          "content": "Mobile layout"
+        },
+        {
+          "type": "range",
+          "id": "spacing_col_mobile",
+          "min": 0,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Column spacing",
+          "default": 8
+        }
+      ]
+    },
+    {
+      "type": "menu",
+      "name": "Banner menu",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "menu",
+          "default": "main-menu",
+          "label": "Menu"
+        },
+        {
+          "type": "range",
+          "id": "menu_text_size",
+          "min": 50,
+          "max": 200,
+          "step": 10,
+          "unit": "%",
+          "label": "Menu text size",
+          "default": 170
+        },
+        {
+          "type": "checkbox",
+          "id": "display_mobile",
+          "default": false,
+          "label": "Display on mobile"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "OT - Promotion banner #1",
+      "blocks": [
+        {
+          "type": "image_banner"
+        },
+        {
+          "type": "buttons"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
