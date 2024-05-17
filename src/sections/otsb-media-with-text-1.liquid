@@ -1,3 +1,63 @@
+<script>
+  requestAnimationFrame(() => {
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('xParallax', () => ({
+        debounce(func, wait) {
+          var timeout;
+          return function() {
+              var context = this, args = arguments;
+              var later = function() {
+                timeout = null;
+                func.apply(context, args);
+              };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+          };
+        },
+        load(disable) {
+          if (disable) return;
+  
+          if ("IntersectionObserver" in window && 'IntersectionObserverEntry' in window) {
+            const observerOptions = {
+              root: null,
+              rootMargin: '0px 0px',
+              threshold: 0
+            };
+  
+            var observer = new IntersectionObserver(handleIntersect, observerOptions);
+            var el;
+            function handleIntersect(entries) {
+              entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                  el = entry.target;
+                  window.addEventListener('scroll', parallax, {passive: true, capture: false});
+                } else {
+                  window.removeEventListener('scroll', parallax, {passive: true, capture: false});
+                }
+              });
+            }
+  
+            observer.observe(this.$el);
+            
+            var parallax = this.debounce(function() {
+              var rect = el.getBoundingClientRect();
+              var speed = (window.innerHeight / el.parentElement.offsetHeight) * 20;
+              var shiftDistance = (rect.top - window.innerHeight) / speed;
+              var maxShiftDistance = el.parentElement.offsetHeight / 11;
+              
+              if (shiftDistance < -maxShiftDistance || shiftDistance > maxShiftDistance) {
+                shiftDistance = -maxShiftDistance;
+              }
+              
+              el.style.transform = 'translate3d(0, '+ shiftDistance +'px, 0)';
+            }, 10);
+          }
+        }
+      }));
+    });
+  });
+</script>
+
 {%-liquid
     if section.settings.desktop_image_width == "medium"
       assign iwt_content = "md:w-1/2"
@@ -140,7 +200,7 @@
                 </div>
               {% endif %}
               {% if section.settings.image == blank and section.settings.image_second == blank %}
-                {{ 'image' | placeholder_svg_tag: 'absolute w-full h-full bg-[#C9C9C9] text-[#acacac]' }}
+                  {{ 'image' | placeholder_svg_tag: 'absolute w-full h-full bg-[#C9C9C9] text-[#acacac] otsb-rounded-svg' }}
               {% endif %}
             {% endif %}
           </div>
@@ -317,7 +377,7 @@
   </div>
   {% schema %}
   {
-    "name": "OTSB - Media with text",
+    "name": "OT - Media with text #1",
     "class": "section section-image-with-text x-section",
     "tag": "section",
     "disabled_on": {
@@ -454,7 +514,7 @@
             "label": "Large"
           }
         ],
-        "default": "large",
+        "default": "medium",
         "label": "Desktop image width"
       },
       {
@@ -481,7 +541,7 @@
         "step": 1,
         "unit": "px",
         "label": "Corner radius",
-        "default": 0
+        "default": 10
       },
       {
         "type": "select",
@@ -496,7 +556,7 @@
             "label": "Overlap"
           }
         ],
-        "default": "overlap",
+        "default": "no-overlap",
         "label": "Content layout"
       },
       {
@@ -543,13 +603,13 @@
             "label": "Right"
           }
         ],
-        "default": "start",
+        "default": "center",
         "label": "Text alignment"
       },
       {
         "type": "color",
         "id": "background_color_light",
-        "default": "rgba(0,0,0,0)",
+        "default": "rgb(255,255,255)",
         "label": "Background color (light)"
       },
       {
@@ -581,7 +641,7 @@
       {
         "type": "checkbox",
         "id": "full_width",
-        "default": false,
+        "default": true,
         "label": "Make section full width"
       },
       {
@@ -852,7 +912,7 @@
     ],
     "presets": [
       {
-        "name": "OTSB - Media with text",
+        "name": "OT - Media with text #1",
         "blocks": [
           {
             "type": "heading"
