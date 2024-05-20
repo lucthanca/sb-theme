@@ -1,64 +1,64 @@
 <script>
-  requestAnimationFrame(() => {
-    document.addEventListener('alpine:init', () => {
-      Alpine.data('xParallax', () => ({
-        debounce(func, wait) {
-          var timeout;
-          return function() {
-              var context = this, args = arguments;
-              var later = function() {
-                timeout = null;
-                func.apply(context, args);
-              };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-          };
-        },
-        load(disable) {
-          if (disable) return;
-  
-          if ("IntersectionObserver" in window && 'IntersectionObserverEntry' in window) {
-            const observerOptions = {
-              root: null,
-              rootMargin: '0px 0px',
-              threshold: 0
+    requestAnimationFrame(() => {
+      document.addEventListener('alpine:init', () => {
+        Alpine.data('xParallax', () => ({
+          debounce(func, wait) {
+            var timeout;
+            return function() {
+                var context = this, args = arguments;
+                var later = function() {
+                  timeout = null;
+                  func.apply(context, args);
+                };
+              clearTimeout(timeout);
+              timeout = setTimeout(later, wait);
             };
-  
-            var observer = new IntersectionObserver(handleIntersect, observerOptions);
-            var el;
-            function handleIntersect(entries) {
-              entries.forEach(function(entry) {
-                if (entry.isIntersecting) {
-                  el = entry.target;
-                  window.addEventListener('scroll', parallax, {passive: true, capture: false});
-                } else {
-                  window.removeEventListener('scroll', parallax, {passive: true, capture: false});
-                }
-              });
-            }
-  
-            observer.observe(this.$el);
-            
-            var parallax = this.debounce(function() {
-              var rect = el.getBoundingClientRect();
-              var speed = (window.innerHeight / el.parentElement.offsetHeight) * 20;
-              var shiftDistance = (rect.top - window.innerHeight) / speed;
-              var maxShiftDistance = el.parentElement.offsetHeight / 11;
-              
-              if (shiftDistance < -maxShiftDistance || shiftDistance > maxShiftDistance) {
-                shiftDistance = -maxShiftDistance;
+          },
+          load(disable) {
+            if (disable) return;
+    
+            if ("IntersectionObserver" in window && 'IntersectionObserverEntry' in window) {
+              const observerOptions = {
+                root: null,
+                rootMargin: '0px 0px',
+                threshold: 0
+              };
+    
+              var observer = new IntersectionObserver(handleIntersect, observerOptions);
+              var el;
+              function handleIntersect(entries) {
+                entries.forEach(function(entry) {
+                  if (entry.isIntersecting) {
+                    el = entry.target;
+                    window.addEventListener('scroll', parallax, {passive: true, capture: false});
+                  } else {
+                    window.removeEventListener('scroll', parallax, {passive: true, capture: false});
+                  }
+                });
               }
+    
+              observer.observe(this.$el);
               
-              el.style.transform = 'translate3d(0, '+ shiftDistance +'px, 0)';
-            }, 10);
+              var parallax = this.debounce(function() {
+                var rect = el.getBoundingClientRect();
+                var speed = (window.innerHeight / el.parentElement.offsetHeight) * 20;
+                var shiftDistance = (rect.top - window.innerHeight) / speed;
+                var maxShiftDistance = el.parentElement.offsetHeight / 11;
+                
+                if (shiftDistance < -maxShiftDistance || shiftDistance > maxShiftDistance) {
+                  shiftDistance = -maxShiftDistance;
+                }
+                
+                el.style.transform = 'translate3d(0, '+ shiftDistance +'px, 0)';
+              }, 10);
+            }
           }
-        }
-      }));
+        }));
+      });
     });
-  });
-</script>
-
-{% liquid
+  </script>
+  
+  {% liquid
     if settings.heading_base_size != blank
       assign heading_base_size = settings.heading_base_size | times: 0.0225
     else
@@ -95,8 +95,8 @@
   {% render 'otsb-section-divider' %}
   
   <div class="pb-[{{ section.settings.padding_bottom_mobile }}px] pt-[{{ section.settings.padding_top_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px] md:pt-[{{ section.settings.padding_top }}px]">
-    <div class="faq-container {% if section.settings.image == blank %}{% if section.settings.image_alignment == "right" %}lg:flex-row-reverse{% else %}lg:flex-row{% endif %}{% if section.settings.image_alignment_mobile == "right" %} flex-col-reverse{% else %} flex-col{% endif %} lg:min-w-full flex gap-y-7 lg:gap-16 lg:!px-5{% endif %} {% if section.settings.desktop_layout == "1" and section.settings.image == blank %}{% if section.settings.make_full_page_width %} page-width{% else %} max-w-3xl md:pl-0 md:pr-0{% endif %} pr-5 pl-5{% else %} page-width{% endif %} ml-auto mr-auto relative">
-      {%- if section.settings.image != blank -%}
+    <div class="otsb-faq-container {% if section.settings.desktop_layout == "1" and section.settings.image == blank %}{% if section.settings.make_full_page_width %} otsb-page-width{% else %} max-w-3xl md:pl-0 md:pr-0{% endif %} pr-5 pl-5{% else %} otsb-page-width{% endif %} ml-auto mr-auto relative">
+      {% if section.settings.image != blank %}
         <div class="flex gap-y-7{% if is_rtl %} ltr{% endif %}{% if section.settings.desktop_layout == "1" %} lg:gap-16{% else %} lg:gap-9{% endif %}{% if section.settings.image_alignment == "right" %} lg:flex-row-reverse{% else %} lg:flex-row{% endif %}{% if section.settings.image_alignment_mobile == "right" %} flex-col-reverse{% else %} flex-col{% endif %}">
           {%- style -%}
             @media screen and (min-width: 1024px) {
@@ -147,13 +147,8 @@
               </div>
             </div>
           </div>
-      {%- else -%}
-        <div class="relative lg:flex-1{% if section.settings.mobile_height == 'auto' %}natural-image-mobile-{{ section.id }}{% endif %}{% if section.settings.desktop_height == 'auto' %} natural-image-{{ section.id }}{% endif %} h-[{{ section.settings.mobile_height }}] lg:h-[{{ section.settings.desktop_height }}]{% if section.settings.desktop_height == 'adapt' %} lg:h-full{% endif %}">  
-          {{ 'image' | placeholder_svg_tag: 'w-full h-full object-cover bg-[#C9C9C9] text-[#acacac]' }}
-        </div>
-      {%- endif -%} 
-          
-      <div class="otsb-faq-wrapper{% if is_rtl %} otsb-rtl{% endif %}{% if section.settings.desktop_layout == "1" %} lg:w-1/2{% else %} lg:w-2/3{% endif %}">
+      {% endif %}
+      <div class="otsb-faq-wrapper{% if is_rtl %} otsb-rtl{% endif %}{% if section.settings.image != blank %}{% if section.settings.desktop_layout == "1" %} lg:w-1/2{% else %} lg:w-2/3{% endif %}{% endif %}">
         <div class="mb-5 text-{{ section.settings.heading_alignment }}{% unless section.settings.heading_alignment contains 'center' %} flex items-center{% endunless %} otsb-heading-{{ section.settings.heading_alignment }}">
           {%- if section.settings.heading != blank -%}
             <{{ section.settings.heading_tag }} class="heading--{{ section.id }} otsb-section-header otsb-h2 block leading-tight flex-auto otsb-p-break-words">
@@ -262,7 +257,7 @@
   
   {% schema %}
   {
-    "name": "OT - Faq #2",
+    "name": "OT - Faq #3",
     "tag": "section",
     "class": "section section-faq x-section",
     "disabled_on": {
@@ -344,7 +339,7 @@
       {
         "type": "checkbox",
         "id": "row_background",
-        "default": false,
+        "default": true,
         "label": "Rows secondary background"
       },
       {
@@ -356,7 +351,7 @@
       {
         "type": "checkbox",
         "id": "show_view_all",
-        "default": false,
+        "default": true,
         "label": "Show \"View all\" button"
       },
       {
@@ -422,7 +417,7 @@
             "label": "2 columns"
           }
         ],
-        "default": "1"
+        "default": "2"
       },
       {
         "type": "select",
@@ -857,7 +852,7 @@
                 "label": "Yoga"
               }
             ],
-            "default": "question-mark",
+            "default": "none",
             "label": "Icon"
           },
           {
@@ -883,7 +878,7 @@
     ],
     "presets": [
       {
-        "name": "OT - Faq #2",
+        "name": "OT - Faq #3",
         "blocks": [
           {
             "type": "frequently_asked_question"

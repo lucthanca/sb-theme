@@ -1,0 +1,44 @@
+@layer components {
+    .otsb-image-position-mobile-left {
+        @apply flex flex-col;
+    }
+    .otsb-image-position-mobile-right {
+        @apply flex flex-col-reverse;
+    }
+    .otsb-image-position-right {
+        @apply flex md:flex-row-reverse;
+    }
+    .otsb-image-position-left {
+        @apply flex md:flex-row
+    }
+    .otsb-iwt-content {
+        @apply pr-5 pl-5 md:pl-12 md:pr-12 md:pt-10 md:pb-10 pb-3;
+    }
+    .otsb-image-position-mobile-right .otsb-iwt-overlap {
+        @apply -mb-10 md:mb-0
+    }
+    .otsb-image-position-mobile-left .otsb-iwt-overlap {
+        @apply -mt-10 md:mt-0 
+    }
+    .otsb-image-position-right .otsb-iwt-overlap {
+        @apply md:-mr-10 z-10 pt-3 md:pt-10;
+    }
+    .otsb-image-position-left .otsb-iwt-overlap {
+        @apply md:-ml-10 z-10 pt-3 md:pt-10;
+    }
+    .otsb-image-position-right .otsb-iwt-no-overlap {
+        @apply lg:pr-24 lg:pl-11 pt-3 md:pt-10;
+    }
+    .otsb-image-position-left.otsb-stacked .otsb-iwt-no-overlap {
+        @apply pt-8 md:pt-10;
+    }
+    .otsb-image-position-left .otsb-iwt-no-overlap {
+        @apply pt-3 lg:pl-24 lg:pr-11 md:pt-10;
+    }
+    .otsb-iwt-content-overlap {
+        @apply md:pt-10 md:pb-10;
+    }
+    .otsb-button-play:hover span {
+        @apply scale-125;
+      }
+}
