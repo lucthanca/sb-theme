@@ -1,135 +1,3 @@
-<script>
-  requestAnimationFrame(() => {
-    document.addEventListener('alpine:init', () => {
-      Alpine.store('xSplide', {
-        load(el, configs) {
-          const initSlider = () => {
-            const id = el.getAttribute('id');
-
-            if (configs.classes != undefined) {
-              if (!configs.classes.arrow)
-                configs.classes.arrow =
-                  'otsb-arrow w-8 h-8 p-2 absolute z-10 top-1/2 -translate-y-1/2 otsb-hidden md:flex items-center justify-center';
-              if (!configs.classes.next) configs.classes.next = 'right-0';
-              if (!configs.classes.prev) configs.classes.prev = '-rotate-180';
-            }
-            let splide = new Splide('#' + id, configs);
-
-            if (configs.thumbs) {
-              let thumbsRoot = document.getElementById(configs.thumbs);
-              let thumbs = thumbsRoot.getElementsByClassName('x-thumbnail');
-              let current;
-              let _this = this;
-
-              for (let i = 0; i < thumbs.length; i++) {
-                thumbs[i].addEventListener('click', function () {
-                  _this.moveThumbnail(i, thumbs[i], thumbsRoot, configs.thumbs_direction);
-                  splide.go(i);
-                });
-              }
-              splide.on('mounted move', function () {
-                let thumbnail = thumbs[splide.index];
-
-                if (thumbnail) {
-                  if (current) {
-                    current.classList.add('opacity-30');
-                  }
-                  thumbnail.classList.remove('opacity-30');
-                  current = thumbnail;
-                  _this.moveThumbnail(splide.index, thumbnail, thumbsRoot, configs.thumbs_direction);
-                }
-              });
-            }
-
-            if (configs.hotspot) {
-              let hotspotRoot = document.getElementById(configs.hotspot);
-              let hotspots = hotspotRoot.getElementsByClassName('x-hotspot');
-              let current;
-
-              if (
-                configs.disableHoverOnTouch &&
-                ('ontouchstart' in window ||
-                  (window.DocumentTouch && window.document instanceof DocumentTouch) ||
-                  window.navigator.maxTouchPoints ||
-                  window.navigator.msMaxTouchPoints)
-              ) {
-                for (let i = 0; i < hotspots.length; i++) {
-                  hotspots[i].addEventListener('click', function () {
-                    splide.go(i);
-                  });
-                }
-              } else {
-                for (let i = 0; i < hotspots.length; i++) {
-                  hotspots[i].addEventListener('mouseover', function () {
-                    splide.go(i);
-                  });
-                  hotspots[i].addEventListener('focus', function () {
-                    splide.go(i);
-                  });
-                }
-              }
-              splide.on('mounted move', function () {
-                let hotspot = hotspots[splide.index];
-
-                if (hotspot) {
-                  if (current) {
-                    current.classList.remove('active-hotspot');
-                  }
-                  hotspot.classList.add('active-hotspot');
-                  current = hotspot;
-                }
-              });
-            }
-
-            if (configs.progressBar) {
-              var bar = splide.root.querySelector('.splide-progress-bar');
-              splide.on('mounted move', function () {
-                var end = splide.Components.Controller.getEnd() + 1;
-                var rate = (splide.index + 1) / end;
-                if (bar) {
-                  bar.style.width = String(100 * rate) + '%';
-                }
-              });
-            }
-
-            if (configs.events) {
-              configs.events.forEach((e) => {
-                splide.on(e.event, e.callback);
-              });
-            }
-
-            el.splide = splide;
-            splide.mount();
-          };
-
-          if (!window.OTSB.loadedScript.includes('slider')) {
-            deferScriptLoad('slider', window.OTSB.sliderScript, initSlider, true);
-          } else if (window.Splide) {
-            initSlider();
-          } else {
-            document.addEventListener('slider loaded', () => {
-              initSlider();
-            });
-          }
-        },
-        moveThumbnail(index, thumbnail, thumbsRoot, direction) {
-          if (direction == 'vertical') {
-            setTimeout(() => {
-              thumbsRoot.scrollTop =
-                (index + 1) * thumbnail.offsetHeight -
-                thumbsRoot.offsetHeight * 0.5 +
-                thumbnail.offsetHeight * 0.5 +
-                index * 12;
-            }, 50);
-          } else {
-            thumbsRoot.scrollLeft = (index - 2) * thumbnail.offsetWidth;
-          }
-        },
-      });
-    });
-  });
-</script>
-
 {%- liquid
   if settings.heading_base_size != blank
     assign size_heading = section.settings.heading_size | times: settings.heading_base_size | times: 0.000225
@@ -353,7 +221,8 @@
                       title_size: section.settings.title_size,
                       content_alignment: section.settings.content_alignment,
                       content_position: section.settings.content_position,
-                      image_overlay_opacity: section.settings.image_overlay_opacity
+                      image_overlay_opacity: section.settings.image_overlay_opacity,
+                      index: forloop.index
                     %}
                   {%- when 'promotion_block' -%}
                     {% render 'otsb-promotion-block',
@@ -412,6 +281,138 @@
   </div>
 </div>
 
+<script>
+  requestAnimationFrame(() => {
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('xSplide', {
+        load(el, configs) {
+          const initSlider = () => {
+            const id = el.getAttribute('id');
+
+            if (configs.classes != undefined) {
+              if (!configs.classes.arrow)
+                configs.classes.arrow =
+                  'otsb-arrow w-8 h-8 p-2 absolute z-10 top-1/2 -translate-y-1/2 otsb-hidden md:flex items-center justify-center';
+              if (!configs.classes.next) configs.classes.next = 'right-0';
+              if (!configs.classes.prev) configs.classes.prev = '-rotate-180';
+            }
+            let splide = new Splide('#' + id, configs);
+
+            if (configs.thumbs) {
+              let thumbsRoot = document.getElementById(configs.thumbs);
+              let thumbs = thumbsRoot.getElementsByClassName('x-thumbnail');
+              let current;
+              let _this = this;
+
+              for (let i = 0; i < thumbs.length; i++) {
+                thumbs[i].addEventListener('click', function () {
+                  _this.moveThumbnail(i, thumbs[i], thumbsRoot, configs.thumbs_direction);
+                  splide.go(i);
+                });
+              }
+              splide.on('mounted move', function () {
+                let thumbnail = thumbs[splide.index];
+
+                if (thumbnail) {
+                  if (current) {
+                    current.classList.add('opacity-30');
+                  }
+                  thumbnail.classList.remove('opacity-30');
+                  current = thumbnail;
+                  _this.moveThumbnail(splide.index, thumbnail, thumbsRoot, configs.thumbs_direction);
+                }
+              });
+            }
+
+            if (configs.hotspot) {
+              let hotspotRoot = document.getElementById(configs.hotspot);
+              let hotspots = hotspotRoot.getElementsByClassName('x-hotspot');
+              let current;
+
+              if (
+                configs.disableHoverOnTouch &&
+                ('ontouchstart' in window ||
+                  (window.DocumentTouch && window.document instanceof DocumentTouch) ||
+                  window.navigator.maxTouchPoints ||
+                  window.navigator.msMaxTouchPoints)
+              ) {
+                for (let i = 0; i < hotspots.length; i++) {
+                  hotspots[i].addEventListener('click', function () {
+                    splide.go(i);
+                  });
+                }
+              } else {
+                for (let i = 0; i < hotspots.length; i++) {
+                  hotspots[i].addEventListener('mouseover', function () {
+                    splide.go(i);
+                  });
+                  hotspots[i].addEventListener('focus', function () {
+                    splide.go(i);
+                  });
+                }
+              }
+              splide.on('mounted move', function () {
+                let hotspot = hotspots[splide.index];
+
+                if (hotspot) {
+                  if (current) {
+                    current.classList.remove('otsb-active-hotspot');
+                  }
+                  hotspot.classList.add('otsb-active-hotspot');
+                  current = hotspot;
+                }
+              });
+            }
+
+            if (configs.progressBar) {
+              var bar = splide.root.querySelector('.splide-progress-bar');
+              splide.on('mounted move', function () {
+                var end = splide.Components.Controller.getEnd() + 1;
+                var rate = (splide.index + 1) / end;
+                if (bar) {
+                  bar.style.width = String(100 * rate) + '%';
+                }
+              });
+            }
+
+            if (configs.events) {
+              configs.events.forEach((e) => {
+                splide.on(e.event, e.callback);
+              });
+            }
+
+            el.splide = splide;
+            splide.mount();
+          };
+
+          if (!window.OTSB.loadedScript.includes('slider')) {
+            deferScriptLoad('slider', window.OTSB.sliderScript, initSlider, true);
+          } else if (window.Splide) {
+            initSlider();
+          } else {
+            document.addEventListener('slider loaded', () => {
+              initSlider();
+            });
+          }
+        },
+        moveThumbnail(index, thumbnail, thumbsRoot, direction) {
+          if (direction == 'vertical') {
+            setTimeout(() => {
+              thumbsRoot.scrollTop =
+                (index + 1) * thumbnail.offsetHeight -
+                thumbsRoot.offsetHeight * 0.5 +
+                thumbnail.offsetHeight * 0.5 +
+                index * 12;
+            }, 50);
+          } else {
+            thumbsRoot.scrollLeft = (index - 2) * thumbnail.offsetWidth;
+          }
+        },
+      });
+    });
+  });
+</script>
+
 {% schema %}
 {
   "name": "OT - Collection List #3",
@@ -425,7 +426,7 @@
     {
       "type": "text",
       "id": "heading",
-      "default": "Collection list",
+      "default": "Popular Categories",
       "label": "Heading"
     },
     {
@@ -698,7 +699,7 @@
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 4,
+      "default": 20,
       "label": "Block spacing"
     },
     {

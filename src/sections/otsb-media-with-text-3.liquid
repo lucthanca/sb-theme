@@ -1,64 +1,4 @@
-<script>
-    requestAnimationFrame(() => {
-      document.addEventListener('alpine:init', () => {
-        Alpine.data('xParallax', () => ({
-          debounce(func, wait) {
-            var timeout;
-            return function() {
-                var context = this, args = arguments;
-                var later = function() {
-                  timeout = null;
-                  func.apply(context, args);
-                };
-              clearTimeout(timeout);
-              timeout = setTimeout(later, wait);
-            };
-          },
-          load(disable) {
-            if (disable) return;
-    
-            if ("IntersectionObserver" in window && 'IntersectionObserverEntry' in window) {
-              const observerOptions = {
-                root: null,
-                rootMargin: '0px 0px',
-                threshold: 0
-              };
-    
-              var observer = new IntersectionObserver(handleIntersect, observerOptions);
-              var el;
-              function handleIntersect(entries) {
-                entries.forEach(function(entry) {
-                  if (entry.isIntersecting) {
-                    el = entry.target;
-                    window.addEventListener('scroll', parallax, {passive: true, capture: false});
-                  } else {
-                    window.removeEventListener('scroll', parallax, {passive: true, capture: false});
-                  }
-                });
-              }
-    
-              observer.observe(this.$el);
-              
-              var parallax = this.debounce(function() {
-                var rect = el.getBoundingClientRect();
-                var speed = (window.innerHeight / el.parentElement.offsetHeight) * 20;
-                var shiftDistance = (rect.top - window.innerHeight) / speed;
-                var maxShiftDistance = el.parentElement.offsetHeight / 11;
-                
-                if (shiftDistance < -maxShiftDistance || shiftDistance > maxShiftDistance) {
-                  shiftDistance = -maxShiftDistance;
-                }
-                
-                el.style.transform = 'translate3d(0, '+ shiftDistance +'px, 0)';
-              }, 10);
-            }
-          }
-        }));
-      });
-    });
-  </script>
-  
-  {%-liquid
+{%-liquid
       if section.settings.desktop_image_width == "medium"
         assign iwt_content = "md:w-1/2"
         assign iwt_image = "md:w-1/2"
@@ -375,6 +315,67 @@
         </div>
       </div>
     </div>
+
+    <script>
+      requestAnimationFrame(() => {
+        document.addEventListener('alpine:init', () => {
+          Alpine.data('xParallax', () => ({
+            debounce(func, wait) {
+              var timeout;
+              return function() {
+                  var context = this, args = arguments;
+                  var later = function() {
+                    timeout = null;
+                    func.apply(context, args);
+                  };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+              };
+            },
+            load(disable) {
+              if (disable) return;
+      
+              if ("IntersectionObserver" in window && 'IntersectionObserverEntry' in window) {
+                const observerOptions = {
+                  root: null,
+                  rootMargin: '0px 0px',
+                  threshold: 0
+                };
+      
+                var observer = new IntersectionObserver(handleIntersect, observerOptions);
+                var el;
+                function handleIntersect(entries) {
+                  entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                      el = entry.target;
+                      window.addEventListener('scroll', parallax, {passive: true, capture: false});
+                    } else {
+                      window.removeEventListener('scroll', parallax, {passive: true, capture: false});
+                    }
+                  });
+                }
+      
+                observer.observe(this.$el);
+                
+                var parallax = this.debounce(function() {
+                  var rect = el.getBoundingClientRect();
+                  var speed = (window.innerHeight / el.parentElement.offsetHeight) * 20;
+                  var shiftDistance = (rect.top - window.innerHeight) / speed;
+                  var maxShiftDistance = el.parentElement.offsetHeight / 11;
+                  
+                  if (shiftDistance < -maxShiftDistance || shiftDistance > maxShiftDistance) {
+                    shiftDistance = -maxShiftDistance;
+                  }
+                  
+                  el.style.transform = 'translate3d(0, '+ shiftDistance +'px, 0)';
+                }, 10);
+              }
+            }
+          }));
+        });
+      });
+    </script>
+    
     {% schema %}
     {
       "name": "OT - Media with text #3",
@@ -720,7 +721,6 @@
             {
               "type": "text",
               "id": "subheading",
-              "default": "Example subheading",
               "label": "Subheading"
             },
             {
@@ -839,7 +839,7 @@
               "type": "color",
               "id": "button_light",
               "label": "Primary button (light)",
-              "default": "rgba(0,0,0,0)"
+              "default": "rgba(255,142,22,1)"
             },
             {
               "type": "color",
@@ -915,10 +915,17 @@
           "name": "OT - Media with text #3",
           "blocks": [
             {
-              "type": "heading"
+              "type": "heading",
+              "settings": {
+                "heading": "Trending Styles",
+                "text": "<p>Unleash your inner trendsetter with our curated collection of the latest fashion-forward pieces. Stay ahead of the curve and make a statement wherever you go. Build a wardrobe that speaks volumes with our must-have essentials.</p>"
+              }
             },
             {
-              "type": "button"
+              "type": "button",
+              "settings": {
+                "button_label": "Explore Now"
+              }
             }
           ]
         }

@@ -227,8 +227,8 @@ input[type="range"].before-after__slider::-webkit-slider-thumb {
   bottom: 8px;
 }
 
-.animate_slideshow__box,
-.animate_transition_slide__box {
+.otsb-animate_slideshow__box,
+.otsb-animate_transition_slide__box {
   opacity: 0;
   transform: translate(-4rem);
   transition-property: transform, opacity;
@@ -236,14 +236,14 @@ input[type="range"].before-after__slider::-webkit-slider-thumb {
   transition-duration: 0.6s;
 }
 
-.active.animate_transition_slide__box,
-.x-splide-slide.is-active .animate_slideshow__box {
+.active.otsb-animate_transition_slide__box,
+.x-splide-slide.is-active .otsb-animate_slideshow__box {
   opacity: 1;
   transform: translate(0);
 }
 
 .animate_slideshow__image,
-.animate_transition_slide__image {
+.otsb-animate_transition_slide__image {
   transform: scale(1.1);
   transition-property: transform;
   transition-timing-function: ease-in;
@@ -251,15 +251,15 @@ input[type="range"].before-after__slider::-webkit-slider-thumb {
 }
 
 .x-splide-slide.is-active .animate_slideshow__image,
-.active.animate_transition_slide__image {
+.active.otsb-animate_transition_slide__image {
   transform: scale(1);
 }
 
-.x-splide-slide.is-active .active-slide-fade {
+.x-splide-slide.is-active .otsb-active-slide-fade {
   display: block;
 }
 
-.x-splide-slide:not([aria-roledescription]) .active-slide-fade-first {
+.x-splide-slide:not([aria-roledescription]) .otsb-active-slide-fade-first {
   display: block;
 }
 
@@ -384,7 +384,7 @@ h2,
 h3,
 .otsb-h3,
 h4,
-.h4,
+.otsb-h4,
 h5,
 .h5,
 h6,
@@ -404,7 +404,7 @@ h2 *::-moz-selection,
 h3 *::-moz-selection,
 .otsb-h3 *::-moz-selection,
 h4 *::-moz-selection,
-.h4 *::-moz-selection,
+.otsb-h4 *::-moz-selection,
 h5 *::-moz-selection,
 .h5 *::-moz-selection,
 h6 *::-moz-selection,
@@ -434,7 +434,7 @@ h2::-moz-selection,
 h3::-moz-selection,
 .otsb-h3::-moz-selection,
 h4::-moz-selection,
-.h4::-moz-selection,
+.otsb-h4::-moz-selection,
 h5::-moz-selection,
 .h5::-moz-selection,
 h6::-moz-selection,
@@ -449,7 +449,7 @@ h2::selection,
 h3::selection,
 .otsb-h3::selection,
 h4::selection,
-.h4::selection,
+.otsb-h4::selection,
 h5::selection,
 .h5::selection,
 h6::selection,
@@ -473,7 +473,7 @@ h3,
 }
 
 h4,
-.h4 {
+.otsb-h4 {
   font-size: var(--h4-font-size-mobile);
 }
 
@@ -566,7 +566,7 @@ button.otsb-button-solid,
 }
 
 .otsb-text-normal {
-  font-size: var(--font-size-normal-mobile);
+  font-size: var(--font-size-normal-mobile, 0.81rem);
 }
 
 .text-large {
@@ -715,8 +715,8 @@ input[type="search"]::-webkit-search-cancel-button {
   background: rgba(var(--image-treatment-overlay, 32, 32, 32), 1);
 }
 
-.image-treatment-text {
-  color: rgba(var(--image-treatment-text, 255, 255, 255));
+.otsb-image-treatment-text {
+  color: rgba(var(--image-treatment-text, 255, 255, 255)) !important;
 }
 
 .paginate-underline-active,
@@ -742,7 +742,7 @@ input[type="search"]::-webkit-search-cancel-button {
   background-color: rgba(var(--colors-text), 0.2);
 }
 
-.image-treatment-text::selection {
+.otsb-image-treatment-text::selection {
   background-color: rgba(var(--image-treatment-text, 255, 255, 255), 0.2);
 }
 
@@ -758,12 +758,12 @@ svg {
   border-width: 1px;
 }
 
-.x-slider-item .pagination-link:hover:after {
+.x-slider-item .otsb-pagination-link:hover:after {
   transform: scaleX(1);
   transform-origin: 0% 50%;
 }
 
-.x-slider-item .pagination-link:after {
+.x-slider-item .otsb-pagination-link:after {
   content: "";
   display: block;
   position: absolute;
@@ -776,7 +776,7 @@ svg {
   transition: transform 0.15s linear;
 }
 
-.x-slider-item.active-hotspot .pagination-link:after {
+.x-slider-item.otsb-active-hotspot .otsb-pagination-link:after {
   transform: scaleX(1);
   transform-origin: 0% 50%;
 }
@@ -820,7 +820,7 @@ svg {
   }
 
   h4,
-  .h4 {
+  .otsb-h4 {
     font-size: var(--h4-font-size);
   }
 
@@ -847,7 +847,7 @@ svg {
   }
 
   .otsb-text-normal {
-    font-size: var(--font-size-normal);
+    font-size: var(--font-size-normal, 0.9rem);
   }
 
   .text-large {
@@ -903,8 +903,8 @@ svg {
     background: rgb(var(--colors-button-hover, 255, 102, 0));
   }
 
-  button.none_border,
-  .otsb-button.none_border {
+  button.otsb-none_border,
+  .otsb-button.otsb-none_border {
     @apply border-0;
   }
 
@@ -938,7 +938,7 @@ svg {
     @apply pr-5 pl-5 mx-auto;
   }
 
-  .page-width-mobile {
+  .otsb-page-width-mobile {
     @apply pr-5 pl-5 mx-auto;
   }
 
