@@ -282,15 +282,15 @@
               <div class="table-cell max-w-2xl md:min-w-[30rem] lg:w-3/5{% if block.settings.content_alignment == "custom" %} min-w-[90%] lg:min-w-[30rem] absolute content--{{ block.id }} text-{{ block.settings.alignment }} pl-5 pr-5{% else %} align-{{ alignment[0] }} text-{{ block.settings.alignment }}{% endif %}">
                 <div :class="effect && 'active'" class="animate_transition_slide__box{% if block.settings.content_alignment contains 'center' %} xl:pl-5 xl:pr-5 mx-auto{% endif %}{% if block.settings.content_alignment != 'custom' %} max-w-2xl pt-5 pr-5 pl-5 float-{{ alignment[1] }}{% endif -%}{% if section.settings.slider_visual != "none" %} pb-10 lg:pb-12{% endif %}">
                   {%- if block.settings.subheading != blank -%}
-                    <p class="sub-heading-{{ block.id }} leading-tight italic p-break-words image-treatment-text">{{ block.settings.subheading | escape }}</p>
+                    <p class="sub-heading-{{ block.id }} leading-tight italic p-break-words otsb-image-treatment-text">{{ block.settings.subheading | escape }}</p>
                   {%- endif -%}
                   {%- if block.settings.heading != blank -%}
-                    <{{ block.settings.heading_tag }} class="p-break-words heading--{{ block.id }} h2 block mt-1 leading-tight image-treatment-text">
+                    <{{ block.settings.heading_tag }} class="p-break-words heading--{{ block.id }} h2 block mt-1 leading-tight otsb-image-treatment-text">
                       {{ block.settings.heading | escape }}
                     </{{ block.settings.heading_tag }}>
                   {%- endif -%}
                   {%- if block.settings.text != blank -%}
-                    <div class="lg:mt-1 p-break-words rte image-treatment-text text-medium rte">
+                    <div class="lg:mt-1 p-break-words rte otsb-image-treatment-text text-medium rte">
                       {{ block.settings.text }}
                     </div>
                   {%- endif -%}
