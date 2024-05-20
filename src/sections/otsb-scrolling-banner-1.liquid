@@ -257,21 +257,6 @@
   </div>
 </div>
 
-<script>
-  requestAnimationFrame(() => {
-    document.addEventListener('alpine:init', () => {
-      Alpine.store('xScrollPromotion', {
-        load(el) {
-          let scroll = el.getElementsByClassName('el_animate');
-          for (let i = 0; i < scroll.length; i++) {
-            scroll[i].classList.add('animate-scroll-banner');
-          }
-        }
-      });
-    })
-  });
-</script>
-
 {% schema %}
 {
   "name": "OT - Scroll promotion #1",

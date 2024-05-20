@@ -1544,10 +1544,6 @@ video {
   display:table-cell
 }
 
-.grid{
-  display:grid
-}
-
 .hidden{
   display:none
 }
