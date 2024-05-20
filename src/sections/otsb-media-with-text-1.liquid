@@ -642,7 +642,7 @@
       {
         "type": "checkbox",
         "id": "full_width",
-        "default": true,
+        "default": false,
         "label": "Make section full width"
       },
       {
@@ -721,7 +721,6 @@
           {
             "type": "text",
             "id": "subheading",
-            "default": "Example subheading",
             "label": "Subheading"
           },
           {
@@ -840,7 +839,7 @@
             "type": "color",
             "id": "button_light",
             "label": "Primary button (light)",
-            "default": "rgba(0,0,0,0)"
+            "default": "rgba(255,142,22,1)"
           },
           {
             "type": "color",
@@ -916,10 +915,17 @@
         "name": "OT - Media with text #1",
         "blocks": [
           {
-            "type": "heading"
+            "type": "heading",
+            "settings": {
+              "heading": "House + Home",
+              "text": "<p>Commodo sociosqu venenatis cras dolor sagittis integer luctus sem primis eget maecenas sed urna malesuada consectetuer</p>"
+            }
           },
           {
-            "type": "button"
+            "type": "button",
+            "settings": {
+              "button_label": "Explore Now"
+            }
           }
         ]
       }

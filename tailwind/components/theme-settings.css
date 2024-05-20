@@ -566,7 +566,7 @@ button.otsb-button-solid,
 }
 
 .otsb-text-normal {
-  font-size: var(--font-size-normal-mobile);
+  font-size: var(--font-size-normal-mobile, 0.81rem);
 }
 
 .text-large {
@@ -847,7 +847,7 @@ svg {
   }
 
   .otsb-text-normal {
-    font-size: var(--font-size-normal);
+    font-size: var(--font-size-normal, 0.9rem);
   }
 
   .text-large {

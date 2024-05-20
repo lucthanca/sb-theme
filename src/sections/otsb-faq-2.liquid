@@ -35,7 +35,7 @@
   {% render 'otsb-section-divider' %}
   
   <div class="pb-[{{ section.settings.padding_bottom_mobile }}px] pt-[{{ section.settings.padding_top_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px] md:pt-[{{ section.settings.padding_top }}px]">
-    <div class="faq-container {% if section.settings.image == blank %}{% if section.settings.image_alignment == "right" %}lg:flex-row-reverse{% else %}lg:flex-row{% endif %}{% if section.settings.image_alignment_mobile == "right" %} flex-col-reverse{% else %} flex-col{% endif %} lg:min-w-full flex gap-y-7 lg:gap-16 lg:!px-5{% endif %} {% if section.settings.desktop_layout == "1" and section.settings.image == blank %}{% if section.settings.make_full_page_width %} page-width{% else %} max-w-3xl md:pl-0 md:pr-0{% endif %} pr-5 pl-5{% else %} page-width{% endif %} ml-auto mr-auto relative">
+    <div class="faq-container {% if section.settings.image == blank %}otsb-page-width {% if section.settings.image_alignment == "right" %}lg:flex-row-reverse{% else %}lg:flex-row{% endif %}{% if section.settings.image_alignment_mobile == "right" %} flex-col-reverse{% else %} flex-col{% endif %} flex gap-y-7 lg:gap-16 lg:!px-5{% endif %} {% if section.settings.desktop_layout == "1" and section.settings.image == blank %}{% if section.settings.make_full_page_width %} otsb-page-width{% else %} md:pl-0 md:pr-0{% endif %} pr-5 pl-5{% else %} otsb-page-width{% endif %} ml-auto mr-auto relative">
       {%- if section.settings.image != blank -%}
         <div class="flex gap-y-7{% if is_rtl %} ltr{% endif %}{% if section.settings.desktop_layout == "1" %} lg:gap-16{% else %} lg:gap-9{% endif %}{% if section.settings.image_alignment == "right" %} lg:flex-row-reverse{% else %} lg:flex-row{% endif %}{% if section.settings.image_alignment_mobile == "right" %} flex-col-reverse{% else %} flex-col{% endif %}">
           {%- style -%}
@@ -885,22 +885,37 @@
       {
         "name": "OT - Faq #2",
         "blocks": [
-          {
-            "type": "frequently_asked_question"
-          },
-          {
-            "type": "frequently_asked_question"
-          },
-          {
-            "type": "frequently_asked_question"
-          },
-          {
-            "type": "frequently_asked_question"
-          },
-          {
-            "type": "frequently_asked_question"
+        {
+          "type": "frequently_asked_question",
+          "settings": {
+            "heading": "Will your template be fully compatible with Shopify?"
           }
-        ]
+        },
+        {
+          "type": "frequently_asked_question",
+          "settings": {
+            "heading": "What is included in the theme package?"
+          }
+        },
+        {
+          "type": "frequently_asked_question",
+          "settings": {
+            "heading": "Do you guys offer a refund or exchange?"
+          }
+        },
+        {
+          "type": "frequently_asked_question",
+          "settings": {
+            "heading": "Would assistance be available to upload the template if needed?"
+          }
+        },
+        {
+          "type": "frequently_asked_question",
+          "settings": {
+            "heading": "Do you guys offer customisation services for your themes?"
+          }
+        }
+      ]
       }
     ]
   }

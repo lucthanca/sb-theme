@@ -221,7 +221,8 @@
                       title_size: section.settings.title_size,
                       content_alignment: section.settings.content_alignment,
                       content_position: section.settings.content_position,
-                      image_overlay_opacity: section.settings.image_overlay_opacity
+                      image_overlay_opacity: section.settings.image_overlay_opacity,
+                      index: forloop.index
                     %}
                   {%- when 'promotion_block' -%}
                     {% render 'otsb-promotion-block',
@@ -425,7 +426,7 @@
     {
       "type": "text",
       "id": "heading",
-      "default": "Collection list",
+      "default": "Popular Categories",
       "label": "Heading"
     },
     {
@@ -698,7 +699,7 @@
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 4,
+      "default": 40,
       "label": "Block spacing"
     },
     {

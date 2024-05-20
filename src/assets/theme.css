@@ -1591,10 +1591,6 @@ video {
   height:94vh
 }
 
-.h-\[calc\(100\%-2rem\)\]{
-  height:calc(100% - 2rem)
-}
-
 .h-\[var\(--base-font-size\)\]{
   height:var(--base-font-size)
 }
@@ -1606,6 +1602,10 @@ video {
 
 .h-full{
   height:100%
+}
+
+.h-\[calc\(100\%-2rem\)\]{
+  height:calc(100% - 2rem)
 }
 
 .max-h-0{
@@ -2680,6 +2680,10 @@ video {
   text-align:end
 }
 
+.text-\[0\.945rem\]{
+  font-size:0.945rem
+}
+
 .font-bold{
   font-weight:700
 }
@@ -3421,7 +3425,7 @@ button.otsb-button-solid,
 }
 
 .otsb-text-normal {
-  font-size: var(--font-size-normal-mobile);
+  font-size: var(--font-size-normal-mobile, 0.81rem);
 }
 
 .text-large {
@@ -3743,7 +3747,7 @@ svg{
   }
 
   .otsb-text-normal {
-    font-size: var(--font-size-normal);
+    font-size: var(--font-size-normal, 0.9rem);
   }
 
   .text-large {
@@ -4931,6 +4935,10 @@ button.otsb-button-solid,
 
   .md\:pt-\[96px\]{
     padding-top:96px
+  }
+
+  .md\:text-\[1\.05rem\]{
+    font-size:1.05rem
   }
 
   .promotion.md\:promotion\:relative{
