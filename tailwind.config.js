@@ -63,5 +63,7 @@ export const plugins = [
     addVariant("pagination-dots", ".pagination-dots &");
     addVariant("pagination-bars", ".pagination-bars &");
     addVariant("is-active-pagination", ".is-active&");
+    addVariant("input_focus", ".otsb-input:focus~&"); 
+    addVariant("input_not_empty", ".otsb-input:not(:placeholder-shown)~&"); 
   })
 ];

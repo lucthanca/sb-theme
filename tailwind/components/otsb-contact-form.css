@@ -1,0 +1,65 @@
+@layer components {
+    .otsb-contact-align-right {
+      @apply flex flex-col md:flex-row;
+    }
+    .otsb-contact-align-left {
+      @apply flex flex-col md:flex-row-reverse;
+    }
+    .otsb-contact-info-align.otsb-align-left {
+      @apply pl-0 md:pr-5 lg:pr-10 pt-7 md:pt-0;
+    }
+  
+    .otsb-contact-info-align.otsb-align-right{
+      @apply pr-0 md:pl-0 lg:pl-10 pb-7 md:pb-0 pt-7 lg:pt-0;
+    }
+    .otsb-contact-full-width .otsb-align-left.otsb-contact-image  {
+      @apply lg:pl-0;
+    }
+    .otsb-contact-full-width .otsb-align-right.otsb-contact-image  {
+      @apply lg:pr-0;
+    }
+    .otsb-contact-full-width .otsb-align-right,
+    .otsb-contact-full-width .otsb-form-align-right{
+      @apply lg:pl-0 lg:pr-5;
+    }
+    .otsb-contact-full-width .otsb-align-left {
+      @apply lg:pr-0 lg:pl-5;
+    }
+    .otsb-contact-full-width .otsb-form-align-left{
+      @apply lg:pr-0 lg:pl-5;
+    }
+  
+    .otsb-contact-has-image.otsb-page-width .otsb-form-align-left {
+      @apply lg:pr-16;
+    }
+    .otsb-contact-has-image.otsb-page-width .otsb-form-align-right {
+      @apply pt-3 lg:pl-16;
+    }
+    
+    .dark .otsb-contact-has-image.otsb-page-width .otsb-form-align-right{
+      @apply pt-3 lg:pl-16;
+    }
+    .dark .otsb-contact-has-image.otsb-page-width .otsb-form-align-left{
+      @apply lg:pr-16;
+    }
+  
+    .otsb-contact-full-width.otsb-contact-has-image .otsb-form-align-left .otsb-contact-form {
+      @apply lg:pr-24;
+    }
+    .otsb-contact-full-width.otsb-contact-has-image .otsb-form-align-right .otsb-contact-form {
+      @apply lg:pl-24;
+    }
+    .otsb-contact-full-width.otsb-contact-has-image .otsb-form-align-left .otsb-contact-form-both {
+      @apply lg:pr-5;
+    }
+    .otsb-contact-full-width.otsb-contact-has-image .otsb-form-align-right .otsb-contact-form-both {
+      @apply lg:pl-5;
+    }
+    .otsb-contact-form-both .otsb-heading-form {
+      @apply pt-6 border-t
+    }
+    .otsb-input {
+      @apply focus-visible:shadow-none
+    }
+  }
+  

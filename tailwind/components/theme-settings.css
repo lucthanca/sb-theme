@@ -673,12 +673,12 @@ input[type="search"]::-webkit-search-cancel-button {
   -webkit-border-radius: 0;
 }
 
-.checkbox-checked:checked:after {
+.otsb-checkbox-checked:checked:after {
   content: '';
   @apply absolute top-[40%] left-1/2 w-3/5 h-2/5 border-l-2 border-b-2 border-[rgba(var(--colors-background))] border-solid -rotate-45 -translate-x-1/2 -translate-y-1/2;
 }
 
-.radio-checked:checked:after {
+.otsb-radio-checked:checked:after {
   content: '';
   background-color: rgba(var(--colors-text-link));
   @apply absolute top-1/2 left-1/2 w-1/2 h-1/2 rounded-full -translate-x-1/2 -translate-y-1/2;
@@ -1122,4 +1122,28 @@ button.otsb-button-solid,
 
 .animate-scroll-banner {
   animation: scrollX var(--duration, 10s) linear infinite var(--play-state, running) var(--direction);
+}
+
+.bg-\[rgba\(var\(--color-success\)\2c 0\.2\)\] {
+  background-color:rgba(var(--color-success, 5, 137, 66),0.2)
+}
+
+.text-\[rgba\(var\(--color-success\)\)\] {
+  color: rgba(var(--color-success, 5, 137, 66));
+}
+
+.selection\:bg-\[rgba\(var\(--color-success\)\2c 0\.2\)\] {
+  background-color:rgba(var(--color-success, 5, 137, 66),0.2)
+}
+
+.bg-\[rgba\(var\(--color-error\)\2c 0\.2\)\] {
+  background-color:rgba(var(--color-error, 225, 43, 40),0.2)
+}
+
+.text-\[rgba\(var\(--color-error\)\)\] {
+  color: rgba(var(--color-error, 225, 43, 40));
+}
+
+.selection\:bg-\[rgba\(var\(--color-error\)\2c 0\.2\)\] {
+  background-color:rgba(var(--color-error, 225, 43, 40),0.2)
 }
