@@ -61,5 +61,8 @@
     .otsb-input {
       @apply focus-visible:shadow-none
     }
+    .otsb-custom-button {
+      @apply !rounded-md !bg-[#FD8E16] !text-white
+    }
   }
   

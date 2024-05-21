@@ -34,11 +34,11 @@
   endif
 
   if section.settings.form_alignment == 'left'
-    assign class_infomation = class_infomation | append: " align-right"
-    assign class_form = class_form | append: " form-align-left"
+    assign class_infomation = class_infomation | append: " otsb-align-right"
+    assign class_form = class_form | append: " otsb-form-align-left"
   else 
-    assign class_infomation = class_infomation | append: " order-1 align-left"
-    assign class_form = class_form | append: " order-2 form-align-right"
+    assign class_infomation = class_infomation | append: " order-1 otsb-align-left"
+    assign class_form = class_form | append: " order-2 otsb-form-align-right"
   endif
   if section.settings.show_content == 'both'
     if settings.page_width != blank
@@ -129,10 +129,10 @@
       <div class="{{ classDivider2 }}">
         {% render 'otsb-section-divider', class: classDivider2 %}
       </div>
-      <div class="{% if is_rtl %}otsb-rtl {% endif %}otsb-contact-form-container flex justify-center{% if section.settings.show_content == 'both' and section.settings.image %} flex-col items-center{% endif %}{% if section.settings.form_alignment == "left" %} pt-7 md:justify-end{% else %} pb-7 md:justify-start{% endif %}{% if section.settings.full_width_mobile %} pl-5 pr-5{% endif %} md:pl-5 md:pr-5 {{ class_form }}{% if section.settings.show_content == 'image' and section.settings.image %} md:pt-[{{ section.settings.padding_top }}px] md:pb-[{{ section.settings.padding_bottom }}px]{% else %} md:pb-7 md:pt-7{% endif %}{% if section.settings.background_color_light.alpha != 0.0 %} pl-5 pr-5{% else %} lg:pl-0 lg:pr-0{% endif %}{% if section.settings.background_color_dark.alpha != 0.0 %} dark:pl-5 dark:pr-5{% else %} dark:pl-0 dark:pr-0 dark:lg:pl-0 dark:lg:pr-0{% endif %}">
+      <div class="{% if is_rtl %}otsb-rtl {% endif %}otsb-contact-form-container flex justify-center{% if section.settings.show_content == 'both' and section.settings.image %} flex-col items-center{% endif %}{% if section.settings.form_alignment == "left" %} pt-7 md:justify-end{% else %} pb-7 md:justify-start{% endif %}{% if section.settings.full_width_mobile %} pl-5 pr-5{% endif %} md:pl-5 md:pr-5 {{ class_form }}{% if section.settings.show_content == 'image' and section.settings.image %} md:pt-[{{ section.settings.padding_top }}px] md:pb-[{{ section.settings.padding_bottom }}px]{% else %} md:pb-7 md:pt-7{% endif %}{% if section.settings.background_color_light.alpha != 0.0 %} pl-5 pr-5{% else %} lg:pl-0 lg:pr-0{% endif %}{% if section.settings.background_color_dark.alpha != 0.0 %} otsb-dark:pl-5 otsb-dark:pr-5{% else %} otsb-dark:pl-0 otsb-dark:pr-0 otsb-dark:lg:pl-0 otsb-dark:lg:pr-0{% endif %}">
         {% if section.settings.show_content == 'info' or section.settings.show_content == 'both' %}
           {% capture info_content %} 
-            <div class="{% if is_rtl %}otsb-rtl {% endif %}otsb-contact-infomation {{ class_infomation }} {{ class_form_both }} flex justify-center md:pb-7 md:pt-7{% if section.settings.form_alignment == "left" %} pb-7 md:justify-end{% else %} pt-7 md:justify-start{% endif %}{% if section.settings.background_color_light.alpha != 0.0 %} pl-5 pr-5{% else %} lg:pl-0 lg:pr-0{% endif %}{% if section.settings.background_color_dark.alpha != 0.0 %} dark:pl-5 dark:pr-5{% else %} dark:pl-0 dark:pr-0 dark:lg:pl-0 dark:lg:pr-0{% endif %}{% if section.settings.full_width_mobile %} pl-5 pr-5{% endif %}">
+            <div class="{% if is_rtl %}otsb-rtl {% endif %}otsb-contact-infomation {{ class_infomation }} {{ class_form_both }} flex justify-center md:pb-7 md:pt-7{% if section.settings.form_alignment == "left" %} pb-7 md:justify-end{% else %} pt-7 md:justify-start{% endif %}{% if section.settings.background_color_light.alpha != 0.0 %} pl-5 pr-5{% else %} lg:pl-0 lg:pr-0{% endif %}{% if section.settings.background_color_dark.alpha != 0.0 %} otsb-dark:pl-5 otsb-dark:pr-5{% else %} otsb-dark:pl-0 otsb-dark:pr-0 otsb-dark:lg:pl-0 otsb-dark:lg:pr-0{% endif %}{% if section.settings.full_width_mobile %} pl-5 pr-5{% endif %}">
               <div class="w-full {% if settings.page_width != blank %}max-w-[{{ settings.page_width | divided_by: 2 }}px]{% else %}max-w-[{{ 1400 | divided_by: 2 }}px]{% endif %}">
                 <div class="otsb-form-heading">
                   {%- if section.settings.heading != blank -%}
@@ -186,7 +186,7 @@
               </{{ section.settings.heading_tag }}>
             {%- endif -%}
             {% if section.settings.text != blank %}
-              <div class="md:text-[1.05rem] text-[0.945rem] otsb-rte mt-2 lg:mt-4">
+              <div class="otsb-rte mt-2 lg:mt-4">
                 {{ section.settings.text }}
               </div>
             {% endif %}
@@ -198,13 +198,13 @@
                   {%- render 'otsb-icon-alls', icon: 'icon-success' %}
                 </span>
                 {%- if section.settings.success_message -%}
-                  <p class="leading-tight flex-1 md:text-[1.05rem] text-[0.945rem]">{{ section.settings.success_message }}</p>
+                  <p class="leading-tight flex-1">{{ section.settings.success_message }}</p>
                 {%- else -%}
                 {{ 'templates.contact.form.post_success' | t }}
                 {%- endif -%}
               </div>
             {%- elsif form.errors -%}
-              <p class="md:text-[1.05rem] text-[0.945rem] flex items-center pl-4 pr-4 pt-3 pb-3 mb-3 bg-[rgba(var(--color-error),0.2)] selection:bg-[rgba(var(--color-error),0.4)]" tabindex="-1" autofocus>
+              <p class="flex items-center pl-4 pr-4 pt-3 pb-3 mb-3 bg-[rgba(var(--color-error),0.2)] selection:bg-[rgba(var(--color-error),0.4)]" tabindex="-1" autofocus>
                 <span class="text-[rgba(var(--color-error))] inline-block w-5 mr-2">{% render 'otsb-icon-alls', icon: 'icon-error' %} </span>
                 {{ form.errors.translated_fields.email | capitalize }}
                 {{ form.errors.messages.email }}
@@ -227,7 +227,7 @@
                           {% if block.settings.mark_as_required %}
                             required
                           {% endif %}>
-                        <label class="md:text-[1.05rem] text-[0.945rem] duration-150 leading-tight absolute top-1/2{% if settings.lang_direction contains request.locale.iso_code %} right-5 lg:right-6{% else %} left-5 lg:left-6{% endif %} -translate-y-1/2 input_focus:text-xs input_focus:top-3 input_not_empty:top-3 input_not_empty:text-xs" for="ContactFormName-{{ section.id }}">
+                        <label class="duration-150 leading-tight absolute top-1/2{% if settings.lang_direction contains request.locale.iso_code %} right-5 lg:right-6{% else %} left-5 lg:left-6{% endif %} -translate-y-1/2 input_focus:text-xs input_focus:top-3 input_not_empty:top-3 input_not_empty:text-xs" for="ContactFormName-{{ section.id }}">
                           {{- block.settings.heading }}
                           {% if block.settings.mark_as_required %}
                             <span aria-hidden="true">*</span>
@@ -248,7 +248,7 @@
                           placeholder="Email"
                           required>
                           <label 
-                            class="md:text-[1.05rem] text-[0.945rem] duration-150 leading-tight absolute top-1/2{% if settings.lang_direction contains request.locale.iso_code %} right-5 lg:right-6{% else %} left-5 lg:left-6{% endif %} -translate-y-1/2 input_focus:text-xs input_focus:top-3 input_not_empty:top-3 input_not_empty:text-xs" 
+                            class="duration-150 leading-tight absolute top-1/2{% if settings.lang_direction contains request.locale.iso_code %} right-5 lg:right-6{% else %} left-5 lg:left-6{% endif %} -translate-y-1/2 input_focus:text-xs input_focus:top-3 input_not_empty:top-3 input_not_empty:text-xs" 
                             for="ContactFormEmail-{{ section.id }}"
                           >
                             {{- block.settings.heading }} 
@@ -269,7 +269,7 @@
                             required
                           {%- endif -%}>
                           <label 
-                            class="md:text-[1.05rem] text-[0.945rem] duration-150 absolute top-1/2{% if settings.lang_direction contains request.locale.iso_code %} right-5 lg:right-6{% else %} left-5 lg:left-6{% endif %} -translate-y-1/2 input_focus:text-xs input_focus:top-3 input_not_empty:top-3 input_not_empty:text-xs" 
+                            class="duration-150 absolute top-1/2{% if settings.lang_direction contains request.locale.iso_code %} right-5 lg:right-6{% else %} left-5 lg:left-6{% endif %} -translate-y-1/2 input_focus:text-xs input_focus:top-3 input_not_empty:top-3 input_not_empty:text-xs" 
                             for="ContactFormPhone-{{ section.id }}"
                           >
                             {{- block.settings.heading }}
@@ -292,7 +292,7 @@
                           {{- form.message -}}
                         </textarea>
                         <label 
-                          class="md:text-[1.05rem] text-[0.945rem] duration-150 absolute top-3 md:top-4{% if settings.lang_direction contains request.locale.iso_code %} right-5 lg:right-6{% else %} left-5 lg:left-6{% endif %} input_focus:text-xs input_focus:top-1 input_not_empty:top-1 input_not_empty:text-xs" 
+                          class="duration-150 absolute top-3 md:top-4{% if settings.lang_direction contains request.locale.iso_code %} right-5 lg:right-6{% else %} left-5 lg:left-6{% endif %} input_focus:text-xs input_focus:top-1 input_not_empty:top-1 input_not_empty:text-xs" 
                           for="ContactFormMessage-{{ section.id }}"
                         >
                           {{- block.settings.heading }}
@@ -334,7 +334,7 @@
                             {% endif %}
                           >
                           <label 
-                            class="md:text-[1.05rem] text-[0.945rem] duration-150 absolute top-1/2{% if settings.lang_direction contains request.locale.iso_code %} right-5 lg:right-6{% else %} left-5 lg:left-6{% endif %} -translate-y-1/2 input_focus:text-xs input_focus:top-3 input_not_empty:top-3 input_not_empty:text-xs" 
+                            class="duration-150 absolute top-1/2{% if settings.lang_direction contains request.locale.iso_code %} right-5 lg:right-6{% else %} left-5 lg:left-6{% endif %} -translate-y-1/2 input_focus:text-xs input_focus:top-3 input_not_empty:top-3 input_not_empty:text-xs" 
                             for="{{ ContactForm }}"
                           >
                             {{- block.settings.heading }}
@@ -439,7 +439,7 @@
                 {%- endfor -%}
               </div>
               <div class="text-{{ section.settings.button_alignment }} mt-3.5 md:mt-5">
-                <button type="submit" class="otsb-button otsb-button-solid leading-normal pl-8 pr-8 lg:pl-11 lg:pr-11 pt-2.5 pb-2.5 lg:pt-3 lg:pb-3 cursor-pointer empty:otsb-hidden pointer-events-auto">
+                <button type="submit" class="otsb-custom-button otsb-button otsb-button-solid leading-normal pl-8 pr-8 lg:pl-11 lg:pr-11 pt-2.5 pb-2.5 lg:pt-3 lg:pb-3 cursor-pointer empty:otsb-hidden pointer-events-auto">
                   {%- if section.settings.button_label != blank -%}
                     {% assign button_label = section.settings.button_label %}
                   {%- else -%}
@@ -645,10 +645,6 @@
         {
           "value": "image",
           "label": "Image"
-        },
-        {
-          "value": "both",
-          "label": "Both"
         },
         {
           "value": "none",

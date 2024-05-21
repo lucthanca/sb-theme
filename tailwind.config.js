@@ -58,6 +58,7 @@ export const theme = {
 };
 export const plugins = [
   plugin(function ({ addVariant }) {
+    addVariant("otsb-dark", ".dark &");
     addVariant("promotion", ".promotion&");
     addVariant("slideshow", ".splide-slideshow &");
     addVariant("pagination-dots", ".pagination-dots &");

@@ -191,12 +191,12 @@
                         </div>
                         {{ settings.edges_type }}
                         {%- if card_collection != blank and section.settings.show_item_count or collage -%}
-                          <p class="text-[rgba(var(--colors-text))] {% if collage %} mt-2.5 leading-none{% else %} mt-1{% endif %} text-[0.945rem] md:text-[1.05rem]{% if columns_desktop > 8 %} otsb-text-normal{% endif %}">
+                          <p class="text-[rgba(var(--colors-text))] {% if collage %} mt-2.5 leading-none{% else %} mt-1{% endif %}{% if columns_desktop > 8 %} otsb-text-normal{% endif %}">
                             {{ card_collection.all_products_count }}{% if card_collection.all_products_count > 1 %} items{% else %} item{% endif %}
                           </p>
                         {%- endif -%}
                         {%- if card_collection == blank and section.settings.show_item_count or collage -%}
-                          <p class="text-[rgba(var(--colors-text))] {% if collage %} mt-2.5 leading-none{% else %} mt-1{% endif %} text-[0.945rem] md:text-[1.05rem]{% if columns_desktop > 8 %} otsb-text-normal{% endif %}">
+                          <p class="text-[rgba(var(--colors-text))] {% if collage %} mt-2.5 leading-none{% else %} mt-1{% endif %}{% if columns_desktop > 8 %} otsb-text-normal{% endif %}">
                             34 items
                           </p>
                         {%- endif -%}

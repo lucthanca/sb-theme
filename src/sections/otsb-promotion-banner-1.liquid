@@ -404,11 +404,11 @@
                 {%- if block.settings.heading != blank or block.settings.text != blank or block.settings.subheading != blank -%}
                   <div class="text-white content--{{ block.id }} relative mx-auto mt-2 mb-2 z-20 lg:max-w-3xl w-full lg:block lg:w-full lg:static lg:translate-x-0 lg:translate-y-0
                     {% if add_class_light %} pt-5 pb-5 pl-5 pr-5{% endif %}
-                    {% if add_class_dark %} dark:pt-5 dark:pb-5 dark:pl-5 dark:pr-5{% else %} dark:pt-0 dark:pb-0 dark:pr-0 dark:pl-0{% endif %}
+                    {% if add_class_dark %} otsb-dark:pt-5 otsb-dark:pb-5 otsb-dark:pl-5 otsb-dark:pr-5{% else %} otsb-dark:pt-0 otsb-dark:pb-0 otsb-dark:pr-0 otsb-dark:pl-0{% endif %}
                     {%- if block.settings.content_box_type == "round" %} rounded-full{% endif -%}
                     {%- if block.settings.add_frame %} pt-5 pb-5 pl-5 pr-5 after:-z-10 after:top-1 after:left-1 after:right-1 after:bottom-1 after:border after:solid after:absolute after:{{ block.settings.content_box_type }}{% endif %}"
                   >
-                    <div class="promotion-box-content--{{ block.settings.content_box_type }}{%- if add_class_light and block.settings.content_box_type == "round" %} pl-8 pb-8 pt-8 pr-8{% else %} pb-1 md:pb-2{% endif %}{%- if add_class_dark and block.settings.content_box_type == "round" %} dark:pl-8 dark:pb-8 dark:pt-8 dark:pr-8{% else %} dark:pl-0 dark:pr-0 dark:pt-0 dark:pb-1 md:dark:pb-2{% endif %} text-{{ section.settings.content_alignment }}"{{ block.shopify_attributes }}>
+                    <div class="promotion-box-content--{{ block.settings.content_box_type }}{%- if add_class_light and block.settings.content_box_type == "round" %} pl-8 pb-8 pt-8 pr-8{% else %} pb-1 md:pb-2{% endif %}{%- if add_class_dark and block.settings.content_box_type == "round" %} otsb-dark:pl-8 otsb-dark:pb-8 otsb-dark:pt-8 otsb-dark:pr-8{% else %} otsb-dark:pl-0 otsb-dark:pr-0 otsb-dark:pt-0 otsb-dark:pb-1 md:otsb-dark:pb-2{% endif %} text-{{ section.settings.content_alignment }}"{{ block.shopify_attributes }}>
                       {%- if block.settings.subheading != blank -%}
                         <p class="sub-heading-{{ block.id }} leading-tight empty:otsb-hidden italic mt-1 p-break-words image-treatment-text">
                           {{ block.settings.subheading | escape }}
