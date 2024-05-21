@@ -115,6 +115,17 @@
       }
     }
   {% endif %}
+  button.otsb-button-arrow {
+    background-color: rgba({{ section.settings.slider_button_color.red }}, {{ section.settings.slider_button_color.green }}, {{ section.settings.slider_button_color.blue }}, 0.3);
+    color: {{ section.settings.slider_button_text_color }};
+    box-shadow: none;
+    border-radius: 50px;
+  }
+
+  button.otsb-button-arrow:hover {
+    color: {{ section.settings.slider_button_hover_text_color }};
+    background: {{ section.settings.slider_button_hover_color }};
+  }
 {%- endstyle -%}
 
 {% render 'otsb-section-divider' %}
@@ -543,6 +554,30 @@
     {
       "type": "header",
       "content": "Carousel"
+    },
+    {
+      "type": "color",
+      "id": "slider_button_color",
+      "default": "rgb(82,81,81)",
+      "label": "Slider button color"
+    },
+    {
+      "type": "color",
+      "id": "slider_button_text_color",
+      "default": "rgb(82,81,81)",
+      "label": "Slider button text color"
+    },
+    {
+      "type": "color",
+      "id": "slider_button_hover_color",
+      "default": "rgb(255,102,0)",
+      "label": "Slider button hover color"
+    },
+    {
+      "type": "color",
+      "id": "slider_button_hover_text_color",
+      "default": "rgb(0,0,0)",
+      "label": "Slider button hover text color"
     },
     {
       "type": "checkbox",

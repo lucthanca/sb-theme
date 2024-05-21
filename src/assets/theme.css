@@ -1815,6 +1815,14 @@ video {
   height:94vh
 }
 
+.h-full{
+  height:100%
+}
+
+.h-\[calc\(100\%-2rem\)\]{
+  height:calc(100% - 2rem)
+}
+
 .h-\[var\(--base-font-size\)\]{
   height:var(--base-font-size)
 }
@@ -1822,14 +1830,6 @@ video {
 .h-fit{
   height:-moz-fit-content;
   height:fit-content
-}
-
-.h-full{
-  height:100%
-}
-
-.h-\[calc\(100\%-2rem\)\]{
-  height:calc(100% - 2rem)
 }
 
 .max-h-0{
@@ -1950,32 +1950,16 @@ video {
   max-width:48rem
 }
 
-.max-w-\[80\%\]{
-  max-width:80%
-}
-
-.max-w-\[86px\]{
-  max-width:86px
-}
-
-.max-w-full{
-  max-width:100%
-}
-
-.max-w-xl{
-  max-width:36rem
-}
-
-.max-w-\[600px\]{
-  max-width:600px
-}
-
 .max-w-\[500px\]{
   max-width:500px
 }
 
 .max-w-\[550px\]{
   max-width:550px
+}
+
+.max-w-\[600px\]{
+  max-width:600px
 }
 
 .max-w-\[650px\]{
@@ -1990,8 +1974,24 @@ video {
   max-width:750px
 }
 
+.max-w-\[80\%\]{
+  max-width:80%
+}
+
 .max-w-\[800px\]{
   max-width:800px
+}
+
+.max-w-\[86px\]{
+  max-width:86px
+}
+
+.max-w-full{
+  max-width:100%
+}
+
+.max-w-xl{
+  max-width:36rem
 }
 
 .flex-1{
@@ -4103,18 +4103,6 @@ svg{
   .button-link:hover {
     background-size: 0 0.1em, 100% 0.1em;
     background-position: 100% 100%, 0% 100%;
-  }
-
-  button.otsb-button-arrow {
-    background: rgb(var(--colors-text, 82, 81, 81), 0.3);
-    color: rgb(var(--colors-text, 82, 81, 81));
-    box-shadow: none;
-    border-radius: 50px;
-  }
-
-  button.otsb-button-arrow:hover {
-    color: rgb(var(--colors-button-text-hover, 0, 0, 0));
-    background: rgb(var(--colors-button-hover, 255, 102, 0));
   }
 
   .otsb-hover-text-link:hover {
