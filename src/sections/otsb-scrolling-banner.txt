@@ -288,7 +288,7 @@
       "step": 2,
       "unit": "s",
       "label": "Speed",
-      "default": 20
+      "default": 10
     },
     {
       "type": "select",
@@ -320,36 +320,18 @@
       "type": "color",
       "id": "bg_light",
       "label": "Background color (light)",
-      "default": "rgba(0,0,0,0)"
+      "default": "rgb(250, 142, 24)"
     },
     {
       "type": "color",
       "id": "color_text_light",
       "label": "Primary text color (light)",
-      "default": "rgba(0,0,0,0)"
+      "default": "rgb(255, 255, 255)"
     },
     {
       "type": "color",
       "id": "color_text_light_2",
       "label": "Secondary text color (light)",
-      "default": "rgba(0,0,0,0)"
-    },
-    {
-      "type": "color",
-      "id": "bg_dark",
-      "label": "Background color (dark)",
-      "default": "rgba(0,0,0,0)"
-    },
-    {
-      "type": "color",
-      "id": "color_text_dark",
-      "label": "Primary text color (dark)",
-      "default": "rgba(0,0,0,0)"
-    },
-    {
-      "type": "color",
-      "id": "color_text_dark_2",
-      "label": "Secondary text color (dark)",
       "default": "rgba(0,0,0,0)"
     },
     {
@@ -374,7 +356,7 @@
       "step": 4,
       "unit": "px",
       "label": "Top padding",
-      "default": 10
+      "default": 12
     },
     {
       "type": "range",
@@ -384,7 +366,7 @@
       "step": 4,
       "unit": "px",
       "label": "Bottom padding",
-      "default": 10
+      "default": 12
     },
     {
       "type": "header",
@@ -408,7 +390,7 @@
       "step": 4,
       "unit": "px",
       "label": "Top padding",
-      "default": 10
+      "default": 12
     },
     {
       "type": "range",
@@ -418,7 +400,7 @@
       "step": 4,
       "unit": "px",
       "label": "Bottom padding",
-      "default": 10
+      "default": 12
     }
   ],
   "max_blocks": 16,
@@ -776,7 +758,7 @@
         {
           "type": "text",
           "id": "text",
-          "default": "Talk about your brand",
+          "default": "10% Off Your First Order",
           "label": "Text"
         },
         {
@@ -786,7 +768,7 @@
           "max": 200,
           "unit": "%",
           "step": 10,
-          "default": 100,
+          "default": 150,
           "label": "Text size"
         },
         {
@@ -1044,18 +1026,6 @@
       "blocks": [
         {
           "type": "text"
-        },
-        {
-          "type": "icon"
-        },
-        {
-          "type": "text"
-        },
-        {
-          "type": "button"
-        },
-        {
-          "type": "icon"
         }
       ]
     }
