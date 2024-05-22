@@ -1,4 +1,4 @@
-  {%- liquid
+{%- liquid
     if settings.text_base_size != blank
       assign pagination_size = section.settings.pagination_size | times: settings.text_base_size | times: 0.0000875
     else
@@ -489,7 +489,7 @@
   
   {% schema %}
   {
-    "name": "OT-CollectionListBanner#2",
+    "name": "OT-CollectionListBanner#3",
     "tag": "section",
     "class": "section section-collection-list-banner",
     "disabled_on": {
@@ -549,7 +549,7 @@
             "label": "Bottom"
           }
         ],
-        "default": "center",
+        "default": "top",
         "label": "Pagination position"
       },
       {
@@ -1020,7 +1020,7 @@
     ],
     "presets": [
       {
-        "name": "OT - Collection List Banner #2",
+        "name": "OT - Collection List Banner #3",
         "blocks": [
           {
             "type": "slide",
