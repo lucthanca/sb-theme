@@ -34,7 +34,7 @@
   .collection-card-{{ section.id }} .image-overlay {
     {% if content_position == 'center' or collection_carousel %}
       opacity: {{ image_overlay_opacity }}%;
-      background: {{ image_overlay_color }};
+      --image-treatment-overlay: {{ image_overlay_color.red }}, {{ image_overlay_color.green }}, {{ image_overlay_color.blue }};
     {% else %}
         background: linear-gradient(to{% if content_position == 'bottom' %} bottom{% elsif content_position == 'top' %} top{% endif %}, transparent 0%, rgba({{ image_overlay_color.red }}, {{ image_overlay_color.green }}, {{ image_overlay_color.blue }}, {{ image_overlay_opacity }}%) 100%);
     {% endif %}

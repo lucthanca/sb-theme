@@ -39,6 +39,9 @@
 -%}
 
 {%- style -%}
+  #shopify-section-{{ section.id }} .otsb-image-treatment-overlay {
+    --image-treatment-overlay: {{ section.settings.image_overlay_color.red }}, {{ section.settings.image_overlay_color.green }}, {{ section.settings.image_overlay_color.blue }};
+  }
   .mobile-{{ section.id }}-natural {
     {%- if adapt_video != true and block_first and block_first.settings.image_mobile != blank -%}
       height:0;
@@ -379,7 +382,7 @@
                       {%- endif -%}
                       {%- if block.settings.button_label_1 != blank -%}
                         <div class="mt-4 lg:mt-9 inline-flex flex-wrap gap-x-1.5 gap-y-2 otsb-p-break-words justify-center" {{ block.shopify_attributes }}>
-                          <a{% if block.settings.button_link_1 %} href="{{ block.settings.button_link_1 }}"{% if block.settings.open_new_window_button %} target="_blank"{% endif %}{% else %} role="link" aria-disabled="true"{% endif %} class="otsb-button button--{{ block.id }}{% if block.settings.button_primary_1 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} border ml-0.5 mr-0.5 mt-0.5 mb-0.5 empty:otsb-hidden pl-6 pr-6 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal{% unless block.settings.button_link_1 %} hover:cursor-not-allowed opacity-70{% endunless %}">
+                          <a{% if block.settings.button_link_1 %} href="{{ block.settings.button_link_1 }}"{% if block.settings.open_new_window_button %} target="_blank"{% endif %}{% else %} role="link" aria-disabled="true"{% endif %} class="rounded-md otsb-button button--{{ block.id }}{% if block.settings.button_primary_1 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} border ml-0.5 mr-0.5 mt-0.5 mb-0.5 empty:otsb-hidden pl-6 pr-6 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal{% unless block.settings.button_link_1 %} hover:cursor-not-allowed opacity-70{% endunless %}">
                             {% render 'otsb-button-label', button_label: block.settings.button_label_1, show_button_primary: block.settings.button_primary_1 %}
                           </a> 
                         </div>
@@ -502,6 +505,12 @@
       "id": "show_hero",
       "label": "Used as Hero",
       "info": "Enable if this section is used as hero, disable if not."
+    },
+    {
+      "type": "color",
+      "id": "image_overlay_color",
+      "default": "#202020",
+      "label": "Overlay color"
     },
     {
       "type": "header",

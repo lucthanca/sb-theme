@@ -393,7 +393,7 @@ h6,
   font-family: var(--font-heading-family);
   font-style: var(--font-heading-style);
   font-weight: var(--font-heading-weight);
-  color: rgba(var(--colors-heading)) !important;
+  color: rgba(var(--colors-heading));
   @apply break-words leading-tight;
 }
 
@@ -505,14 +505,14 @@ button.otsb-button-outline,
 .otsb-button.otsb-button-outline {
   background: rgba(var(--background-secondary-button), 1);
   color: rgb(var(--colors-secondary-button, 0, 0, 0)) !important;
-  box-shadow: inset 0 0 0 1px rgba(var(--colors-secondary-button, 0, 0, 0), 1);
+  box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button, 0, 0, 0), 1);
   border: none;
   transition: 0.3s;
 }
 
 .otsb-button.otsb-button-outline:hover,
 button.otsb-button-outline:hover {
-  box-shadow: inset 0 0 0 1px rgba(var(--colors-secondary-button, 0, 0, 0), 1);
+  box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button, 0, 0, 0), 1);
   background: rgba(var(--background-secondary-button), 1);
   transition: 0.3s;
 }
@@ -737,6 +737,10 @@ input[type="search"]::-webkit-search-cancel-button {
   background-color: rgba(var(--image-treatment-text, 255, 255, 255), 0.2);
 }
 
+.otsb-image-treatment-text {
+  color: rgb(var(--image-treatment-text, 255, 255, 255));
+}
+
 svg {
   @apply fill-current;
 }
@@ -871,7 +875,7 @@ svg {
   button.otsb-button-outline,
   .otsb-button.otsb-button-outline {
     color: rgb(var(--colors-secondary-button, 0, 0, 0));
-    box-shadow: inset 0 0 0 1px rgba(var(--colors-secondary-button, 0, 0, 0), 0.5);
+    box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button, 0, 0, 0), 0.5);
     background: rgba(var(--background-secondary-button), 0.7);
   }
 
@@ -1039,6 +1043,7 @@ button.otsb-button-solid,
 @media (min-width: 1024px) {
   button.otsb-button-solid,
   .otsb-button.otsb-button-solid {
+    border: none;
     box-shadow: none;
     color: rgb(var(--colors-button-text, 255, 255, 255));
     background-color: rgb(var(--colors-button, 253, 142, 22));
@@ -1053,6 +1058,7 @@ button.otsb-button-solid,
     background-color: var(--colors-button-hover, rgb(255, 102, 0)) ;
     color: rgb(var(--colors-button-text-hover));
     background-origin: border-box;
+    border: none;
   }
 
   button.otsb-button-solid:before,
@@ -1122,4 +1128,8 @@ button.otsb-button-solid,
 
 .selection\:bg-\[rgba\(var\(--color-error\)\2c 0\.2\)\] {
   background-color:rgba(var(--color-error, 225, 43, 40),0.2)
+}
+
+.otsb-image-treatment-overlay {
+  background: rgba(var(--image-treatment-overlay));
 }
