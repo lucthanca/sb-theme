@@ -9,13 +9,13 @@
   assign enable_slider = false
   if section.blocks.size > 1
     assign enable_slider = true
-  endif--image-treatment-text
+  endif
   assign block_first = section.blocks | first
   assign desktop_height = section.settings.desktop_height | append: "px"
   assign mobile_height = section.settings.mobile_height | append: "px"
   if section.settings.desktop_height == "fullscreen"
     assign desktop_height = "95vh"
-  endifendif
+  endif
   if section.settings.mobile_height == "fullscreen"
     assign mobile_height = "94vh"
   endif
@@ -41,11 +41,24 @@
       {%- endif -%}
     }
   }
+
+  #shopify-section-{{ section.id }} button.otsb-button-arrow {
+    background-color: rgba({{ section.settings.slider_button_color.red }}, {{ section.settings.slider_button_color.green }}, {{ section.settings.slider_button_color.blue }}, 0.3);
+    color: {{ section.settings.slider_button_text_color }};
+    box-shadow: none;
+    border-radius: 50px;
+  }
+
+  #shopify-section-{{ section.id }} button.otsb-button-arrow:hover {
+    color: {{ section.settings.slider_button_hover_text_color }};
+    background: {{ section.settings.slider_button_hover_color }};
+  }
 {%- endstyle -%}
+
 <div class="pt-[{{ section.settings.padding_top_mobile }}px] md:pt-[{{ section.settings.padding_top }}px] pb-[{{ section.settings.padding_bottom_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px]">
   <div
     id="x-slideshow-{{ section.id }}"
-    class="{% if settings.lang_direction contains request.locale.iso_code and section.settings.transition_style == "fade" %}ltr {% endif %}splide-slideshow visible mx-auto{% if enable_slider %} x-splide splide cursor-grab group{% endif %}{% if section.settings.full_width %}{% if section.settings.padding_full_width %} md:pl-5 md:pr-5{% else %} md:pl-0 md:pr-0{% endif %}{% else %} page-width{% endif %}{% if section.settings.full_width_mobile %} full-width-mobile{% else %} pl-5 pr-5{% endif %}"
+    class="{% if settings.lang_direction contains request.locale.iso_code and section.settings.transition_style == "fade" %}otsb-ltr {% endif %}splide-slideshow visible mx-auto{% if enable_slider %} x-splide splide cursor-grab group{% endif %}{% if section.settings.full_width %}{% if section.settings.padding_full_width %} md:pl-5 md:pr-5{% else %} md:pl-0 md:pr-0{% endif %}{% else %} otsb-page-width{% endif %}{% if section.settings.full_width_mobile %} otsb-full-width-mobile{% else %} pl-5 pr-5{% endif %}"
     {% if enable_slider %}
       x-data
       x-intersect.once.margin.200px='$store.xSplide.load($el, {
@@ -182,7 +195,7 @@
             </div>
           {% endif %}
           <div x-slide-index="{{ forloop.index | minus: 1 }}" 
-            class="x-slideshow-{{ block.id }}{% if settings.lang_direction contains request.locale.iso_code %} rtl{% endif %} h-full relative transition-opacity flex-shrink-0 w-full{% if enable_slider %} splide__slide x-splide-slide{% endif %}{% if section.settings.show_hero %} w-full{% endif %}"
+            class="x-slideshow-{{ block.id }}{% if settings.lang_direction contains request.locale.iso_code %} otsb-rtl{% endif %} h-full relative transition-opacity flex-shrink-0 w-full{% if enable_slider %} splide__slide x-splide-slide{% endif %}{% if section.settings.show_hero %} w-full{% endif %}"
             x-data="{effect: false}" 
             {% if section.settings.transition_style != "fade" or enable_slider == false %} 
               {%- if section.settings.full_width %} x-intersect:leave.margin.-40px="effect = false"{% else %} x-intersect:leave.margin.-20px.half.-20px.haft="effect = false"{% endif %}
@@ -195,7 +208,12 @@
               </div>
             {% endif %}
             <div class="h-full relative overflow-hidden">
-              <span class="absolute top-0 left-0 bottom-0 right-0 z-10 image-treatment-overlay opacity-{{ block.settings.overlay_opacity }}"></span>
+              {% style %}
+                .x-slideshow-{{ block.id }} .otsb-image-treatment-overlay {
+                  background: rgb({{ block.settings.image_overlay_color.red }}, {{ block.settings.image_overlay_color.green }}, {{ block.settings.image_overlay_color.blue }})
+                }
+              {% endstyle %}
+              <span class="absolute top-0 left-0 bottom-0 right-0 z-10 otsb-image-treatment-overlay opacity-{{ block.settings.overlay_opacity }}"></span>
               <div :class="effect && 'active'" class="h-full w-full absolute top-0 left-0 z-0 animate_transition_slide__image">
                 {%- if block.settings.image == blank -%}
                   <div class="w-full h-full text-[#acacac]{% if block.settings.image_mobile != blank %} otsb-hidden{% endif %} md:block mx-auto">
@@ -278,24 +296,24 @@
               </div>
             </div>
             {%- assign alignment = block.settings.content_alignment | split: '-' -%}
-            <div class="hero-text transition{% unless block.settings.content_alignment == "custom" %} page-width{% endunless %} absolute left-1/2 z-20 -translate-x-1/2 top-0 w-full h-full table">
+            <div class="hero-text transition{% unless block.settings.content_alignment == "custom" %} otsb-page-width{% endunless %} absolute left-1/2 z-20 -translate-x-1/2 top-0 w-full h-full table">
               <div class="table-cell max-w-2xl md:min-w-[30rem] lg:w-3/5{% if block.settings.content_alignment == "custom" %} min-w-[90%] lg:min-w-[30rem] absolute content--{{ block.id }} text-{{ block.settings.alignment }} pl-5 pr-5{% else %} align-{{ alignment[0] }} text-{{ block.settings.alignment }}{% endif %}">
                 <div :class="effect && 'active'" class="animate_transition_slide__box{% if block.settings.content_alignment contains 'center' %} xl:pl-5 xl:pr-5 mx-auto{% endif %}{% if block.settings.content_alignment != 'custom' %} max-w-2xl pt-5 pr-5 pl-5 float-{{ alignment[1] }}{% endif -%}{% if section.settings.slider_visual != "none" %} pb-10 lg:pb-12{% endif %}">
                   {%- if block.settings.subheading != blank -%}
-                    <p class="sub-heading-{{ block.id }} leading-tight italic p-break-words image-treatment-text">{{ block.settings.subheading | escape }}</p>
+                    <p class="sub-heading-{{ block.id }} leading-tight italic p-break-words otsb-image-treatment-text">{{ block.settings.subheading | escape }}</p>
                   {%- endif -%}
                   {%- if block.settings.heading != blank -%}
-                    <{{ block.settings.heading_tag }} class="p-break-words heading--{{ block.id }} h2 block mt-1 leading-tight image-treatment-text">
+                    <{{ block.settings.heading_tag }} class="p-break-words heading--{{ block.id }} otsb-h2 block mt-1 leading-tight otsb-image-treatment-text">
                       {{ block.settings.heading | escape }}
                     </{{ block.settings.heading_tag }}>
                   {%- endif -%}
                   {%- if block.settings.text != blank -%}
-                    <div class="lg:mt-1 p-break-words rte image-treatment-text text-medium rte">
+                    <div class="lg:mt-1 p-break-words otsb-rte otsb-image-treatment-text text-medium">
                       {{ block.settings.text }}
                     </div>
                   {%- endif -%}
                   {%- if block.settings.button_label_1 != blank or block.settings.button_label_2 != blank -%}
-                    <div class="otsb-slideshow-{{ block.id }} mt-4 lg:mt-9 inline-flex flex-wrap gap-x-1.5 gap-y-2 p-break-words{% if block.settings.content_alignment == 'custom' or block.settings.content_alignment contains 'center' %} justify-center{% else %} justify-{{ alignment[1] }}{% endif %}" {{ block.shopify_attributes }}>
+                    <div class="mt-4 lg:mt-9 inline-flex flex-wrap gap-x-1.5 gap-y-2 p-break-words{% if block.settings.content_alignment == 'custom' or block.settings.content_alignment contains 'center' %} justify-center{% else %} justify-{{ alignment[1] }}{% endif %}" {{ block.shopify_attributes }}>
                       {%- liquid
                         case block.settings.button_style
                           when 'rounded'
@@ -309,38 +327,38 @@
 
                       {% style %}
                         {% if block.settings.primary_button_animation == 'sliced' %}
-                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-outline:not(.not-icon),
-                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:not(.not-icon) {
+                          .x-slideshow-{{ block.id }} .otsb-button.otsb-button-outline:not(.not-icon),
+                          .x-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:not(.not-icon) {
                             display: inline-flex;
                             align-items: center;
                             justify-content: center;
                             padding-left: 1.5rem;
                             padding-right: 1.5rem;
                           }
-                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-icon,
-                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text {
+                          .x-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-icon,
+                          .x-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text {
                             transition-timing-function: cubic-bezier(0,.71,.4,1);
                           }
-                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-icon {
+                          .x-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-icon {
                             width: max-content;
                             transition: opacity .25s,transform .5s;
                           }
-                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text {
+                          .x-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text {
                             transition: transform .5s;
                             transform: translateX(10px);
                           }
-                          .otsb-slideshow-{{ block.id }} .otsb-button-solid:hover .otsb-button-text {
+                          .x-slideshow-{{ block.id }} .otsb-button-solid:hover .otsb-button-text {
                             opacity: 1;
                             transform: translateX(0px);
                           }
-                          .otsb-slideshow-{{ block.id }} .otsb-button-solid:hover .otsb-button-icon {
+                          .x-slideshow-{{ block.id }} .otsb-button-solid:hover .otsb-button-icon {
                             opacity: 1;
                             transform: translateX(5px);
                           }
-                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:before {
+                          .x-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:before {
                             content: none;
                           }
-                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:hover {
+                          .x-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:hover {
                             transition-delay: 0s;
                             transition: opacity .25s,transform .5s;
                             background-color: var(--colors-button-hover, rgb(255, 102, 0));
@@ -349,11 +367,11 @@
                           }
                         {% endif %}
                         {% if block.settings.primary_button_animation == 'underline' %}
-                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text {
+                          .x-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text {
                             position: relative;
                             display: block;
                           }
-                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text::after {
+                          .x-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text::after {
                             content: "";
                             pointer-events: none;
                             bottom: 1px;
@@ -366,15 +384,15 @@
                             transition-duration: 400ms;
                             transition-property: width, left;
                           }
-                          .otsb-slideshow-{{ block.id }} .otsb-button-solid:hover .otsb-button-text::after {
+                          .x-slideshow-{{ block.id }} .otsb-button-solid:hover .otsb-button-text::after {
                             background-color: rgb(var(--colors-button-text-hover));
                             width: 100%;
                             left: 0%;
                           }
-                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:before {
+                          .x-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:before {
                             content: none;
                           }
-                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:hover {
+                          .x-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:hover {
                             transition-delay: 0s;
                             transition: opacity .25s,transform .5s;
                             background-color: var(--colors-button-hover, rgb(255, 102, 0));
@@ -460,6 +478,30 @@
       "label": "Next/Previous arrows",
       "default": false,
       "info": "Show navigation arrows"
+    },
+    {
+      "type": "color",
+      "id": "slider_button_color",
+      "default": "rgb(82,81,81)",
+      "label": "Slider button color"
+    },
+    {
+      "type": "color",
+      "id": "slider_button_text_color",
+      "default": "rgb(82,81,81)",
+      "label": "Slider button text color"
+    },
+    {
+      "type": "color",
+      "id": "slider_button_hover_color",
+      "default": "rgb(255,102,0)",
+      "label": "Slider button hover color"
+    },
+    {
+      "type": "color",
+      "id": "slider_button_hover_text_color",
+      "default": "rgb(0,0,0)",
+      "label": "Slider button hover text color"
     },
     {
       "type": "select",
@@ -666,6 +708,12 @@
           "unit": "%",
           "label": "Overlay opacity",
           "default": 0
+        },
+        {
+          "type": "color",
+          "id": "image_overlay_color",
+          "default": "rgb(32,32,32)",
+          "label": "Overlay color"
         },
         {
           "type": "text",
