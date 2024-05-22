@@ -10,6 +10,6 @@
 @import url(components/otsb-promotion-banner.css);
 @import url(components/otsb-slideshow.css);
 @import url(components/otsb-media-with-text.css);
-@import url(components//otsb-contact-form.css);
+@import url(components/otsb-contact-form.css);
 
 [x-cloak] { display: none !important; }
