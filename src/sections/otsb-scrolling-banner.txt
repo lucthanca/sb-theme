@@ -180,7 +180,7 @@
     {%- case block.type -%}
       {%- when 'icon' -%}
         <div class="space-blocks-{{ section.id }} space-block-{{ block.id }} flex whitespace-nowrap">
-          <span class="inline-block icon-{{ block.id }}">
+          <span class="inline-block icon-{{ block.id }} text-color-{{ block.settings.icon_color }}">
             {% if block.settings.custom_icon == blank %}
               {% render 'otsb-icon-labels-bags', icon: block.settings.icon %}
             {% else %}
@@ -259,7 +259,7 @@
 
 {% schema %}
 {
-  "name": "OT - Scroll promotion #1",
+  "name": "OT: Scolling Promo #1",
   "class": "section section-scroll-banner x-section",
   "tag": "section",
   "disabled_on": {
@@ -288,7 +288,7 @@
       "step": 2,
       "unit": "s",
       "label": "Speed",
-      "default": 20
+      "default": 10
     },
     {
       "type": "select",
@@ -319,37 +319,19 @@
     {
       "type": "color",
       "id": "bg_light",
-      "label": "Background color (light)",
-      "default": "rgba(0,0,0,0)"
+      "label": "Background color",
+      "default": "rgb(250, 142, 24)"
     },
     {
       "type": "color",
       "id": "color_text_light",
-      "label": "Primary text color (light)",
-      "default": "rgba(0,0,0,0)"
+      "label": "Primary color",
+      "default": "rgb(255, 255, 255)"
     },
     {
       "type": "color",
       "id": "color_text_light_2",
-      "label": "Secondary text color (light)",
-      "default": "rgba(0,0,0,0)"
-    },
-    {
-      "type": "color",
-      "id": "bg_dark",
-      "label": "Background color (dark)",
-      "default": "rgba(0,0,0,0)"
-    },
-    {
-      "type": "color",
-      "id": "color_text_dark",
-      "label": "Primary text color (dark)",
-      "default": "rgba(0,0,0,0)"
-    },
-    {
-      "type": "color",
-      "id": "color_text_dark_2",
-      "label": "Secondary text color (dark)",
+      "label": "Secondary color",
       "default": "rgba(0,0,0,0)"
     },
     {
@@ -374,7 +356,7 @@
       "step": 4,
       "unit": "px",
       "label": "Top padding",
-      "default": 10
+      "default": 12
     },
     {
       "type": "range",
@@ -384,7 +366,7 @@
       "step": 4,
       "unit": "px",
       "label": "Bottom padding",
-      "default": 10
+      "default": 12
     },
     {
       "type": "header",
@@ -408,7 +390,7 @@
       "step": 4,
       "unit": "px",
       "label": "Top padding",
-      "default": 10
+      "default": 12
     },
     {
       "type": "range",
@@ -418,7 +400,7 @@
       "step": 4,
       "unit": "px",
       "label": "Bottom padding",
-      "default": 10
+      "default": 12
     }
   ],
   "max_blocks": 16,
@@ -720,6 +702,22 @@
           "default": 35
         },
         {
+          "type": "radio",
+          "id": "icon_color",
+          "label": "Icon color",
+          "default": "primary",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary color"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary color"
+            }
+          ]
+        },
+        {
           "type": "header",
           "content": "Desktop layout"
         },
@@ -776,7 +774,7 @@
         {
           "type": "text",
           "id": "text",
-          "default": "Talk about your brand",
+          "default": "10% Off Your First Order",
           "label": "Text"
         },
         {
@@ -786,7 +784,7 @@
           "max": 200,
           "unit": "%",
           "step": 10,
-          "default": 100,
+          "default": 150,
           "label": "Text size"
         },
         {
@@ -1040,22 +1038,10 @@
   ],
   "presets": [
     {
-      "name": "OT - Scrolling promotion #1",
+      "name": "OT: Scolling Promo #1",
       "blocks": [
         {
           "type": "text"
-        },
-        {
-          "type": "icon"
-        },
-        {
-          "type": "text"
-        },
-        {
-          "type": "button"
-        },
-        {
-          "type": "icon"
         }
       ]
     }

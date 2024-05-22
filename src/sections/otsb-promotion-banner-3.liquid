@@ -675,7 +675,7 @@
 
 {% schema %}
 {
-  "name": "OT: Promo Banner #1",
+  "name": "OT: Promo Banner #3",
   "tag": "section",
   "class": "section section-promotion-banner",
   "disabled_on": {
@@ -1086,7 +1086,6 @@
         {
           "type": "text",
           "id": "subheading",
-          "default": "Example Subheading",
           "label": "Subheading"
         },
         {
@@ -1172,7 +1171,6 @@
         {
           "type": "text",
           "id": "button_label_2",
-          "default": "Second Button Label",
           "label": "Second button label"
         },
         {
@@ -1721,7 +1719,7 @@
           "step": 10,
           "unit": "%",
           "label": "Overlay opacity",
-          "default": 100
+          "default": 30
         },
         {
           "type": "header",
@@ -1731,19 +1729,19 @@
           "type": "color",
           "id": "timer_color_countdown",
           "label": "Timer color",
-          "default": "rgba(0,0,0,0)"
+          "default": "#FFFFFF"
         },
         {
           "type": "color",
           "id": "text_color_countdown",
           "label": "Text color",
-          "default": "#525151"
+          "default": "#FFFFFF"
         },
         {
           "type": "color",
           "id": "bg_color_countdown",
           "label": "Background color",
-          "default": "rgba(0,0,0,0)"
+          "default": "#000000"
         },
         {
           "type": "header",
@@ -1819,10 +1817,13 @@
   ],
   "presets": [
     {
-      "name": "OT: Promo Banner #1",
+      "name": "OT: Promo Banner #3",
       "blocks": [
         {
           "type": "image_banner"
+        },
+        {
+          "type": "countdown_timer"
         },
         {
           "type": "buttons"

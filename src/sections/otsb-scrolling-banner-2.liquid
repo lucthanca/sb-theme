@@ -180,7 +180,7 @@
     {%- case block.type -%}
       {%- when 'icon' -%}
         <div class="space-blocks-{{ section.id }} space-block-{{ block.id }} flex whitespace-nowrap">
-          <span class="inline-block icon-{{ block.id }}">
+          <span class="inline-block icon-{{ block.id }} text-color-{{ block.settings.icon_color }}">
             {% if block.settings.custom_icon == blank %}
               {% render 'otsb-icon-labels-bags', icon: block.settings.icon %}
             {% else %}
@@ -259,7 +259,7 @@
 
 {% schema %}
 {
-  "name": "OT - Scroll promotion #2",
+  "name": "OT: Scolling Promo #2",
   "class": "section section-scroll-banner x-section",
   "tag": "section",
   "disabled_on": {
@@ -319,38 +319,20 @@
     {
       "type": "color",
       "id": "bg_light",
-      "label": "Background color (light)",
+      "label": "Background color",
       "default": "rgba(0,0,0,0)"
     },
     {
       "type": "color",
       "id": "color_text_light",
-      "label": "Primary text color (light)",
-      "default": "rgba(0,0,0,0)"
+      "label": "Primary color",
+      "default": "#f96f96"
     },
     {
       "type": "color",
       "id": "color_text_light_2",
-      "label": "Secondary text color (light)",
-      "default": "rgba(0,0,0,0)"
-    },
-    {
-      "type": "color",
-      "id": "bg_dark",
-      "label": "Background color (dark)",
-      "default": "rgba(0,0,0,0)"
-    },
-    {
-      "type": "color",
-      "id": "color_text_dark",
-      "label": "Primary text color (dark)",
-      "default": "rgba(0,0,0,0)"
-    },
-    {
-      "type": "color",
-      "id": "color_text_dark_2",
-      "label": "Secondary text color (dark)",
-      "default": "rgba(0,0,0,0)"
+      "label": "Secondary color",
+      "default": "#32355d"
     },
     {
       "type": "header",
@@ -720,6 +702,22 @@
           "default": 20
         },
         {
+          "type": "radio",
+          "id": "icon_color",
+          "label": "Icon color",
+          "default": "primary",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary color"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary color"
+            }
+          ]
+        },
+        {
           "type": "header",
           "content": "Desktop layout"
         },
@@ -793,7 +791,7 @@
           "type": "radio",
           "id": "text_color",
           "label": "Text color",
-          "default": "primary",
+          "default": "secondary",
           "options": [
             {
               "value": "primary",
@@ -1040,7 +1038,7 @@
   ],
   "presets": [
     {
-      "name": "OT - Scrolling promotion #2",
+      "name": "OT: Scolling Promo #2",
       "blocks": [
         {
           "type": "text"

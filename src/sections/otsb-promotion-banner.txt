@@ -77,7 +77,7 @@
     }
   {%- endif -%}
 {%- endstyle -%}
-<div class="pt-[{{ section.settings.padding_top_mobile }}px] md:pt-[{{ section.settings.padding_top }}px] pb-[{{ section.settings.padding_bottom_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px]{% if section.settings.full_width %} {% if section.settings.padding_full_width %} md:pl-5 md:pr-5{% else %} md:pl-0 md:pr-0{% endif %}{% else %} page-width{% endif %}{% if section.settings.full_width_mobile %} full-width-mobile{% else %} pl-5 pr-5{% endif %}">
+<div class="pt-[{{ section.settings.padding_top_mobile }}px] md:pt-[{{ section.settings.padding_top }}px] pb-[{{ section.settings.padding_bottom_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px]{% if section.settings.full_width %} {% if section.settings.padding_full_width %} md:pl-5 md:pr-5{% else %} md:pl-0 md:pr-0{% endif %}{% else %} otsb-page-width{% endif %}{% if section.settings.full_width_mobile %} otsb-full-width-mobile{% else %} pl-5 pr-5{% endif %}">
   <div class="promotion bg-[#c9c9c9] section--{{ section.id }} w-full flex relative overflow-hidden{% if section.settings.desktop_height == "natural" %}{% if section.settings.image != blank %} md:h-0 desktop-{{ section.id }}-natural{% else %} md:promotion:h-[650px]{% endif %}{% else %} md:promotion:h-[{{ section.settings.desktop_height }}] md:promotion:pb-0{% endif %}{% if section.settings.rounded_corner_image %} md:rounded-[10px] z-20{% else %} md:rounded-none{% endif %}{% if section.settings.rounded_corner_image_mobile %}  z-20 rounded-[10px]{% endif %}
     {% if section.settings.mobile_height == "natural" %}{% if section.settings.image_mobile != blank %} h-0 mobile-{{ section.id }}-natural{% else %} h-[550px]{% endif %}{% else %}h-[{{ section.settings.mobile_height }}] md:h-auto{% endif %}"
     x-data='{
@@ -118,7 +118,12 @@
             {% if section.settings.open_new_window %}target="_blank"{% endif %}
           >
         {% endif %}
-        <div class="z-10 absolute top-0 left-0 bottom-0 right-0 image-treatment-overlay opacity-{{ section.settings.image_overlay_opacity }}"></div>
+        {% style %}
+          #shopify-section-{{ section.id }} .otsb-image-treatment-overlay {
+            background: rgb({{ section.settings.image_overlay_color.red }}, {{ section.settings.image_overlay_color.green }}, {{ section.settings.image_overlay_color.blue }})
+          }
+        {% endstyle %}
+        <span class="z-10 absolute top-0 left-0 bottom-0 right-0 otsb-image-treatment-overlay opacity-{{ section.settings.image_overlay_opacity }}"></span>
         {% if section.settings.image_link != blank %}
           </a>
         {% endif %}
@@ -330,7 +335,7 @@
           </div>
         {%- endif -%} 
       </div>
-      <div class="{% if section.settings.content_position != "custom" %}page-width ml-5 mr-5 lg:mx-auto absolute top-0 left-0 bottom-0 right-0{% else %} w-full h-full{% endif %}">
+      <div class="{% if section.settings.content_position != "custom" %}otsb-page-width ml-5 mr-5 lg:mx-auto absolute top-0 left-0 bottom-0 right-0{% else %} w-full h-full{% endif %}">
         {%- if section.settings.image_link != blank -%}
           <a href="{{ section.settings.image_link }}"{% if section.settings.open_new_window %} target="_blank"{% endif %} class="absolute top-0 left-0 right-0 bottom-0 disable-effect" aria-label="Banner link"></a>
         {%- endif -%}
@@ -375,10 +380,10 @@
                     {% endif %}
                   }
                   .content--{{ block.id }}:after {
-                    border-color: #ffffff;
+                    border-color: rgba(var(--image-treatment-text));
                   }
                   .dark .content--{{ block.id }}:after {
-                    border-color: #ffffff;
+                    border-color: rgba(var(--image-treatment-text));
                   }
                   .heading--{{ block.id }}{
                     font-size: {{ heading_size | times: 0.5 }}rem;
@@ -402,25 +407,31 @@
                   }
                 {%- endstyle -%} 
                 {%- if block.settings.heading != blank or block.settings.text != blank or block.settings.subheading != blank -%}
+                  {%- style -%}
+                    #shopify-section-{{ section.id }} .content--{{ block.id }} {
+                      --image-treatment-text: {{ block.settings.color_text.red }}, {{ block.settings.color_text.green }}, {{ block.settings.color_text.blue }};
+                    }
+                  {%- endstyle -%}
+                  
                   <div class="content--{{ block.id }} relative mx-auto mt-2 mb-2 z-20 lg:max-w-3xl w-full lg:block lg:w-full lg:static lg:translate-x-0 lg:translate-y-0
                     {% if add_class_light %} pt-5 pb-5 pl-5 pr-5{% endif %}
-                    {% if add_class_dark %} dark:pt-5 dark:pb-5 dark:pl-5 dark:pr-5{% else %} dark:pt-0 dark:pb-0 dark:pr-0 dark:pl-0{% endif %}
+                    {% if add_class_dark %} otsb-dark:pt-5 otsb-dark:pb-5 otsb-dark:pl-5 otsb-dark:pr-5{% else %} otsb-dark:pt-0 otsb-dark:pb-0 otsb-dark:pr-0 otsb-dark:pl-0{% endif %}
                     {%- if block.settings.content_box_type == "round" %} rounded-full{% endif -%}
                     {%- if block.settings.add_frame %} pt-5 pb-5 pl-5 pr-5 after:-z-10 after:top-1 after:left-1 after:right-1 after:bottom-1 after:border after:solid after:absolute after:{{ block.settings.content_box_type }}{% endif %}"
                   >
-                    <div class="promotion-box-content--{{ block.settings.content_box_type }}{%- if add_class_light and block.settings.content_box_type == "round" %} pl-8 pb-8 pt-8 pr-8{% else %} pb-1 md:pb-2{% endif %}{%- if add_class_dark and block.settings.content_box_type == "round" %} dark:pl-8 dark:pb-8 dark:pt-8 dark:pr-8{% else %} dark:pl-0 dark:pr-0 dark:pt-0 dark:pb-1 md:dark:pb-2{% endif %} text-{{ section.settings.content_alignment }}"{{ block.shopify_attributes }}>
+                    <div class="promotion-box-content--{{ block.settings.content_box_type }}{%- if add_class_light and block.settings.content_box_type == "round" %} pl-8 pb-8 pt-8 pr-8{% else %} pb-1 md:pb-2{% endif %}{%- if add_class_dark and block.settings.content_box_type == "round" %} otsb-dark:pl-8 otsb-dark:pb-8 otsb-dark:pt-8 otsb-dark:pr-8{% else %} otsb-dark:pl-0 otsb-dark:pr-0 otsb-dark:pt-0 otsb-dark:pb-1 md:otsb-dark:pb-2{% endif %} text-{{ section.settings.content_alignment }}"{{ block.shopify_attributes }}>
                       {%- if block.settings.subheading != blank -%}
-                        <p class="sub-heading-{{ block.id }} leading-tight empty:otsb-hidden italic mt-1 p-break-words image-treatment-text">
+                        <p class="sub-heading-{{ block.id }} leading-tight empty:otsb-hidden italic mt-1 otsb-p-break-words otsb-image-treatment-text">
                           {{ block.settings.subheading | escape }}
                         </p>
                       {%- endif -%}
                       {%- if block.settings.heading != blank -%}
-                        <{{ block.settings.heading_tag }} class="empty:otsb-hidden h2 block leading-tight mt-1 image-treatment-text p-break-words heading--{{ block.id }}">
+                        <{{ block.settings.heading_tag }} class="empty:otsb-hidden otsb-h2 block leading-tight mt-1 otsb-image-treatment-text p-break-words heading--{{ block.id }}">
                           {{ block.settings.heading | escape }}
                         </{{ block.settings.heading_tag }}>
                       {%- endif -%}
                       {%- if block.settings.text != blank -%} 
-                        <p class="content-text-{{ block.id }} p-break-words empty:otsb-hidden leading-tight image-treatment-text{% if block.settings.heading != blank %} mt-3 lg:mt-4{% endif %}">
+                        <p class="content-text-{{ block.id }} otsb-p-break-words empty:otsb-hidden leading-tight otsb-image-treatment-text{% if block.settings.heading != blank %} mt-3 lg:mt-4{% endif %}">
                           {{ block.settings.text | escape }}
                         </p>
                       {%- endif -%}
@@ -460,7 +471,7 @@
                   }
                 {%- endstyle -%}
                 {%- if block.settings.button_label != blank or block.settings.button_label_2 != blank -%}
-                  <div class="selection:bg-[rgba(var(--image-treatment-text),0.2)] z-20 mt-3 lg:mt-9 mb-2 mx-auto ltr">
+                  <div class="selection:bg-[rgba(var(--image-treatment-text),0.2)] z-20 mt-3 lg:mt-9 mb-2 mx-auto otsb-ltr">
                     <div class="flex lg:justify-{{ section.settings.content_alignment }} items-{{ section.settings.content_alignment }} lg:flex-row flex-col gap-x-2" {{ block.shopify_attributes }}>
                       {%- if block.settings.button_label != blank -%}
                         {%- if block.settings.button_link != blank -%}
@@ -472,7 +483,7 @@
                             {% if block.settings.open_new_window_button %}target="_blank"{% endif %}
                           >
                         {%- endif -%}
-                          <div class="otsb-button p-break-words button--{{ block.id }}{% if block.settings.primary_button_1 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} empty:otsb-hidden leading-normal text-center mt-1 mb-1 lg:mt-0 lg:mb-0 lg:ml-0 lg:mr-0 h-full pl-7 pr-7 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3{% unless block.settings.button_link != blank %} opacity-70 hover:cursor-not-allowed{% endunless %}">
+                          <div class="otsb-button otsb-p-break-words button--{{ block.id }}{% if block.settings.primary_button_1 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} empty:otsb-hidden leading-normal text-center mt-1 mb-1 lg:mt-0 lg:mb-0 lg:ml-0 lg:mr-0 h-full pl-7 pr-7 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3{% unless block.settings.button_link != blank %} opacity-70 hover:cursor-not-allowed{% endunless %}">
                             {% render 'otsb-button-label', button_label: block.settings.button_label, show_button_primary: block.settings.primary_button_1 %}
                           </div>
                         {%- if block.settings.button_link != blank -%}
@@ -489,7 +500,7 @@
                             {% if block.settings.open_new_window_button_2 %}target="_blank"{% endif %}
                           >
                         {%- endif -%}
-                          <div class="otsb-button p-break-words button--{{ block.id }}{% if block.settings.primary_button_2 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} empty:otsb-hidden leading-normal text-center mt-1 mb-1 lg:mt-0 lg:mb-0 lg:ml-0 lg:mr-0 h-full pl-7 pr-7 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3{% unless block.settings.button_link_2 != blank %} opacity-70 hover:cursor-not-allowed{% endunless %}">
+                          <div class="otsb-button otsb-p-break-words button--{{ block.id }}{% if block.settings.primary_button_2 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} empty:otsb-hidden leading-normal text-center mt-1 mb-1 lg:mt-0 lg:mb-0 lg:ml-0 lg:mr-0 h-full pl-7 pr-7 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3{% unless block.settings.button_link_2 != blank %} opacity-70 hover:cursor-not-allowed{% endunless %}">
                             {% render 'otsb-button-label', button_label: block.settings.button_label_2, show_button_primary: block.settings.primary_button_2 %}
                           </div>
                         {%- if block.settings.button_link_2 != blank -%}
@@ -504,9 +515,9 @@
                   .timer--{{ block.id }} {
                     font-size: {{ 100 | times: 0.013 }}rem;
                     {% unless block.settings.timer_color_countdown.alpha == 0.0 %}
-                      color: {{ block.settings.timer_color_countdown }};
+                      color: {{ block.settings.timer_color_countdown }} !important;
                     {% else %}
-                      color: var(--colors-button-hover);
+                      color: var(--colors-button-hover) !important;
                     {% endunless %}
                   }
                   .dark .timer--{{ block.id }} {
@@ -584,28 +595,28 @@
                   })'
                   {{ block.shopify_attributes }}
                 >
-                  <div class="x-countdown-promo-banner x-countdown-{{ block.id }} justify-{{ section.settings.content_alignment }} flex rtl:flex-row-reverse">
+                  <div class="x-countdown-promo-banner x-countdown-{{ block.id }} justify-{{ section.settings.content_alignment }} flex otsb-rtl:flex-row-reverse">
                     <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
                       <div class="flex flex-col items-center justify-center absolute top-0 left-0 h-full w-full">
-                        <span x-html="loading?textLoad:days" class="h2 timer--{{ block.id }}"></span>
+                        <span x-html="loading?textLoad:days" class="otsb-h2 timer--{{ block.id }}"></span>
                         <span>Days</span>
                       </div>
                     </div>
                     <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
                       <div class="flex flex-col items-center justify-center absolute top-0 left-0 h-full w-full">
-                        <span x-html="loading?textLoad:hours" class="h2 timer--{{ block.id }}"></span>
+                        <span x-html="loading?textLoad:hours" class="otsb-h2 timer--{{ block.id }}"></span>
                         <span>Hours</span>
                       </div>
                     </div>
                     <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
                       <div class="flex flex-col items-center justify-center absolute top-0 left-0 h-full w-full">
-                        <span x-html="loading?textLoad:minutes" class="h2 timer--{{ block.id }}"></span>
+                        <span x-html="loading?textLoad:minutes" class="otsb-h2 timer--{{ block.id }}"></span>
                         <span>Minutes</span>
                       </div>
                     </div>
                     <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
                       <div class="flex flex-col items-center justify-center absolute top-0 left-0 h-full w-full">
-                        <span x-html="loading?textLoad:seconds" class="h2 timer--{{ block.id }}"></span>
+                        <span x-html="loading?textLoad:seconds" class="otsb-h2 timer--{{ block.id }}"></span>
                         <span>Seconds</span>
                       </div>
                     </div>
@@ -620,21 +631,33 @@
                     font-size: {{ menu_text_size | times: 0.3 }}rem;
                   }
                   .menu--{{ block.id }} .link-active {
-                    border-bottom: 1px solid rgba(var(--colors-text-link), 1);
+                    color: rgba({{ block.settings.text_color_menu_hover.red }}, {{ block.settings.text_color_menu_hover.green }}, {{ block.settings.text_color_menu_hover.blue }});
+                    border-bottom: 1px solid rgba({{ block.settings.text_color_menu_hover.red }}, {{ block.settings.text_color_menu_hover.green }}, {{ block.settings.text_color_menu_hover.blue }});
                   }
                   @media screen and (min-width: 768px) { 
                     .menu--{{ block.id }} {
                       font-size: {{ menu_text_size | times: 0.58 }}rem;
                     }
                   }
+
+                  a.otsb-nav-link:not(.otsb-effect-inline) {
+                    color: rgba({{ block.settings.text_color_menu.red }}, {{ block.settings.text_color_menu.green }}, {{ block.settings.text_color_menu.blue }});
+                  }
+                  a.otsb-nav-link:not(.otsb-effect-inline):hover {
+                    transition: transform 0.15s linear;
+                    color: rgba({{ block.settings.text_color_menu_hover.red }}, {{ block.settings.text_color_menu_hover.green }}, {{ block.settings.text_color_menu_hover.blue }});
+                  }
+                  a.otsb-nav-link:not(.otsb-effect-inline):after {
+                    border-bottom: 1px solid rgba({{ block.settings.text_color_menu_hover.red }}, {{ block.settings.text_color_menu_hover.green }}, {{ block.settings.text_color_menu_hover.blue }});
+                  }
                 </style>
-                <nav class="menu--{{ block.id }} image-treatment-text justify-{{ section.settings.content_alignment }} {% if block.settings.display_mobile %} flex {% else %} otsb-hidden lg:flex {% endif %}">
+                <nav class="menu--{{ block.id }} otsb-image-treatment-text justify-{{ section.settings.content_alignment }} {% if block.settings.display_mobile %} flex {% else %} otsb-hidden lg:flex {% endif %}">
                   <ul class="list-menu inline-flex flex-wrap items-center gap-4 lg:gap-12">
                     {%- for link in block.settings.menu.links -%}
                         <li class="py-1">
                           <a
                             href="{{ link.url }}"
-                            class="relative p-break-words flex items-center hover-text-link font-bold is-focus:link-active{% if link.current or link.child_active %} link-active {% else %} nav-link {% endif %}"
+                            class="relative otsb-p-break-words flex items-center hover-text-link font-bold is-focus:link-active{% if link.current or link.child_active %} link-active {% else %} otsb-nav-link {% endif %}"
                           >
                             <span>{{ link.title | escape }}</span>
                           </a>
@@ -652,7 +675,7 @@
 
 {% schema %}
 {
-  "name": "OT - Promotion banner",
+  "name": "OT: Promo Banner #1",
   "tag": "section",
   "class": "section section-promotion-banner",
   "disabled_on": {
@@ -710,6 +733,12 @@
       "unit": "%",
       "label": "Image overlay opacity",
       "default": 0
+    },
+    {
+      "type": "color",
+      "id": "image_overlay_color",
+      "default": "rgb(32,32,32)",
+      "label": "Overlay color"
     },
     {
       "type": "select",
@@ -904,7 +933,7 @@
           "label": "Fullscreen"
         }
       ],
-      "default": "750px",
+      "default": "550px",
       "label": "Desktop height"
     },
     {
@@ -1005,7 +1034,7 @@
         {
           "type": "text",
           "id": "heading",
-          "default": "Flash Sale 70% Off",
+          "default": "Title Content Banner",
           "label": "Heading"
         },
         {
@@ -1016,7 +1045,7 @@
           "step": 10,
           "unit": "%",
           "label": "Heading size",
-          "default": 170
+          "default": 180
         },
         {
           "type": "select",
@@ -1057,13 +1086,13 @@
         {
           "type": "text",
           "id": "subheading",
-          "default": "Summer Lookbook",
+          "default": "Example Subheading",
           "label": "Subheading"
         },
         {
           "type": "text",
           "id": "text",
-          "default": "Give customers details about the banner image(s) or content on the template.",
+          "default": "Give custormers details about the banner image(s) or content on the template.",
           "label": "Text"
         },
         {
@@ -1074,7 +1103,7 @@
           "step": 10,
           "unit": "%",
           "label": "Text size",
-          "default": 130
+          "default": 150
         },
         {
           "type": "select",
@@ -1102,13 +1131,13 @@
           "type": "color",
           "id": "color_content_box_light",
           "default": "rgba(0,0,0,0)",
-          "label": "Content box color (light)"
+          "label": "Content box color"
         },
         {
           "type": "color",
-          "id": "color_content_box_dark",
-          "default": "rgba(0,0,0,0)",
-          "label": "Content box color (dark)"
+          "id": "color_text",
+          "default": "#FFFFFF",
+          "label": "Content text color"
         }
       ]
     },
@@ -1120,7 +1149,7 @@
         {
           "type": "text",
           "id": "button_label",
-          "default": "Button label",
+          "default": "Button Label",
           "label": "First button label"
         },
         {
@@ -1143,6 +1172,7 @@
         {
           "type": "text",
           "id": "button_label_2",
+          "default": "Second Button Label",
           "label": "Second button label"
         },
         {
@@ -1170,7 +1200,7 @@
           "type": "color",
           "id": "color_button",
           "label": "Button color",
-          "default": "rgba(0,0,0,0)"
+          "default": "#FFFFFF"
         },
         {
           "type": "color",
@@ -1182,7 +1212,7 @@
           "type": "color",
           "id": "color_text_button",
           "label": "Button text color",
-          "default": "rgba(0,0,0,0)"
+          "default": "#000000"
         },
         {
           "type": "color",
@@ -1194,7 +1224,7 @@
           "type": "color",
           "id": "color_button_secondary",
           "label": "Secondary button color",
-          "default": "rgba(0,0,0,0)"
+          "default": "#FFFFFF"
         },
         {
           "type": "color",
@@ -1767,6 +1797,18 @@
           "default": 170
         },
         {
+          "type": "color",
+          "id": "text_color_menu",
+          "label": "Text color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "text_color_menu_hover",
+          "label": "Text color hover",
+          "default": "#FFFFFF"
+        },
+        {
           "type": "checkbox",
           "id": "display_mobile",
           "default": false,
@@ -1777,7 +1819,7 @@
   ],
   "presets": [
     {
-      "name": "OT - Promotion banner",
+      "name": "OT: Promo Banner #1",
       "blocks": [
         {
           "type": "image_banner"
