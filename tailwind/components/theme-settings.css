@@ -618,7 +618,7 @@ a.otsb-effect-inline:after {
 
 .otsb-rte a,
 .button-link {
-  background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)), linear-gradient(to right, rgba(var(--colors-text-link), 1), rgba(var(--colors-text-link), 1), rgba(var(--colors-text-link), 1));
+  background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)), linear-gradient(to right, rgba(var(--colors-text-link, 253, 142, 22), 1), rgba(var(--colors-text-link, 253, 142, 22), 1), rgba(var(--colors-text-link, 253, 142, 22), 1));
   background-size: 100% 0.1em, 0 0.1em;
   background-position: 100% 100%, 100% 100%;
   background-repeat: no-repeat;
@@ -1132,4 +1132,8 @@ button.otsb-button-solid,
 
 .otsb-image-treatment-overlay {
   background: rgba(var(--image-treatment-overlay));
+}
+
+.text-\[rgba\(var\(--colors-text-link\)\)\] {
+  color: rgba(var(--colors-text-link, 253, 142, 22));
 }
