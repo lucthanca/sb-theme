@@ -295,15 +295,102 @@
                     </div>
                   {%- endif -%}
                   {%- if block.settings.button_label_1 != blank or block.settings.button_label_2 != blank -%}
-                    <div class="mt-4 lg:mt-9 inline-flex flex-wrap gap-x-1.5 gap-y-2 p-break-words{% if block.settings.content_alignment == 'custom' or block.settings.content_alignment contains 'center' %} justify-center{% else %} justify-{{ alignment[1] }}{% endif %}" {{ block.shopify_attributes }}>
+                    <div class="otsb-slideshow-{{ block.id }} mt-4 lg:mt-9 inline-flex flex-wrap gap-x-1.5 gap-y-2 p-break-words{% if block.settings.content_alignment == 'custom' or block.settings.content_alignment contains 'center' %} justify-center{% else %} justify-{{ alignment[1] }}{% endif %}" {{ block.shopify_attributes }}>
+                      {%- liquid
+                        case block.settings.button_style
+                          when 'rounded'
+                            assign borderRadius = '100px'
+                          when 'rounded_corners'
+                            assign borderRadius = '6px'
+                          else
+                            assign borderRadius = '0'
+                        endcase
+                      %}
+
+                      {% style %}
+                        {% if block.settings.primary_button_animation == 'sliced' %}
+                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-outline:not(.not-icon),
+                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:not(.not-icon) {
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            padding-left: 1.5rem;
+                            padding-right: 1.5rem;
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-icon,
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text {
+                            transition-timing-function: cubic-bezier(0,.71,.4,1);
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-icon {
+                            width: max-content;
+                            transition: opacity .25s,transform .5s;
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text {
+                            transition: transform .5s;
+                            transform: translateX(10px);
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid:hover .otsb-button-text {
+                            opacity: 1;
+                            transform: translateX(0px);
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid:hover .otsb-button-icon {
+                            opacity: 1;
+                            transform: translateX(5px);
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:before {
+                            content: none;
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:hover {
+                            transition-delay: 0s;
+                            transition: opacity .25s,transform .5s;
+                            background-color: var(--colors-button-hover, rgb(255, 102, 0));
+                            color: rgb(var(--colors-button-text-hover));
+                            background-origin: border-box;
+                          }
+                        {% endif %}
+                        {% if block.settings.primary_button_animation == 'underline' %}
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text {
+                            position: relative;
+                            display: block;
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text::after {
+                            content: "";
+                            pointer-events: none;
+                            bottom: 1px;
+                            left: 50%;
+                            position: absolute;
+                            width: 0%;
+                            height: 1px;
+                            background-color: rgba(var(--colors-button-text));
+                            transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+                            transition-duration: 400ms;
+                            transition-property: width, left;
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid:hover .otsb-button-text::after {
+                            background-color: rgb(var(--colors-button-text-hover));
+                            width: 100%;
+                            left: 0%;
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:before {
+                            content: none;
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:hover {
+                            transition-delay: 0s;
+                            transition: opacity .25s,transform .5s;
+                            background-color: var(--colors-button-hover, rgb(255, 102, 0));
+                            color: rgb(var(--colors-button-text-hover));
+                            background-origin: border-box;
+                          }
+                        {% endif %}
+                      {% endstyle %}
                       {%- if block.settings.button_label_1 != blank -%}
-                        <a{% if block.settings.button_link_1 %} href="{{ block.settings.button_link_1 }}"{% if block.settings.open_new_window_button %} target="_blank"{% endif %}{% else %} role="link" aria-disabled="true"{% endif %} class="otsb-button button--{{ block.id }}{% if block.settings.button_primary_1 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} border ml-0.5 mr-0.5 mt-0.5 mb-0.5 empty:otsb-hidden pl-6 pr-6 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal{% unless block.settings.button_link_1 %} hover:cursor-not-allowed opacity-70{% endunless %}">
-                          {% render 'otsb-button-label', button_label: block.settings.button_label_1, show_button_primary: block.settings.button_primary_1 %}
+                        <a style="border-radius: {{borderRadius}};" {% if block.settings.button_link_1 %} href="{{ block.settings.button_link_1 }}"{% if block.settings.open_new_window_button %} target="_blank"{% endif %}{% else %} role="link" aria-disabled="true"{% endif %} class="otsb-button button--{{ block.id }}{% if block.settings.button_primary_1 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} border ml-0.5 mr-0.5 mt-0.5 mb-0.5 empty:otsb-hidden pl-6 pr-6 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal{% unless block.settings.button_link_1 %} hover:cursor-not-allowed opacity-70{% endunless %}">
+                          {% render 'otsb-button-label', button_animation: block.settings.primary_button_animation, button_label: block.settings.button_label_1, show_button_primary: block.settings.button_primary_1 %}
                         </a> 
                       {%- endif -%}
                       {%- if block.settings.button_label_2 != blank -%}
-                        <a{% if block.settings.button_link_2 %} href="{{ block.settings.button_link_2 }}"{% if block.settings.open_new_window_button_2 %} target="_blank"{% endif %}{% else %} role="link" aria-disabled="true"{% endif %} class="otsb-button button--{{ block.id }}{% if block.settings.button_primary_2 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} border ml-0.5 mr-0.5 mt-0.5 mb-0.5 empty:otsb-hidden pl-6 pr-6 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal{% unless block.settings.button_link_2 %} hover:cursor-not-allowed opacity-70{% endunless %}">
-                          {% render 'otsb-button-label', button_label: block.settings.button_label_2, show_button_primary: block.settings.button_primary_2 %}
+                        <a style="border-radius: {{borderRadius}};" {% if block.settings.button_link_2 %} href="{{ block.settings.button_link_2 }}"{% if block.settings.open_new_window_button_2 %} target="_blank"{% endif %}{% else %} role="link" aria-disabled="true"{% endif %} class="otsb-button button--{{ block.id }}{% if block.settings.button_primary_2 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} border ml-0.5 mr-0.5 mt-0.5 mb-0.5 empty:otsb-hidden pl-6 pr-6 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal{% unless block.settings.button_link_2 %} hover:cursor-not-allowed opacity-70{% endunless %}">
+                          {% render 'otsb-button-label', button_animation: block.settings.primary_button_animation, button_label: block.settings.button_label_2, show_button_primary: block.settings.button_primary_2 %}
                         </a> 
                       {%- endif -%}
                     </div>
@@ -642,6 +729,46 @@
           "id": "text",
           "default": "<p>Browse Through Out Latest Trendy Collections</p>",
           "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "options": [
+            {
+              "value": "square",
+              "label": "Square"
+            },
+            {
+              "value": "rounded",
+              "label": "Rounded"
+            },
+            {
+              "value": "rounded_corners",
+              "label": "Rounded corners"
+            }
+          ],
+          "default": "rounded",
+          "label": "Button style"
+        },
+        {
+          "type": "select",
+          "id": "primary_button_animation",
+          "options": [
+            {
+              "value": "slide",
+              "label": "Slide"
+            },
+            {
+              "value": "sliced",
+              "label": "Slided with icon"
+            },
+            {
+              "value": "underline",
+              "label": "Underline"
+            }
+          ],
+          "default": "sliced",
+          "label": "Primary button hover animation"
         },
         {
           "type": "text",
