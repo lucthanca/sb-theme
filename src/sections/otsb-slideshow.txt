@@ -9,7 +9,7 @@
   assign enable_slider = false
   if section.blocks.size > 1
     assign enable_slider = true
-  endif
+  endif--image-treatment-text
   assign block_first = section.blocks | first
   assign desktop_height = section.settings.desktop_height | append: "px"
   assign mobile_height = section.settings.mobile_height | append: "px"
@@ -295,15 +295,102 @@
                     </div>
                   {%- endif -%}
                   {%- if block.settings.button_label_1 != blank or block.settings.button_label_2 != blank -%}
-                    <div class="mt-4 lg:mt-9 inline-flex flex-wrap gap-x-1.5 gap-y-2 p-break-words{% if block.settings.content_alignment == 'custom' or block.settings.content_alignment contains 'center' %} justify-center{% else %} justify-{{ alignment[1] }}{% endif %}" {{ block.shopify_attributes }}>
+                    <div class="otsb-slideshow-{{ block.id }} mt-4 lg:mt-9 inline-flex flex-wrap gap-x-1.5 gap-y-2 p-break-words{% if block.settings.content_alignment == 'custom' or block.settings.content_alignment contains 'center' %} justify-center{% else %} justify-{{ alignment[1] }}{% endif %}" {{ block.shopify_attributes }}>
+                      {%- liquid
+                        case block.settings.button_style
+                          when 'rounded'
+                            assign borderRadius = '100px'
+                          when 'rounded_corners'
+                            assign borderRadius = '6px'
+                          else
+                            assign borderRadius = '0'
+                        endcase
+                      %}
+
+                      {% style %}
+                        {% if block.settings.primary_button_animation == 'sliced' %}
+                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-outline:not(.not-icon),
+                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:not(.not-icon) {
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            padding-left: 1.5rem;
+                            padding-right: 1.5rem;
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-icon,
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text {
+                            transition-timing-function: cubic-bezier(0,.71,.4,1);
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-icon {
+                            width: max-content;
+                            transition: opacity .25s,transform .5s;
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text {
+                            transition: transform .5s;
+                            transform: translateX(10px);
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid:hover .otsb-button-text {
+                            opacity: 1;
+                            transform: translateX(0px);
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid:hover .otsb-button-icon {
+                            opacity: 1;
+                            transform: translateX(5px);
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:before {
+                            content: none;
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:hover {
+                            transition-delay: 0s;
+                            transition: opacity .25s,transform .5s;
+                            background-color: var(--colors-button-hover, rgb(255, 102, 0));
+                            color: rgb(var(--colors-button-text-hover));
+                            background-origin: border-box;
+                          }
+                        {% endif %}
+                        {% if block.settings.primary_button_animation == 'underline' %}
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text {
+                            position: relative;
+                            display: block;
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text::after {
+                            content: "";
+                            pointer-events: none;
+                            bottom: 1px;
+                            left: 50%;
+                            position: absolute;
+                            width: 0%;
+                            height: 1px;
+                            background-color: rgba(var(--colors-button-text));
+                            transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+                            transition-duration: 400ms;
+                            transition-property: width, left;
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button-solid:hover .otsb-button-text::after {
+                            background-color: rgb(var(--colors-button-text-hover));
+                            width: 100%;
+                            left: 0%;
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:before {
+                            content: none;
+                          }
+                          .otsb-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:hover {
+                            transition-delay: 0s;
+                            transition: opacity .25s,transform .5s;
+                            background-color: var(--colors-button-hover, rgb(255, 102, 0));
+                            color: rgb(var(--colors-button-text-hover));
+                            background-origin: border-box;
+                          }
+                        {% endif %}
+                      {% endstyle %}
                       {%- if block.settings.button_label_1 != blank -%}
-                        <a{% if block.settings.button_link_1 %} href="{{ block.settings.button_link_1 }}"{% if block.settings.open_new_window_button %} target="_blank"{% endif %}{% else %} role="link" aria-disabled="true"{% endif %} class="otsb-button button--{{ block.id }}{% if block.settings.button_primary_1 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} border ml-0.5 mr-0.5 mt-0.5 mb-0.5 empty:otsb-hidden pl-6 pr-6 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal{% unless block.settings.button_link_1 %} hover:cursor-not-allowed opacity-70{% endunless %}">
-                          {% render 'otsb-button-label', button_label: block.settings.button_label_1, show_button_primary: block.settings.button_primary_1 %}
+                        <a style="border-radius: {{borderRadius}};" {% if block.settings.button_link_1 %} href="{{ block.settings.button_link_1 }}"{% if block.settings.open_new_window_button %} target="_blank"{% endif %}{% else %} role="link" aria-disabled="true"{% endif %} class="otsb-button button--{{ block.id }}{% if block.settings.button_primary_1 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} border ml-0.5 mr-0.5 mt-0.5 mb-0.5 empty:otsb-hidden pl-6 pr-6 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal{% unless block.settings.button_link_1 %} hover:cursor-not-allowed opacity-70{% endunless %}">
+                          {% render 'otsb-button-label', button_animation: block.settings.primary_button_animation, button_label: block.settings.button_label_1, show_button_primary: block.settings.button_primary_1 %}
                         </a> 
                       {%- endif -%}
                       {%- if block.settings.button_label_2 != blank -%}
-                        <a{% if block.settings.button_link_2 %} href="{{ block.settings.button_link_2 }}"{% if block.settings.open_new_window_button_2 %} target="_blank"{% endif %}{% else %} role="link" aria-disabled="true"{% endif %} class="otsb-button button--{{ block.id }}{% if block.settings.button_primary_2 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} border ml-0.5 mr-0.5 mt-0.5 mb-0.5 empty:otsb-hidden pl-6 pr-6 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal{% unless block.settings.button_link_2 %} hover:cursor-not-allowed opacity-70{% endunless %}">
-                          {% render 'otsb-button-label', button_label: block.settings.button_label_2, show_button_primary: block.settings.button_primary_2 %}
+                        <a style="border-radius: {{borderRadius}};" {% if block.settings.button_link_2 %} href="{{ block.settings.button_link_2 }}"{% if block.settings.open_new_window_button_2 %} target="_blank"{% endif %}{% else %} role="link" aria-disabled="true"{% endif %} class="otsb-button button--{{ block.id }}{% if block.settings.button_primary_2 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} border ml-0.5 mr-0.5 mt-0.5 mb-0.5 empty:otsb-hidden pl-6 pr-6 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal{% unless block.settings.button_link_2 %} hover:cursor-not-allowed opacity-70{% endunless %}">
+                          {% render 'otsb-button-label', button_animation: block.settings.primary_button_animation, button_label: block.settings.button_label_2, show_button_primary: block.settings.button_primary_2 %}
                         </a> 
                       {%- endif -%}
                     </div>
@@ -327,192 +414,6 @@
     {%- endif -%}
   </div>
 </div>
-
-<script>
-  requestAnimationFrame(() => {
-    document.addEventListener('alpine:init', () => {
-      Alpine.store('xSplide', {
-        load(el, configs) {
-          const initSlider = () => {
-            const id = el.getAttribute('id');
-
-            if (configs.classes != undefined) {
-              if (!configs.classes.arrow)
-                configs.classes.arrow =
-                  'otsb-arrow w-8 h-8 p-2 absolute z-10 top-1/2 -translate-y-1/2 otsb-hidden md:flex items-center justify-center';
-              if (!configs.classes.next) configs.classes.next = 'right-0';
-              if (!configs.classes.prev) configs.classes.prev = '-rotate-180';
-            }
-            let splide = new Splide('#' + id, configs);
-
-            if (configs.thumbs) {
-              let thumbsRoot = document.getElementById(configs.thumbs);
-              let thumbs = thumbsRoot.getElementsByClassName('x-thumbnail');
-              let current;
-              let _this = this;
-
-              for (let i = 0; i < thumbs.length; i++) {
-                thumbs[i].addEventListener('click', function () {
-                  _this.moveThumbnail(i, thumbs[i], thumbsRoot, configs.thumbs_direction);
-                  splide.go(i);
-                });
-              }
-              splide.on('mounted move', function () {
-                let thumbnail = thumbs[splide.index];
-
-                if (thumbnail) {
-                  if (current) {
-                    current.classList.add('opacity-30');
-                  }
-                  thumbnail.classList.remove('opacity-30');
-                  current = thumbnail;
-                  _this.moveThumbnail(splide.index, thumbnail, thumbsRoot, configs.thumbs_direction);
-                }
-              });
-            }
-
-            if (configs.hotspot) {
-              let hotspotRoot = document.getElementById(configs.hotspot);
-              let hotspots = hotspotRoot.getElementsByClassName('x-hotspot');
-              let current;
-
-              if (
-                configs.disableHoverOnTouch &&
-                ('ontouchstart' in window ||
-                  (window.DocumentTouch && window.document instanceof DocumentTouch) ||
-                  window.navigator.maxTouchPoints ||
-                  window.navigator.msMaxTouchPoints)
-              ) {
-                for (let i = 0; i < hotspots.length; i++) {
-                  hotspots[i].addEventListener('click', function () {
-                    splide.go(i);
-                  });
-                }
-              } else {
-                for (let i = 0; i < hotspots.length; i++) {
-                  hotspots[i].addEventListener('mouseover', function () {
-                    splide.go(i);
-                  });
-                  hotspots[i].addEventListener('focus', function () {
-                    splide.go(i);
-                  });
-                }
-              }
-              splide.on('mounted move', function () {
-                let hotspot = hotspots[splide.index];
-
-                if (hotspot) {
-                  if (current) {
-                    current.classList.remove('active-hotspot');
-                  }
-                  hotspot.classList.add('active-hotspot');
-                  current = hotspot;
-                }
-              });
-            }
-
-            if (configs.progressBar) {
-              var bar = splide.root.querySelector('.splide-progress-bar');
-              splide.on('mounted move', function () {
-                var end = splide.Components.Controller.getEnd() + 1;
-                var rate = (splide.index + 1) / end;
-                if (bar) {
-                  bar.style.width = String(100 * rate) + '%';
-                }
-              });
-            }
-
-            if (configs.events) {
-              configs.events.forEach((e) => {
-                splide.on(e.event, e.callback);
-              });
-            }
-
-            el.splide = splide;
-            splide.mount();
-          };
-
-          if (!window.OTSB.loadedScript.includes('slider')) {
-            deferScriptLoad('slider', window.OTSB.sliderScript, initSlider, true);
-          } else if (window.Splide) {
-            initSlider();
-          } else {
-            document.addEventListener('slider loaded', () => {
-              initSlider();
-            });
-          }
-        },
-        moveThumbnail(index, thumbnail, thumbsRoot, direction) {
-          if (direction == 'vertical') {
-            setTimeout(() => {
-              thumbsRoot.scrollTop =
-                (index + 1) * thumbnail.offsetHeight -
-                thumbsRoot.offsetHeight * 0.5 +
-                thumbnail.offsetHeight * 0.5 +
-                index * 12;
-            }, 50);
-          } else {
-            thumbsRoot.scrollLeft = (index - 2) * thumbnail.offsetWidth;
-          }
-        },
-      });
-      
-      Alpine.data('xParallax', () => ({
-      debounce(func, wait) {
-        var timeout;
-        return function() {
-            var context = this, args = arguments;
-            var later = function() {
-              timeout = null;
-              func.apply(context, args);
-            };
-          clearTimeout(timeout);
-          timeout = setTimeout(later, wait);
-        };
-      },
-      load(disable) {
-        if (disable) return;
-
-        if ("IntersectionObserver" in window && 'IntersectionObserverEntry' in window) {
-          const observerOptions = {
-            root: null,
-            rootMargin: '0px 0px',
-            threshold: 0
-          };
-
-          var observer = new IntersectionObserver(handleIntersect, observerOptions);
-          var el;
-          function handleIntersect(entries) {
-            entries.forEach(function(entry) {
-              if (entry.isIntersecting) {
-                el = entry.target;
-                window.addEventListener('scroll', parallax, {passive: true, capture: false});
-              } else {
-                window.removeEventListener('scroll', parallax, {passive: true, capture: false});
-              }
-            });
-          }
-
-          observer.observe(this.$el);
-          
-          var parallax = this.debounce(function() {
-            var rect = el.getBoundingClientRect();
-            var speed = (window.innerHeight / el.parentElement.offsetHeight) * 20;
-            var shiftDistance = (rect.top - window.innerHeight) / speed;
-            var maxShiftDistance = el.parentElement.offsetHeight / 11;
-            
-            if (shiftDistance < -maxShiftDistance || shiftDistance > maxShiftDistance) {
-              shiftDistance = -maxShiftDistance;
-            }
-            
-            el.style.transform = 'translate3d(0, '+ shiftDistance +'px, 0)';
-          }, 10);
-        }
-      }
-    }));
-    });
-  });
-</script>
 
 {% schema %}
 {
@@ -557,8 +458,24 @@
       "type": "checkbox",
       "id": "show_arrow",
       "label": "Next/Previous arrows",
-      "default": true,
+      "default": false,
       "info": "Show navigation arrows"
+    },
+    {
+      "type": "select",
+      "id": "transition_style",
+      "options": [
+        {
+          "value": "default",
+          "label": "Slide"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        }
+      ],
+      "default": "fade",
+      "label": "Transition style"
     },
     {
       "type": "select",
@@ -579,22 +496,6 @@
       ],
       "default": "bars",
       "label": "Pagination"
-    },
-    {
-      "type": "select",
-      "id": "transition_style",
-      "options": [
-        {
-          "value": "default",
-          "label": "Slide"
-        },
-        {
-          "value": "fade",
-          "label": "Fade"
-        }
-      ],
-      "default": "fade",
-      "label": "Transition style"
     },
     {
       "type": "header",
@@ -648,7 +549,7 @@
           "label": "Fullscreen"
         }
       ],
-      "default": "750",
+      "default": "550",
       "label": "Desktop height"
     },
     {
@@ -769,12 +670,13 @@
         {
           "type": "text",
           "id": "subheading",
+          "default": "UP TO 30% OFF",
           "label": "Subheading"
         },
         {
           "type": "text",
           "id": "heading",
-          "default": "Slide title",
+          "default": "MASTERING THE ART OF SKIN CARE",
           "label": "Heading"
         },
         {
@@ -826,13 +728,52 @@
         {
           "type": "richtext",
           "id": "text",
-          "default": "<p>Tell your brand's story through images</p>",
           "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "options": [
+            {
+              "value": "square",
+              "label": "Square"
+            },
+            {
+              "value": "rounded",
+              "label": "Rounded"
+            },
+            {
+              "value": "rounded_corners",
+              "label": "Rounded corners"
+            }
+          ],
+          "default": "square",
+          "label": "Button style"
+        },
+        {
+          "type": "select",
+          "id": "primary_button_animation",
+          "options": [
+            {
+              "value": "slide",
+              "label": "Slide"
+            },
+            {
+              "value": "sliced",
+              "label": "Slided with icon"
+            },
+            {
+              "value": "underline",
+              "label": "Underline"
+            }
+          ],
+          "default": "slide",
+          "label": "Primary button hover animation"
         },
         {
           "type": "text",
           "id": "button_label_1",
-          "default": "Button label",
+          "default": "New Arrival",
           "label": "First button label"
         },
         {
@@ -855,7 +796,7 @@
         {
           "type": "text",
           "id": "button_label_2",
-          "default": "Button label",
+          "default": "Shop All",
           "label": "Second button label"
         },
         {
@@ -920,7 +861,7 @@
               "label": "Custom"
             }
           ],
-          "default": "middle-center",
+          "default": "middle-left",
           "label": "Position"
         },
         {
@@ -973,31 +914,31 @@
           "type": "color",
           "id": "color_text",
           "label": "Text color",
-          "default": "rgba(0,0,0,0)"
+          "default": "#FFFFFF"
         },
         {
           "type": "color",
           "id": "color_button",
           "label": "Button color",
-          "default": "rgba(0,0,0,0)"
+          "default": "#FFFFFF"
         },
         {
           "type": "color",
           "id": "color_text_button",
           "label": "Button text color",
-          "default": "rgba(0,0,0,0)"
+          "default": "#000"
         },
         {
           "type": "color",
           "id": "color_button_hover",
           "label": "Button hover color",
-          "default": "rgba(0,0,0,0)"
+          "default": "#6b7050"
         },
         {
           "type": "color",
           "id": "color_text_button_hover",
           "label": "Button text hover color",
-          "default": "rgba(0,0,0,0)"
+          "default": "#FFFFFF"
         },
         {
           "type": "color",
@@ -1008,7 +949,7 @@
         {
           "type": "color",
           "id": "secondary_button_text",
-          "default": "rgba(0,0,0,0)",
+          "default": "#FFFFFF",
           "label": "Secondary button text color"
         }
       ]
@@ -1018,6 +959,9 @@
     {
       "name": "OT - Slideshow #1",
       "blocks": [
+        {
+          "type": "slide"
+        },
         {
           "type": "slide"
         },
