@@ -1,60 +1,60 @@
 @layer components {
-  .rte {
+  .otsb-rte {
     @apply after:clear-both after:block
   }
-  .rte p {
+  .otsb-rte p {
     @apply mt-2 last:mb-2 leading-normal;
     font-weight: initial;
   }
-  .rte table {
+  .otsb-rte table {
     @apply table-fixed;
     font-weight: initial;
     word-break: break-word;
   }
-  .rte table td {
+  .otsb-rte table td {
     @apply md:pl-5 md:pr-5 border pt-2 pb-2 pl-2 pr-2
   }
-  .rte img {
+  .otsb-rte img {
     @apply h-auto max-w-full mb-2 border inline
   }
-  .rte iframe {
+  .otsb-rte iframe {
     @apply inline
   }
-  .rte li {
+  .otsb-rte li {
     @apply mt-2 mb-2;
     font-weight: initial;
     list-style: inherit;
   }
-  .rte li:last-child {
+  .otsb-rte li:last-child {
     @apply mb-0
   }
 
-  .rte blockquote > * {
+  .otsb-rte blockquote > * {
     @apply -ml-2 mt-0 -mr-2 mb-0
   }
 
-  .rte a {
+  .otsb-rte a {
     @apply relative text-[rgba(var(--colors-text-link))] decoration-1 mt-2 mb-2;
   }
-  .rte ul {
+  .otsb-rte ul {
     @apply list-disc list-inside pl-5 mt-4 mb-4;
   }
-  .pl0-ul.rte ul {
+  .pl0-ul.otsb-rte ul {
     @apply pl-0
   }
-  .rte ol {
+  .otsb-rte ol {
     @apply list-decimal list-inside pl-5 mt-4 mb-4;
   }
 
-  .rte blockquote {
+  .otsb-rte blockquote {
     @apply inline-flex;
   }
-  .rte h1,
-  .rte h2,
-  .rte h3,
-  .rte h4,
-  .rte h2,
-  .rte h6 {
+  .otsb-rte h1,
+  .otsb-rte h2,
+  .otsb-rte h3,
+  .otsb-rte h4,
+  .otsb-rte h2,
+  .otsb-rte h6 {
     margin-block-start: 1em;
     margin-block-end: 0.5em;
   }
