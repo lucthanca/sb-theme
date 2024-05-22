@@ -9,7 +9,7 @@
   assign enable_slider = false
   if section.blocks.size > 1
     assign enable_slider = true
-  endif--image-treatment-text
+  endif
   assign block_first = section.blocks | first
   assign desktop_height = section.settings.desktop_height | append: "px"
   assign mobile_height = section.settings.mobile_height | append: "px"
