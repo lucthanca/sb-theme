@@ -490,7 +490,6 @@ h6,
 [role="button"],
 [type="button"],
 .otsb-button {
-  border-radius: var(--border-radius);
   font-family: var(--font-button);
   font-weight: var(--font-button-weight);
   font-style: var(--font-button-style);
@@ -628,7 +627,7 @@ a.otsb-effect-inline:after {
 
 a.otsb-effect-inline,
 p.otsb-effect-inline {
-  color: rgb(var(--colors-text-link, 255, 102, 0));
+  color: rgb(var(--colors-text-link, 253, 142, 22));
 }
 
 parallax-movement {
@@ -709,14 +708,6 @@ input[type="search"]::-webkit-search-cancel-button {
 .x-section {
   margin-top: var(--advanced-sections-spacing);
   margin-bottom: var(--advanced-sections-spacing);
-}
-
-.otsb-image-treatment-overlay {
-  background: rgba(var(--image-treatment-overlay, 32, 32, 32), 1);
-}
-
-.otsb-image-treatment-text {
-  color: rgba(var(--image-treatment-text, 255, 255, 255)) !important;
 }
 
 .paginate-underline-active,
@@ -874,7 +865,7 @@ svg {
   }
 
   .otsb-hover-text-link:hover {
-    color: rgb(var(--colors-text-link, 255, 102, 0));
+    color: rgb(var(--colors-text-link, 253, 142, 22));
   }
 
   button.otsb-button-outline,
@@ -887,7 +878,6 @@ svg {
   .button-action,
   button.otsb-button-solid,
   .otsb-button.otsb-button-solid {
-    border: none;
     background: rgb(var(--colors-button-hover, 255, 102, 0));
   }
 
@@ -1043,17 +1033,15 @@ svg {
 
 button.otsb-button-solid,
 .otsb-button.otsb-button-solid {
-  border: none;
   background-color: rgb(var(--colors-button-hover, 255, 102, 0));
 }
 
 @media (min-width: 1024px) {
   button.otsb-button-solid,
   .otsb-button.otsb-button-solid {
-    border: none;
     box-shadow: none;
     color: rgb(var(--colors-button-text, 255, 255, 255));
-    background-color: rgb(var(--colors-button, 0, 0, 0));
+    background-color: rgb(var(--colors-button, 253, 142, 22));
     overflow: hidden;
     background-origin: border-box;
   }

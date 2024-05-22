@@ -34,12 +34,9 @@
   .collection-card-{{ section.id }} .image-overlay {
     {% if content_position == 'center' or collection_carousel %}
       opacity: {{ image_overlay_opacity }}%;
+      background: {{ image_overlay_color }};
     {% else %}
-      {% if settings.colors_image_treatment_overlay != blank %}
-        background: linear-gradient(to{% if content_position == 'bottom' %} bottom{% elsif content_position == 'top' %} top{% endif %}, transparent 0%, rgba({{ settings.colors_image_treatment_overlay.red }}, {{ settings.colors_image_treatment_overlay.green }}, {{ settings.colors_image_treatment_overlay.blue }}, {{ image_overlay_opacity }}%) 100%);
-      {% else %}
-        background: linear-gradient(to{% if content_position == 'bottom' %} bottom{% elsif content_position == 'top' %} top{% endif %}, transparent 0%, rgba(32, 32, 32, {{ image_overlay_opacity }}%) 100%);
-      {% endif %}
+        background: linear-gradient(to{% if content_position == 'bottom' %} bottom{% elsif content_position == 'top' %} top{% endif %}, transparent 0%, rgba({{ image_overlay_color.red }}, {{ image_overlay_color.green }}, {{ image_overlay_color.blue }}, {{ image_overlay_opacity }}%) 100%);
     {% endif %}
   }
   .dark .collection-card-{{ blockID }} .image-overlay,

@@ -115,14 +115,14 @@
       }
     }
   {% endif %}
-  button.otsb-button-arrow {
+  #shopify-section-{{ section.id }} button.otsb-button-arrow {
     background-color: rgba({{ section.settings.slider_button_color.red }}, {{ section.settings.slider_button_color.green }}, {{ section.settings.slider_button_color.blue }}, 0.3);
     color: {{ section.settings.slider_button_text_color }};
     box-shadow: none;
     border-radius: 50px;
   }
 
-  button.otsb-button-arrow:hover {
+  #shopify-section-{{ section.id }} button.otsb-button-arrow:hover {
     color: {{ section.settings.slider_button_hover_text_color }};
     background: {{ section.settings.slider_button_hover_color }};
   }
@@ -233,7 +233,8 @@
                       content_alignment: section.settings.content_alignment,
                       content_position: section.settings.content_position,
                       image_overlay_opacity: section.settings.image_overlay_opacity,
-                      index: forloop.index
+                      index: forloop.index,
+                      image_overlay_color: section.settings.image_overlay_color
                     %}
                   {%- when 'promotion_block' -%}
                     {% render 'otsb-promotion-block',
@@ -264,7 +265,8 @@
                       icon: block.settings.icon,
                       custom_icon: block.settings.custom_icon,
                       icon_size: block.settings.icon_size,
-                      subheading: block.settings.subheading
+                      subheading: block.settings.subheading,
+                      image_overlay_color: section.settings.image_overlay_color
                     %}
                 {%- endcase -%}
               </div>
@@ -491,6 +493,12 @@
       "default": 5,
       "unit": "%",
       "label": "Overlay opacity"
+    },
+    {
+      "type": "color",
+      "id": "image_overlay_color",
+      "default": "rgb(32,32,32)",
+      "label": "Overlay"
     },
     {
       "type": "color",

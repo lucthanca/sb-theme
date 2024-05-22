@@ -4,6 +4,9 @@ export const content = [
   "./src/**/*.{liquid,js}",
   "./tailwind/pre-process-template/**/*.liquid"
 ];
+export const blocklist = [
+  'grid'
+]
 export const theme = {
   extend: {
     padding: {

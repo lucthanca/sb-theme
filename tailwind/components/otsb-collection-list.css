@@ -28,6 +28,6 @@
     }
 
     .otsb-grid {
-        @apply grid;
+        display: grid
     }
 }

@@ -106,6 +106,11 @@
       font-size: {{ text_size }}rem;
     }
   }
+  {%- if image != blank -%}
+    .promotion-block-{{ block.id }} .otsb-image-treatment-overlay {
+      background: {{ image_overlay_color }}
+    }
+  {%- endif -%}
 {%- endstyle -%}
 {%- liquid 
                       assign classLayout = "flex flex-col justify-end"
@@ -238,7 +243,7 @@
                             </div>
                           {%- endif -%}
                           {%- if button_label != blank -%}
-                            {% if button_link %}<a href="{{ button_link }}" aria-label="{{ button_label }}"{% if open_new_window %} target="_blank"{% endif %}{% else %}<p{% endif %} class="otsb-button{% if show_button_primary %} otsb-button-solid{% else %} otsb-button-outline{% endif %} button--{{ block.id }} inline-block empty:otsb-hidden pl-4 pr-4 lg:pl-6 lg:pr-6 pt-2.5 pb-2.5 leading-normal md:pt-3 md:pb-3 cursor-pointer otsb-p-break-words{% if content == blank and image_ratio != "round" %} mt-3{% endif %}{% if button_link == blank %} hover:cursor-not-allowed opacity-70{%- endif -%}">
+                            {% if button_link %}<a href="{{ button_link }}" aria-label="{{ button_label }}"{% if open_new_window %} target="_blank"{% endif %}{% else %}<p{% endif %} class="rounded-md otsb-button{% if show_button_primary %} otsb-button-solid{% else %} otsb-button-outline{% endif %} button--{{ block.id }} inline-block empty:otsb-hidden pl-4 pr-4 lg:pl-6 lg:pr-6 pt-2.5 pb-2.5 leading-normal md:pt-3 md:pb-3 cursor-pointer otsb-p-break-words{% if content == blank and image_ratio != "round" %} mt-3{% endif %}{% if button_link == blank %} hover:cursor-not-allowed opacity-70{%- endif -%}">
                               {% render 'otsb-button-label', button_label: button_label, show_button_primary: show_button_primary %}
                             {% if button_link %}</a>{% else %}</p>{% endif %}
                           {%- endif -%}
