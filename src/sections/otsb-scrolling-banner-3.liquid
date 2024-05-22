@@ -180,7 +180,7 @@
     {%- case block.type -%}
       {%- when 'icon' -%}
         <div class="space-blocks-{{ section.id }} space-block-{{ block.id }} flex whitespace-nowrap">
-          <span class="inline-block icon-{{ block.id }}">
+          <span class="inline-block icon-{{ block.id }} text-color-{{ block.settings.icon_color }}">
             {% if block.settings.custom_icon == blank %}
               {% render 'otsb-icon-labels-bags', icon: block.settings.icon %}
             {% else %}
@@ -319,19 +319,19 @@
     {
       "type": "color",
       "id": "bg_light",
-      "label": "Background color (light)",
+      "label": "Background color",
       "default": "rgb(113, 147, 120)"
     },
     {
       "type": "color",
       "id": "color_text_light",
-      "label": "Primary text color (light)",
+      "label": "Primary color",
       "default": "rgb(255, 255, 255)"
     },
     {
       "type": "color",
       "id": "color_text_light_2",
-      "label": "Secondary text color (light)",
+      "label": "Secondary color",
       "default": "rgba(0,0,0,0)"
     },
     {
@@ -700,6 +700,22 @@
           "unit": "px",
           "label": "Icon height",
           "default": 20
+        },
+        {
+          "type": "radio",
+          "id": "icon_color",
+          "label": "Icon color",
+          "default": "primary",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary color"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary color"
+            }
+          ]
         },
         {
           "type": "header",
