@@ -92,7 +92,7 @@
                 </div>
               {% else %}
                 {% if section.settings.image != blank %}
-                  <div class="border-radius-{{ section.id }} w-full overflow-hidden{% if section.settings.image_layout == "stacked" and section.settings.image_second != blank %} h-[calc(100%-2rem)] md:h-[calc(100%-5rem)]{% else %} h-full{% endif %}">
+                  <div class="border-radius-{{ section.id }} w-full overflow-hidden{% if section.settings.image_layout == "stacked" and section.settings.image_second != blank %} !h-[calc(100%-2rem)] md:!h-[calc(100%-5rem)]{% else %} h-full{% endif %}">
                     <parallax-image class="block h-full w-full">
                       <parallax-movement x-data="xParallax" x-intersect.once.margin.200px="load({{ settings.disable_parallax_effect }})">
                         <img
@@ -116,7 +116,7 @@
                   </div>
                 {% endif %}
                 {% if section.settings.image_second != blank %}
-                  <div class="border-radius-{{ section.id }} h-full w-full overflow-hidden{% if section.settings.image_layout == "stacked" and section.settings.image != blank %} mt-8 md:mt-20 h-[calc(100%-2rem)] md:h-[calc(100%-5rem)]{% else %} h-full{% endif %}">
+                  <div class="border-radius-{{ section.id }} h-full w-full overflow-hidden{% if section.settings.image_layout == "stacked" and section.settings.image != blank %} mt-8 md:mt-20 !h-[calc(100%-2rem)] md:!h-[calc(100%-5rem)]{% else %} h-full{% endif %}">
                     <parallax-image class="block h-full w-full">
                       <parallax-movement x-data="xParallax" x-intersect.once.margin.200px="load({{ settings.disable_parallax_effect }})">
                         <img

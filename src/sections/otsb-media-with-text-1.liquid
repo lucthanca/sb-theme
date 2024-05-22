@@ -92,7 +92,7 @@
               </div>
             {% else %}
               {% if section.settings.image != blank %}
-                <div class="border-radius-{{ section.id }} w-full overflow-hidden{% if section.settings.image_layout == "stacked" and section.settings.image_second != blank %} h-[calc(100%-2rem)] md:h-[calc(100%-5rem)]{% else %} h-full{% endif %}">
+                <div class="border-radius-{{ section.id }} w-full overflow-hidden{% if section.settings.image_layout == "stacked" and section.settings.image_second != blank %} !h-[calc(100%-2rem)] md:!h-[calc(100%-5rem)]{% else %} h-full{% endif %}">
                   <parallax-image class="block h-full w-full">
                     <parallax-movement x-data="xParallax" x-intersect.once.margin.200px="load({{ settings.disable_parallax_effect }})">
                       <img
@@ -116,7 +116,7 @@
                 </div>
               {% endif %}
               {% if section.settings.image_second != blank %}
-                <div class="border-radius-{{ section.id }} h-full w-full overflow-hidden{% if section.settings.image_layout == "stacked" and section.settings.image != blank %} mt-8 md:mt-20 h-[calc(100%-2rem)] md:h-[calc(100%-5rem)]{% else %} h-full{% endif %}">
+                <div class="border-radius-{{ section.id }} h-full w-full overflow-hidden{% if section.settings.image_layout == "stacked" and section.settings.image != blank %} mt-8 md:mt-20 !h-[calc(100%-2rem)] md:!h-[calc(100%-5rem)]{% else %} h-full{% endif %}">
                   <parallax-image class="block h-full w-full">
                     <parallax-movement x-data="xParallax" x-intersect.once.margin.200px="load({{ settings.disable_parallax_effect }})">
                       <img
@@ -299,11 +299,11 @@
                   {% endstyle %}
                   <div class="button-{{ block.id }} flex justify-{{ section.settings.text_alignment }} mt-4 mb-9 md:mt-8 md:mb-4"{{ block.shopify_attributes }}>
                     {% if block.settings.button_link == blank %}
-                      <p class="otsb-button{% if block.settings.button_primary %} otsb-button-solid{% else %} otsb-button-outline{% endif %} leading-normal empty:otsb-hidden text-center pl-7 pr-7 pt-2.5 pb-2.5 md:pl-8 md:pr-8 md:pt-3 md:pb-3 opacity-70 hover:cursor-not-allowed">
+                      <p class="rounded-md otsb-button{% if block.settings.button_primary %} otsb-button-solid{% else %} otsb-button-outline{% endif %} leading-normal empty:otsb-hidden text-center pl-7 pr-7 pt-2.5 pb-2.5 md:pl-8 md:pr-8 md:pt-3 md:pb-3 opacity-70 hover:cursor-not-allowed">
                         {% render 'otsb-button-label', button_label: block.settings.button_label, show_button_primary: block.settings.button_primary %}
                       </p>
                     {% else %}
-                      <a class="otsb-button{% if block.settings.button_primary %} otsb-button-solid{% else %} otsb-button-outline{% endif %} leading-normal empty:otsb-hidden text-center pl-7 pr-7 pt-2.5 pb-2.5 md:pl-8 md:pr-8 md:pt-3 md:pb-3" href="{{ block.settings.button_link }}"{% if block.settings.open_new_window %} target="_blank"{% endif %}>
+                      <a class="rounded-md otsb-button{% if block.settings.button_primary %} otsb-button-solid{% else %} otsb-button-outline{% endif %} leading-normal empty:otsb-hidden text-center pl-7 pr-7 pt-2.5 pb-2.5 md:pl-8 md:pr-8 md:pt-3 md:pb-3" href="{{ block.settings.button_link }}"{% if block.settings.open_new_window %} target="_blank"{% endif %}>
                         {% render 'otsb-button-label', button_label: block.settings.button_label, show_button_primary: block.settings.button_primary %}
                       </a>
                     {% endif %}
@@ -779,37 +779,37 @@
             "type": "color",
             "id": "button_light",
             "label": "Primary button (light)",
-            "default": "rgba(255,142,22,1)"
+            "default": "rgba(253,142,22,1)"
           },
           {
             "type": "color",
             "id": "button_text_light",
             "label": "Primary button text (light)",
-            "default": "rgba(0,0,0,0)"
+            "default": "rgba(255,255,255,1)"
           },
           {
             "type": "color",
             "id": "button_hover_light",
             "label": "Primary button hover (light)",
-            "default": "rgba(0,0,0,0)"
+            "default": "rgba(255,102,0,1)"
           },
           {
             "type": "color",
             "id": "button_text_hover_light",
             "label": "Primary button hover text (light)",
-            "default": "rgba(0,0,0,0)"
+            "default": "rgba(0,0,0,1)"
           },
           {
             "type": "color",
             "id": "secondary_button_light",
             "label": "Secondary button color (light)",
-            "default": "rgba(0,0,0,0)"
+            "default": "rgba(255,255,255,1)"
           },
           {
             "type": "color",
             "id": "secondary_button_text_light",
             "label": "Secondary button text color (light)",
-            "default": "rgba(0,0,0,0)"
+            "default": "rgba(0,0,0,1)"
           },
           {
             "type": "color",
