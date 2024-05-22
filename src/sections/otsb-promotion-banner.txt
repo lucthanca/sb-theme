@@ -675,7 +675,7 @@
 
 {% schema %}
 {
-  "name": "OT - Promotion banner #1",
+  "name": "OT: Promo Banner #1",
   "tag": "section",
   "class": "section section-promotion-banner",
   "disabled_on": {
@@ -1819,7 +1819,7 @@
   ],
   "presets": [
     {
-      "name": "OT - Promotion banner #1",
+      "name": "OT: Promo Banner #1",
       "blocks": [
         {
           "type": "image_banner"
