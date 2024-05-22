@@ -888,32 +888,32 @@ video {
   word-break: break-word;
 }
 
-.rte::after{
+.otsb-rte::after{
   clear:both;
   content:var(--tw-content);
   display:block
 }
 
-.rte p{
+.otsb-rte p{
   margin-top:0.5rem;
   line-height:1.5
 }
 
-.rte p:last-child{
+.otsb-rte p:last-child{
   margin-bottom:0.5rem
 }
 
-.rte p {
+.otsb-rte p {
   font-weight: initial;
 }
 
-.rte table{
+.otsb-rte table{
   table-layout:fixed;
   font-weight: initial;
   word-break: break-word
 }
 
-.rte table td{
+.otsb-rte table td{
   border-width:1px;
   padding-top:0.5rem;
   padding-bottom:0.5rem;
@@ -922,13 +922,13 @@ video {
 }
 
 @media (min-width: 768px){
-  .rte table td{
+  .otsb-rte table td{
     padding-left:1.25rem;
     padding-right:1.25rem
   }
 }
 
-.rte img{
+.otsb-rte img{
   margin-bottom:0.5rem;
   display:inline;
   height:auto;
@@ -936,29 +936,29 @@ video {
   border-width:1px
 }
 
-.rte iframe{
+.otsb-rte iframe{
   display:inline
 }
 
-.rte li{
+.otsb-rte li{
   margin-top:0.5rem;
   margin-bottom:0.5rem;
   font-weight: initial;
   list-style: inherit
 }
 
-.rte li:last-child{
+.otsb-rte li:last-child{
   margin-bottom:0px
 }
 
-.rte blockquote > *{
+.otsb-rte blockquote > *{
   margin-left:-0.5rem;
   margin-top:0px;
   margin-right:-0.5rem;
   margin-bottom:0px
 }
 
-.rte a{
+.otsb-rte a{
   position:relative;
   margin-top:0.5rem;
   margin-bottom:0.5rem;
@@ -966,7 +966,7 @@ video {
   text-decoration-thickness:1px
 }
 
-.rte ul{
+.otsb-rte ul{
   margin-top:1rem;
   margin-bottom:1rem;
   list-style-position:inside;
@@ -974,11 +974,11 @@ video {
   padding-left:1.25rem
 }
 
-.pl0-ul.rte ul{
+.pl0-ul.otsb-rte ul{
   padding-left:0px
 }
 
-.rte ol{
+.otsb-rte ol{
   margin-top:1rem;
   margin-bottom:1rem;
   list-style-position:inside;
@@ -986,16 +986,16 @@ video {
   padding-left:1.25rem
 }
 
-.rte blockquote{
+.otsb-rte blockquote{
   display:inline-flex
 }
 
-.rte h1,
-  .rte h2,
-  .rte h3,
-  .rte h4,
-  .rte h2,
-  .rte h6 {
+.otsb-rte h1,
+  .otsb-rte h2,
+  .otsb-rte h3,
+  .otsb-rte h4,
+  .otsb-rte h2,
+  .otsb-rte h6 {
   margin-block-start: 1em;
   margin-block-end: 0.5em;
 }
@@ -6469,10 +6469,6 @@ button.otsb-button-solid,
 .rtl\:rotate-180:where([dir="rtl"], [dir="rtl"] *){
   --tw-rotate:180deg;
   transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
-}
-
-.rtl\:flex-row-reverse:where([dir="rtl"], [dir="rtl"] *){
-  flex-direction:row-reverse
 }
 
 .rtl\:pl-6:where([dir="rtl"], [dir="rtl"] *){
