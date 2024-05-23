@@ -63,3 +63,9 @@ promotion-block
 checkbox-checked
 radio-checked
 active-hotspot
+image-comparision
+ic-image
+before-after__slider
+vertical
+button-comparison
+ic-content
