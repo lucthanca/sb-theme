@@ -1037,7 +1037,7 @@ svg {
 
 button.otsb-button-solid,
 .otsb-button.otsb-button-solid {
-  background-color: rgb(var(--colors-button-hover, 255, 102, 0));
+  background-color: var(--colors-button-hover, rgb(255, 102, 0));
 }
 
 @media (min-width: 1024px) {
