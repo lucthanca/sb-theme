@@ -335,7 +335,7 @@ h1.color-text-header,
 }
 
 .text-column-with-icon,
-.map,
+.otsb-map,
 .featured-product,
 .otsb-image-with-text,
 .age-popup,
@@ -1136,4 +1136,15 @@ button.otsb-button-solid,
 
 .text-\[rgba\(var\(--colors-text-link\)\)\] {
   color: rgba(var(--colors-text-link, 253, 142, 22));
+}
+
+.selection\:bg-\[rgba\(var\(--colors-text\)\2c 0\.2\)\] *::selection {
+  background-color: rgba(var(--colors-text, 82, 81, 81),0.2);
+}
+.selection\:bg-\[rgba\(var\(--colors-text\)\2c 0\.2\)\]::selection {
+  background-color: rgba(var(--colors-text, 82, 81, 81),0.2);
+}
+
+.text-\[rgb\(var\(--colors-text\)\)\] {
+  color: rgb(var(--colors-text, 82, 81, 81));
 }

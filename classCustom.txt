@@ -69,3 +69,5 @@ before-after__slider
 vertical
 button-comparison
 ic-content
+map
+bg-section-map

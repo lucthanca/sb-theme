@@ -22,6 +22,12 @@ export const theme = {
       '450px': '450px',
       '550px': '550px'
     },
+    height: {
+      '500px': '500px',
+      '600px': '600px',
+      '650px': '650px',
+      '700px': '700px'
+    },
     flex: {
       '2': '2 2 0%'
     },
