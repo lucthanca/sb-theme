@@ -337,7 +337,7 @@
       </div>
       <div class="{% if section.settings.content_position != "custom" %}otsb-page-width ml-5 mr-5 lg:mx-auto absolute top-0 left-0 bottom-0 right-0{% else %} w-full h-full{% endif %}">
         {%- if section.settings.image_link != blank -%}
-          <a href="{{ section.settings.image_link }}"{% if section.settings.open_new_window %} target="_blank"{% endif %} class="absolute top-0 left-0 right-0 bottom-0 disable-effect" aria-label="Banner link"></a>
+          <a href="{{ section.settings.image_link }}"{% if section.settings.open_new_window %} target="_blank"{% endif %} class="absolute top-0 left-0 right-0 bottom-0 disable-effect" aria-label="Banner link"> </a>
         {%- endif -%}
         <div class="promotion-banner--{{ section.id }} w-11/12 overflow-hidden h-fit promotion-alignment--{{ section.settings.position_content_mobile }} absolute lg:max-w-3xl lg:w-3/5{% if section.settings.content_position != "custom" %} lg:promotion-alignment--{{ section.settings.content_position }}{% else %} p-5{% endif %}">
           {%- if section.settings.image_link != blank -%}
@@ -346,8 +346,7 @@
               class="absolute top-0 left-0 right-0 bottom-0 disable-effect"
               aria-label="Banner link"
               {% if section.settings.open_new_window %}target="_blank"{% endif %}
-            >
-            </a>
+            > </a>
           {%- endif -%}
           {%- for block in section.blocks -%}
             {%- case block.type -%}
