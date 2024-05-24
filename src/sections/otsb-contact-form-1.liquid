@@ -18,8 +18,6 @@
     assign class_infomation = 'w-full lg:w-[48%]'
     assign class_form = 'w-full lg:w-[48%]'
     assign check_content = 'info'
-    if section.settings.background_color_light.alpha != 0.0
-    endif
   elsif section.settings.show_content == 'image' and section.settings.image != blank
     assign class_infomation = 'w-full lg:w-1/2'
     assign class_form = 'w-full lg:w-1/2'
@@ -28,8 +26,11 @@
     if section.settings.image != blank
       assign check_content = 'image'
       assign class_infomation = 'w-full'
+      assign class_form = "w-full lg:w-1/2"
     else
       assign check_content = 'info'
+      assign class_form = "w-full lg:w-[48%]"
+      assign class_infomation = "w-full lg:w-[48%]"
     endif
   endif
 
@@ -47,7 +48,10 @@
       assign form_page_width = 1400 | divided_by: 2
     endif
     assign class_infomation = class_infomation | remove: ' order-1'
-    assign class_form_both = '' | append: ' max-w-[' | append: form_page_width | append: 'px]'
+    assign class_form_both = 'contact-form'
+    if section.settings.image != blank
+      assign class_form_both = class_form_both | append: ' max-w-[' | append: form_page_width | append: 'px]'
+    endif
   endif
 
   if settings.lang_direction contains request.locale.iso_code
@@ -336,7 +340,7 @@
                     <div class="mb-3 lg:mb-4 relative" {{ block.shopify_attributes }}>
                       {%- if block.settings.heading != blank or block.settings.mark_as_required -%}
                         <label
-                          class="pb-2 pt-3 block{% if block.settings.type_field == 'dropdown' or block.settings.type_field == 'text' %} otsb-hidden{% endif %}"
+                          class="pb-2 pt-3 block{% if block.settings.type_field == 'dropdown' or block.settings.type_field == 'text' %} !hidden{% endif %}"
                           for="{{ ContactForm }}"
                         >
                           {{- block.settings.heading }}
@@ -371,7 +375,7 @@
                           <div class="relative">
                             <select
                               id="{{ ContactForm }}"
-                              class="w-full pt-3 pb-3 pl-5 md:pt-4 md:pb-3.5 lg:pl-6 pr-8 rtl:pl-8 rtl:lg:pr-6 border focus:outline-none focus:border-current relative cursor-pointer bg-transparent{% if settings.edges_type == 'rounded_corners' %} !rounded-md{% endif %}"
+                              class="otsb-select w-full pt-3 pb-3 pl-5 md:pt-4 md:pb-3.5 lg:pl-6 pr-8 rtl:pl-8 rtl:lg:pr-6 border focus:outline-none focus:border-current relative cursor-pointer bg-transparent{% if settings.edges_type == 'rounded_corners' %} !rounded-md{% endif %}"
                               name="contact[{%- if block.settings.heading != blank -%}{{ block.settings.heading }}{%- else -%}{{ FormItem }}{% endif %}]"
                               {% if block.settings.mark_as_required %}
                                 required
@@ -429,8 +433,8 @@
                               {
                                 data: [],
                                 checkEmpty() {
-                                  const element = this.$el.closest('.multi-select').querySelector('.content').value;
-                                  const checkboxes = this.$el.closest('.multi-select').querySelectorAll('.checkbox');
+                                  const element = this.$el.closest('.otsb-multi-select').querySelector('.otsb-content').value;
+                                  const checkboxes = this.$el.closest('.otsb-multi-select').querySelectorAll('.otsb-checkbox');
                                   if (!element) {
                                     for (let i = 0; i < checkboxes.length; i++) {
                                       checkboxes[i].setAttribute('required', '');
@@ -446,11 +450,16 @@
                             class="otsb-multi-select otsb-grid md:grid-cols-2 gap-x-7"
                           >
                             {%- for option in options -%}
+                              {%- style -%}
+                                .otsb-checkbox {
+                                  --colors-text-link: 253, 142, 22
+                                }
+                              {%- endstyle -%}
                               <div class="flex items-center mt-1.5 mb-1.5">
                                 <input
                                   type="checkbox"
                                   id="{{ ContactForm }}-{{ forloop.index }}"
-                                  class="otsb-checkbox checkbox-checked mr-2 rtl:mr-0 rtl:ml-2 h-4 w-4 border checked:border-[rgba(var(--colors-text-link))] checked:bg-[rgba(var(--colors-text-link))] relative cursor-pointer{% if settings.edges_type == 'rounded_corners' %} rounded{% else %} rounded-none{% endif %}"
+                                  class="otsb-checkbox otsb-checkbox-checked !mr-2 rtl:mr-0 rtl:ml-2 h-4 !w-4 border checked:border-[rgba(var(--colors-text-link))] checked:bg-[rgba(var(--colors-text-link))] relative cursor-pointer{% if settings.edges_type == 'rounded_corners' %} rounded{% else %} rounded-none{% endif %}"
                                   value="{{ option }}"
                                   x-model="data"
                                   {% if block.settings.mark_as_required %}
@@ -521,7 +530,7 @@
             }
           }
         {%- endstyle -%}
-        <div class="{{ class_infomation }} otsb-contact-image">
+        <div class="w-full lg:w-1/2 otsb-contact-image {% if section.settings.form_alignment == 'left' %}otsb-align-right{% else %}order-1 otsb-align-left{% endif %}">
           <div class="relative md:h-full overflow-hidden{% if section.settings.image %} promotion relative{% if section.settings.mobile_height != 'natural' %} h-[{{ section.settings.mobile_height }}] md:h-auto{% else %} mobile-{{ section.id }}-natural{% endif %}{% if section.settings.desktop_height != 'natural' %} md:promotion:h-[{{ section.settings.desktop_height }}] md:promotion:pb-0{% else %} desktop-{{ section.id }}-natural{% endif %}{% endif %}{% if section.settings.full_width %} md:rounded-none{% else %}{% if settings.edges_type == 'rounded_corners' %} md:rounded-[10px]{% endif %}{% endif %}{% unless section.settings.full_width_mobile %}{% if settings.edges_type == 'rounded_corners' %} rounded-[10px]{% endif %}{% endunless %}">
             <div class="overflow-hidden h-full w-full absolute top-0 left-0">
               <parallax-image class="h-full w-full">
@@ -719,6 +728,10 @@
           "label": "Image"
         },
         {
+          "value": "both",
+          "label": "Both"
+        },
+        {
           "value": "none",
           "label": "None"
         }
@@ -771,7 +784,7 @@
         },
         {
           "value": "natural",
-          "label": "Adapt to first image"
+          "label": "Adapt to content"
         },
         {
           "value": "100vh",
@@ -803,7 +816,7 @@
         },
         {
           "value": "natural",
-          "label": "Adapt to first image"
+          "label": "Natural"
         },
         {
           "value": "100vh",

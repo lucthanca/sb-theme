@@ -61,5 +61,8 @@
     .otsb-input {
       @apply focus-visible:shadow-none
     }
+    .otsb-select {
+      @apply focus-visible:shadow-none
+    }
   }
   

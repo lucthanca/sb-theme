@@ -674,12 +674,12 @@ input[type="search"]::-webkit-search-cancel-button {
 
 .otsb-checkbox-checked:checked:after {
   content: '';
-  @apply absolute top-[40%] left-1/2 w-3/5 h-2/5 border-l-2 border-b-2 border-[rgba(var(--colors-background))] border-solid -rotate-45 -translate-x-1/2 -translate-y-1/2;
+  @apply absolute top-[40%] left-1/2 w-3/5 h-2/5 border-l-2 border-b-2 /*border-[rgba(var(--colors-background))]*/ border-white border-solid -rotate-45 -translate-x-1/2 -translate-y-1/2;
 }
 
 .otsb-radio-checked:checked:after {
   content: '';
-  background-color: rgba(var(--colors-text-link));
+  background-color: rgba(var(--colors-text-link, 253, 142, 22));
   @apply absolute top-1/2 left-1/2 w-1/2 h-1/2 rounded-full -translate-x-1/2 -translate-y-1/2;
 }
 
