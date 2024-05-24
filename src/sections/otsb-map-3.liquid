@@ -1,0 +1,543 @@
+{%- liquid
+    assign columns = 2
+    assign notlayered = 38
+    if section.settings.content_position == 'top-left'
+      assign columns = 1
+      assign notlayered = 0
+    endif
+    if settings.lang_direction contains request.locale.iso_code
+      assign is_rtl = true
+    else
+      assign is_rtl = false
+    endif
+  -%}
+  {%- style -%}
+    #shopify-section-{{ section.id }} .otsb-bg-section-map {
+      {% unless section.settings.bg_color_map.alpha == 0.0 %}
+        background: {{ section.settings.bg_color_map }};
+      {% else %}
+        background: rgb(var(--colors-background-secondary, 246, 246, 246));
+      {% endunless %}
+    }
+    .dark #shopify-section-{{ section.id }} .otsb-bg-section-map {
+      {% unless section.settings.bg_color_map_dark.alpha == 0.0 %}
+        background: {{ section.settings.bg_color_map_dark }};
+      {% else %}
+        background: rgb(var(--colors-background-secondary, 246, 246, 246));
+      {% endunless %}
+    }
+    .text-map-{{ section.id }} {
+      {% if section.settings.text_color_map.alpha != 0.0 %}
+        --colors-text: {{ section.settings.text_color_map.red }}, {{ section.settings.text_color_map.green }}, {{ section.settings.text_color_map.blue }};
+      {% endif %}
+      {% if section.settings.heading_color.alpha != 0.0 %}
+        --colors-heading: {{ section.settings.heading_color.red }}, {{ section.settings.heading_color.green }}, {{ section.settings.heading_color.blue }};
+      {% endif %}
+    }
+    .dark .text-map-{{ section.id }} {
+      {% if section.settings.text_color_map_dark.alpha != 0.0 %}
+        --colors-text: {{ section.settings.text_color_map_dark.red }}, {{ section.settings.text_color_map_dark.green }}, {{ section.settings.text_color_map_dark.blue }};
+      {% else %}
+        --colors-text: var(--colors-text-secondary, 82, 81, 81);
+      {% endif %}
+      {% if section.settings.heading_color_dark.alpha != 0.0 %}
+        --colors-heading: {{ section.settings.heading_color_dark.red }}, {{ section.settings.heading_color_dark.green }}, {{ section.settings.heading_color_dark.blue }};
+      {% else %}
+        --colors-heading: var(--colors-heading-secondary, 0, 0, 0)
+      {% endif %}
+    }
+    
+    #shopify-section-{{ section.id }} .scrollbar::-webkit-scrollbar-thumb {
+      background: {{ section.settings.text_color_map }};
+    }
+    .dark #shopify-section-{{ section.id }} .scrollbar::-webkit-scrollbar-thumb {
+      background: {{ section.settings.text_color_map_dark }};
+    }
+  {%- endstyle -%}
+  <div class="otsb-map{% if section.settings.full_width_mobile %} pl-0 pr-0{% else %} pl-5 pr-5{% endif %}{% if section.settings.full_width %} md:pr-0 md:pl-0{% else %} otsb-page-width md:pl-5 md:pr-5{% endif %} pb-[{{ section.settings.padding_bottom_mobile }}px] pt-[{{ section.settings.padding_top_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px] md:pt-[{{ section.settings.padding_top }}px]">
+    <div class="otsb-bg-section-map h-[{{ section.settings.mobile_height }}] md:h-auto{% if is_rtl %} otsb-ltr{% endif %}{% unless section.settings.content_position == "top-left" %} md:!h-[{{ section.settings.desktop_height }}]{% endunless %} flex flex-col md:flex-row{% if section.settings.content_position == "left" %} flex-col-reverse md:flex-row-reverse{% endif %} relative{% if section.settings.content_position == "top-left" %} md:items-center{% endif %}{% if section.settings.rounded_corner_image %} rounded-[10px]{% endif %}">
+      <div class="relative flex-1 bg-[#c9c9c9] overflow-hidden{% if section.settings.content_position == "top-left" %} w-full md:h-[{{ section.settings.desktop_height }}]{% else %} md:w-1/2 lg:max-w-[61.25%]{% endif %}{% if section.settings.rounded_corner_image %} rounded-[10px]{% endif %}">
+        {%- if section.settings.image != blank -%}
+          <parallax-image class="block h-full w-full">
+            <parallax-movement x-data="xParallax" x-intersect.once.margin.200px="load({{ settings.disable_parallax_effect }})">
+              {%- capture sizes -%}
+                (min-width: {{ settings.page_width }}px) {% if section.settings.full_width %} calc((100vw - {{ notlayered }}vw)) {% else -%} calc({{ settings.page_width }}px - {{ settings.page_width | times: notlayered | divided_by: 100 }}px  ) {%- endif -%}, 
+                (min-width: 768px) calc(100vw / {{ columns }}), 
+                100vw
+              {%- endcapture -%}
+              {{ section.settings.image | image_url: width: 3000 | image_tag: loading: 'lazy', sizes: sizes, widths: '375, 450, 750, 900, 1100, 1500, 1780, 2000, 3000, 3840', class: 'h-full w-full object-cover z-0 absolute inset-0' }} 
+            </parallax-movement>
+          </parallax-image>
+        {%- elsif section.settings.store_address != blank -%}
+          <div x-data="xMap('{{ section.settings.store_address }}')" class="h-full" x-intersect.once.margin.250px="load()"> 
+            <iframe src="" class="w-full h-full" title="Map"></iframe>
+          </div>
+        {%- else -%}
+          <div class="flex items-center justify-center w-full h-full">
+            {% render 'otsb-icon-placeholder', icon: 'icon-location-map', class: 'w-20 h-20 md:h-auto md:w-auto' %}
+          </div>
+        {%- endif -%}
+      </div>
+      {%- if section.blocks.size > 0 -%}
+        <div class="{% if is_rtl %} otsb-rtl{% endif %}text-map-{{ section.id }} md:pl-5 md:pr-5 pt-7 otsb-bg-section-map pb-6 md:pt-8 md:pb-8 z-10{% if section.settings.content_position == "left" %} lg:pr-8 md:w-1/2 lg:w-[38.75%] lg:relative{% elsif section.settings.content_position == "top-left" %} md:max-w-[370px] md:w-full md:px-[30px] md:pt-8 md:pb-10 md:absolute md:right-[8%] md:translate-x-0 md:shadow transition-opacity duration-200{% else %} lg:pl-8 md:w-1/2 lg:w-[38.75%] lg:relative{% endif %} text-{{ section.settings.content_alignment }}{% if request.design_mode == false and section.settings.content_position == "top-left" %} pointer-events-none{% endif %}{% if section.settings.rounded_corner_image %} rounded-[10px]{% endif %}">
+          <div class="pl-5 pr-5{% unless section.settings.content_position == "top-left" %} lg:mt-12 w-full lg:max-w-[270px] lg:pl-0 lg:pr-0 lg:absolute{% endunless %}{% if section.settings.content_position == "left" %} lg:right-[14%]{% elsif section.settings.content_position == "right" %} lg:left-[14%]{% endif %} selection:bg-[rgba(var(--colors-text),0.2)]">
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {%- when 'heading' -%}
+                  {%- if block.settings.heading != blank -%}
+                    {% liquid
+                      if settings.heading_base_size != blank
+                        assign heading_base_size =  settings.heading_base_size | times: 0.0225
+                      else
+                        assign heading_base_size =  100 | times: 0.0225
+                      endif
+                      assign heading_size =  block.settings.heading_size | times: 0.01 | times: heading_base_size
+                      assign heading_size_mobile = heading_size | times: 0.6
+                    %}
+                    {%- style -%}
+                      .heading--{{ block.id }} {
+                        font-size: {{ heading_size_mobile }}rem;
+                      }
+                      @media (min-width: 768px) {
+                        .heading--{{ block.id }}{ 
+                          font-size: {{ heading_size }}rem; 
+                        }
+                      }
+                    {%- endstyle -%}
+                    <{{ block.settings.heading_tag }} class="heading--{{ block.id }} otsb-h2 block{% if forloop.index != 1 %} mt-2 md:mt-5{% endif %}" {{ block.shopify_attributes }}>
+                      {{ block.settings.heading | escape }}
+                    </{{ block.settings.heading_tag }}>
+                  {%- endif -%}
+                {%- when 'richtext' -%}
+                  {%- if block.settings.text != blank -%}
+                    {% liquid
+                      if settings.text_base_size != blank
+                        assign text_base_size =  settings.text_base_size | times: 0.00875
+                      else
+                        assign text_base_size =  120 | times: 0.00875
+                      endif
+                      assign text_size = block.settings.text_size | times : text_base_size | times: 0.01
+                      assign text_size_mobile = text_size | times: 0.9
+                    %}
+                    {%- style -%} 
+                      .description--{{ block.id }}{ 
+                        font-size: {{ text_size_mobile }}rem;
+                      }
+                      @media (min-width: 768px) {
+                        .description--{{ block.id }}{ 
+                          font-size: {{ text_size }}rem;
+                        }
+                      }
+                    {%- endstyle -%}
+                    <div
+                      class="description--{{ block.id }} text-color-{{ section.id }}{% if forloop.index != 1 %} mt-2 md:mt-4{% endif %} max-h-36{% if section.settings.desktop_height == "500px" and section.settings.content_position == "top-left" %} md:max-h-40{% else %} md:max-h-52{% endif %} overflow-y-auto scrollbar-body pointer-events-auto text-[rgb(var(--colors-text))]"
+                      {{ block.shopify_attributes }}
+                    >
+                      <div class="md:pr-2 pr-1 otsb-rte otsb-p-break-words{% if section.settings.content_position == "top-left" %} md:pr-0{% endif %}">
+                        {% if block.settings.text != blank %}
+                          {{ block.settings.text }}
+                        {% endif %}
+                        </div>
+                    </div>
+                  {%- endif -%}
+                {%- when 'button' -%}
+                  {%- if section.settings.store_address != blank -%}
+                    {%- style -%}
+                      .button-{{ block.id }}, .button-{{ block.id }} *:before {
+                      {% if block.settings.button_light.alpha != 0.0 %}
+                        --colors-button: {{ block.settings.button_light.red }}, {{ block.settings.button_light.green }}, {{ block.settings.button_light.blue }};
+                      {% endif %}
+                      {% if block.settings.button_text_light.alpha != 0.0 %}
+                        --colors-button-text: {{ block.settings.button_text_light.red }}, {{ block.settings.button_text_light.green }}, {{ block.settings.button_text_light.blue }};
+                      {% endif %}
+                      {% if block.settings.button_hover_light.alpha != 0.0 %}
+                        --colors-button-hover: rgb({{ block.settings.button_hover_light.red }}, {{ block.settings.button_hover_light.green }}, {{ block.settings.button_hover_light.blue }});
+                      {% endif %}
+                      {% if block.settings.button_text_hover_light.alpha != 0.0 %}
+                        --colors-button-text-hover: {{ block.settings.button_text_hover_light.red }}, {{ block.settings.button_text_hover_light.green }}, {{ block.settings.button_text_hover_light.blue }};
+                      {% endif %}
+                      {% if block.settings.secondary_button_text_light.alpha != 0.0 %}
+                        --colors-secondary-button: {{ block.settings.secondary_button_text_light.red }}, {{ block.settings.secondary_button_text_light.green }}, {{ block.settings.secondary_button_text_light.blue }};
+                        --colors-line-secondary-button: {{ block.settings.secondary_button_text_light.red }}, {{ block.settings.secondary_button_text_light.green }}, {{ block.settings.secondary_button_text_light.blue }};
+                        --background-secondary-button: transparent;
+                      {% endif %}
+                      {% if block.settings.secondary_button_light.alpha != 0.0 %}
+                        --background-secondary-button: {{ block.settings.secondary_button_light.red }}, {{ block.settings.secondary_button_light.green }}, {{ block.settings.secondary_button_light.blue }};
+                        --colors-line-secondary-button: {{ block.settings.secondary_button_light.red }}, {{ block.settings.secondary_button_light.green }}, {{ block.settings.secondary_button_light.blue }};
+                      {% endif %}
+                    }
+                    {%- endstyle -%}
+                    <div {% if forloop.index != 1 %} class="button-{{ block.id }} mt-5 md:mt-7 mb-4 md:mb-0 w-full text-center"{% endif %} {{ block.shopify_attributes }} >
+                      <a
+                        class="rounded-md otsb-button {% if block.settings.button_primary %} otsb-button-solid{% else %} otsb-button-outline{% endif %} leading-normal w-full pl-6 pr-6 pt-2.5 pb-2.5 md:pt-3 md:pb-3 cursor-pointer inline-flex text-center justify-center items-center empty:otsb-hidden pointer-events-auto{% if section.settings.content_position == "top-left" %} md:w-full{% endif %}"
+                        href="https://www.google.com/maps/place/{{ section.settings.store_address }}"
+                        target="_blank"
+                      >
+                        {%- if block.settings.button_label != blank -%}
+                          {% assign button_label = block.settings.button_label %}
+                        {% else %}
+                          {% assign button_label = 'Get Directions' %}
+                        {% endif -%}
+                        {% render 'otsb-button-label', button_label: button_label, show_button_primary: block.settings.button_primary %}
+                      </a>
+                    </div>
+                  {%- endif -%}
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+  
+  {% schema %}
+  {
+    "name": "OT - Map #3",
+    "class": "section section-map x-section",
+    "tag": "section",
+    "disabled_on": {
+      "groups": [
+        "header",
+        "footer",
+        "aside"
+      ]
+    },
+    "settings": [
+      {
+        "type": "text",
+        "id": "store_address",
+        "default": "75 9th Ave, New York, NY 10011-7006",
+        "label": "Store address",
+        "info": "Google Map will find the exact location"
+      },
+      {
+        "type": "select",
+        "id": "desktop_height",
+        "label": "Desktop height",
+        "options": [
+          {
+            "value": "500px",
+            "label": "Small"
+          },
+          {
+            "value": "600px",
+            "label": "Medium"
+          },
+          {
+            "value": "650px",
+            "label": "Large"
+          }
+        ],
+        "default": "600px"
+      },
+      {
+        "type": "select",
+        "id": "mobile_height",
+        "label": "Mobile height",
+        "options": [
+          {
+            "value": "600px",
+            "label": "Small"
+          },
+          {
+            "value": "650px",
+            "label": "Medium"
+          },
+          {
+            "value": "700px",
+            "label": "Large"
+          }
+        ],
+        "default": "600px"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "checkbox",
+        "id": "rounded_corner_image",
+        "default": false,
+        "label": "Enable rounded corner style"
+      },
+      {
+        "type": "select",
+        "id": "content_position",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          },
+          {
+            "value": "top-left",
+            "label": "Layered"
+          }
+        ],
+        "default": "right",
+        "label": "Content position"
+      },
+      {
+        "type": "select",
+        "id": "content_alignment",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "left",
+        "label": "Content alignment"
+      },
+      {
+        "type": "header",
+        "content": "Styles"
+      },
+      {
+        "type": "color",
+        "id": "bg_color_map",
+        "default": "rgba(0,0,0,0)",
+        "label": "Background color"
+      },
+      {
+        "type": "color",
+        "id": "text_color_map",
+        "default": "rgba(0,0,0,0)",
+        "label": "Text color"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "default": "rgba(0,0,0,0)",
+        "label": "Heading and title color"
+      },
+      {
+        "type": "header",
+        "content": "Desktop layout"
+      },
+      {
+        "type": "checkbox",
+        "id": "full_width",
+        "default": false,
+        "label": "Make section full width"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Top padding",
+        "default": 28
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Bottom padding",
+        "default": 28
+      },
+      {
+        "type": "header",
+        "content": "Mobile layout"
+      },
+      {
+        "type": "checkbox",
+        "id": "full_width_mobile",
+        "default": false,
+        "label": "Make section full width"
+      },
+      {
+        "type": "range",
+        "id": "padding_top_mobile",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Top padding",
+        "default": 20
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom_mobile",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Bottom padding",
+        "default": 20
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "name": "Store name",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "default": "Store name",
+            "label": "Heading"
+          },
+          {
+            "type": "range",
+            "id": "heading_size",
+            "min": 50,
+            "max": 200,
+            "unit": "%",
+            "step": 10,
+            "default": 90,
+            "label": "Heading size"
+          },
+          {
+            "type": "select",
+            "id": "heading_tag",
+            "default": "h2",
+            "label": "Heading tag",
+            "options": [
+              {
+                "value": "h1",
+                "label": "H1"
+              },
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              },
+              {
+                "value": "p",
+                "label": "p"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "richtext",
+        "name": "Address and hour",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "text",
+            "default": "<p>75 9th Ave, New York, NY 10011-7006</p></br><p>Mon - Fri, 8:30am - 10:30pm,</br>Saturday, 8:30am - 10:30pm,</br>Sunday, 8:30am - 10:30pm</p>",
+            "label": "Text"
+          },
+          {
+            "type": "range",
+            "id": "text_size",
+            "min": 50,
+            "max": 200,
+            "unit": "%",
+            "step": 10,
+            "default": 100,
+            "label": "Text size"
+          }
+        ]
+      },
+      {
+        "type": "button",
+        "name": "Button",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "button_label",
+            "label": "Button label",
+            "default": "Get Directions"
+          },
+          {
+            "type": "checkbox",
+            "id": "button_primary",
+            "default": true,
+            "label": "Show as primary button"
+          },
+          {
+            "type": "color",
+            "id": "button_light",
+            "label": "Primary button",
+            "default": "#FD8E16"
+          },
+          {
+            "type": "color",
+            "id": "button_text_light",
+            "label": "Primary button text",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "button_hover_light",
+            "label": "Primary button hover",
+            "default": "#FF6600"
+          },
+          {
+            "type": "color",
+            "id": "button_text_hover_light",
+            "label": "Primary button hover text",
+            "default": "#000000"
+          },
+          {
+            "type": "color",
+            "id": "secondary_button_light",
+            "label": "Secondary button color",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "secondary_button_text_light",
+            "label": "Secondary button text color",
+            "default": "#000000"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "OT - Map #3",
+        "blocks": [
+          {
+            "type": "heading"
+          },
+          {
+            "type": "richtext"
+          },
+          {
+            "type": "button"
+          }
+        ]
+      }
+    ]
+  }
+  {% endschema %}
