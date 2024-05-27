@@ -266,7 +266,11 @@
                       custom_icon: block.settings.custom_icon,
                       icon_size: block.settings.icon_size,
                       subheading: block.settings.subheading,
-                      image_overlay_color: section.settings.image_overlay_color
+                      image_overlay_color: section.settings.image_overlay_color,
+                      button_type: section.settings.button_type,
+                      button_color_mobile: section.settings.button_color_mobile,
+                      button_animation: section.settings.button_animation,
+                      custom_icon_button: section.settings.custom_icon_button
                     %}
                 {%- endcase -%}
               </div>
@@ -492,7 +496,7 @@
     {
       "type": "color",
       "id": "image_overlay_color",
-      "default": "rgb(32,32,32)",
+      "default": "#202020",
       "label": "Overlay color"
     },
     {
@@ -549,25 +553,25 @@
     {
       "type": "color",
       "id": "slider_button_color",
-      "default": "rgb(82,81,81)",
+      "default": "#525151",
       "label": "Slider button color"
     },
     {
       "type": "color",
       "id": "slider_button_text_color",
-      "default": "rgb(82,81,81)",
+      "default": "#525151",
       "label": "Slider button text color"
     },
     {
       "type": "color",
       "id": "slider_button_hover_color",
-      "default": "rgb(255,102,0)",
+      "default": "#FF6600",
       "label": "Slider button hover color"
     },
     {
       "type": "color",
       "id": "slider_button_hover_text_color",
-      "default": "rgb(0,0,0)",
+      "default": "#000000",
       "label": "Slider button hover text color"
     },
     {
@@ -581,6 +585,80 @@
       "id": "swiper_on_mobile",
       "default": true,
       "label": "Enable swipe on mobile"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "select",
+      "id": "button_type",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "rounded",
+          "label": "Rounded"
+        },
+        {
+          "value": "rounded_corners",
+          "label": "Rounded Corners"
+        },
+        {
+          "value": "mixed",
+          "label": "Mixed"
+        }
+      ],
+      "label": "Button style",
+      "default": "square"
+    },
+    {
+      "type": "select",
+      "id": "button_color_mobile",
+      "options": [
+        {
+          "value": "hover",
+          "label": "Use button hover color"
+        },
+        {
+          "value": "color",
+          "label": "Use button color"
+        }
+      ],
+      "label": "Mobile primary button style",
+      "default": "color"
+    },
+    {
+      "type": "select",
+      "id": "button_animation",
+      "options": [
+        {
+          "value": "slide",
+          "label": "Slide"
+        },
+        {
+          "value": "fill_up",
+          "label": "Fill up"
+        },
+        {
+          "value": "sliced",
+          "label": "Sliced with icon"
+        },
+        {
+          "value": "underline",
+          "label": "Underline"
+        }
+      ],
+      "label": "Primary button hover animation",
+      "default": "fill_up"
+    },
+    {
+      "type": "html",
+      "id": "custom_icon_button",
+      "label": "Custom icon (SVG code)",
+      "info": "Applies to 'Sliced with icon' animation type. For assistance with custom SVG code or fixing issues that arise from custom SVG code, please [contact our support](https://support.bsscommerce.com/support/tickets/new)."
     },
     {
       "type": "header",
@@ -1110,37 +1188,37 @@
         {
           "type": "color",
           "id": "color_button",
-          "default": "rgba(0,0,0,0)",
+          "default": "#FD8E16",
           "label": "Button color"
         },
         {
           "type": "color",
           "id": "color_text_button",
-          "default": "rgba(0,0,0,0)",
+          "default": "#FFFFFF",
           "label": "Button text color"
         },
         {
           "type": "color",
           "id": "color_button_hover",
-          "default": "rgba(0,0,0,0)",
+          "default": "#FF6600",
           "label": "Button hover color"
         },
         {
           "type": "color",
           "id": "color_text_button_hover",
-          "default": "rgba(0,0,0,0)",
-          "label": "Button text hover colo"
+          "default": "#000000",
+          "label": "Button text hover color"
         },
         {
           "type": "color",
           "id": "color_button_secondary",
-          "default": "rgba(0,0,0,0)",
+          "default": "#FFFFFF",
           "label": "Secondary button color"
         },
         {
           "type": "color",
           "id": "secondary_button_text",
-          "default": "rgba(0,0,0,0)",
+          "default": "#000000",
           "label": "Secondary button text color"
         }
       ]

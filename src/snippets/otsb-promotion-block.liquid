@@ -242,9 +242,200 @@
                               {{ content }}
                             </div>
                           {%- endif -%}
+
+                          {%- liquid
+                            case button_type
+                              when 'rounded'
+                                assign borderRadius = '100px'
+                              when 'rounded_corners'
+                                assign borderRadius = '6px'
+                              when 'mixed'
+                                assign borderRadius = '6px 0 6px 0'
+                              else
+                                assign borderRadius = '0'
+                            endcase
+                          %}
+    
+                          {% style %}
+                          .button--{{ block.id }} {
+                            --border-radius: {{ borderRadius }};
+                            {% if button_animation == 'slide' %}
+                              --button-width: 102%;
+                              --button-height: 500%;
+                              --button-transform: rotate3d(0,0,1,-10deg) translate3d(-130%,-10em,0);
+                              --button-transform-origin: 100% 0%;
+                            {% elsif button_animation == 'fill_up' %}
+                              --button-width: 120%;
+                              --button-height: 100%;
+                              --button-transform: rotate3d(0,0,1,10deg) translate3d(-1.2em,110%,0);
+                              --button-transform-origin: 0% 100%;
+                              {% endif %}
+                            }
+
+                            {% if button_color_mobile == "hover" %}
+                              [role="button"], [type="button"], .otsb-button {
+                                color: rgb(var(--colors-button-text-hover));
+                              }
+                              button.otsb-button-solid, .otsb-button.otsb-button-solid {
+                                border: none;
+                                background-color: var(--colors-button-hover);
+                              }
+                              button.otsb-button-disable-effect, .otsb-button.otsb-button-disable-effect {
+                                color: rgba(var(--colors-button-text-hover));
+                                background-color: var(--colors-button-hover);
+                              }
+                              .otsb-button-action {
+                                border: none;
+                                color: rgba(var(--colors-button-text-hover));
+                                background-color: var(--colors-button-hover);
+                              }
+                            {% else %}
+                              [role="button"], [type="button"], .otsb-button {
+                                color: rgb(var(--colors-button-text));
+                              }
+                              button.otsb-button-solid, .otsb-button.otsb-button-solid {
+                                border: none;
+                                background-color: rgba(var(--colors-button));
+                              }
+                              button.otsb-button-disable-effect, .otsb-button.otsb-button-disable-effect {
+                                color: rgb(var(--colors-button-text));
+                                background-color: rgba(var(--colors-button));
+                              }
+                              .otsb-button-action {
+                                border: none;
+                                color: rgb(var(--colors-button-text));
+                                background-color: rgba(var(--colors-button));
+                              }
+                            {% endif %}
+                            [role="button"], [type="button"], .otsb-button {
+                              direction: ltr;
+                            }
+                            
+                            {% if button_animation == 'sliced' %}
+                              .otsb-button.otsb-button-outline:not(.not-icon), .otsb-button.otsb-button-solid:not(.not-icon) {
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                padding-left: 1.5rem;
+                                padding-right: 1.5rem;
+                              }
+                              .otsb-button-solid .otsb-button-icon, .otsb-button-solid .otsb-button-text {
+                                transition-timing-function: cubic-bezier(0,.71,.4,1);
+                              }
+                              .otsb-button-solid .otsb-button-icon {
+                                transition: opacity .25s,transform .5s;
+                              }
+                              .otsb-button-solid .otsb-button-text {
+                                transition: transform .5s;
+                                transform: translateX(0.625rem);
+                              }
+                              .otsb-button-solid:hover .otsb-button-text {
+                                opacity: 1;
+                                transform: translateX(0px);
+                              }
+                              .otsb-button-solid:hover .otsb-button-icon {
+                                opacity: 1;
+                                transform: translateX(0.3125rem);
+                              }
+                            {% endif %}
+                            {% if button_animation == 'underline' %}
+                              .otsb-button-solid .otsb-button-text {
+                                position: relative;
+                                display: block;
+                              }
+                              .otsb-button-solid .otsb-button-text::after {
+                                content: "";
+                                pointer-events: none;
+                                bottom: 1px;
+                                left: 50%;
+                                position: absolute;
+                                width: 0%;
+                                height: 1px;
+                                background-color: rgba(var(--colors-button-text));
+                                transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+                                transition-duration: 400ms;
+                                transition-property: width, left;
+                              }
+                              .otsb-button-solid:hover .otsb-button-text::after {
+                                {% if button_color_mobile == "hover" %}
+                                  background-color: rgba(var(--colors-button-text-hover));
+                                {% else %}
+                                  background-color: rgba(var(--colors-button-text));
+                                {% endif %}
+                                  width: 100%;
+                                  left: 0%;
+                              }
+                            {% endif %}
+          
+                            @media (min-width: 1024px){
+                              [role="button"], [type="button"], .otsb-button { 
+                                color: rgba(var(--colors-button-text));
+                              }
+                              button.otsb-button-solid, .otsb-button.otsb-button-solid {
+                                border: none;
+                                box-shadow: none;
+                                color: rgb(var(--colors-button-text));
+                                background-color: rgba(var(--colors-button));
+                                overflow: hidden;
+                                background-origin: border-box;
+                              }
+                              button.otsb-button-solid:hover, .otsb-button.otsb-button-solid:hover {
+                                {% if button_animation == 'sliced' or button_animation == 'underline' %}
+                                  transition-duration: 0.2s;
+                                {% else %}
+                                  transition-delay: 0.5s;
+                                {% endif %}
+                                  transition-property: background-color;
+                                  background-color: var(--colors-button-hover);
+                                  color: rgba(var(--colors-button-text-hover));
+                                  background-origin: border-box;
+                              }
+                              .otsb-button-action {
+                                border: none;
+                                color: rgba(var(--colors-button-text-hover));
+                                background-color: var(--colors-button-hover);
+                              }
+                              button.otsb-button-disable-effect, .otsb-button.otsb-button-disable-effect {
+                                color: rgb(var(--colors-button-text));
+                                background-color: rgba(var(--colors-button));
+                              }
+                              button.otsb-button-disable-effect:hover, .otsb-button.otsb-button-disable-effect:hover {
+                                color: rgba(var(--colors-button-text-hover));
+                                background-color: var(--colors-button-hover);
+                              }
+                              {% if button_animation == 'slide' or button_animation == 'fill_up' %}
+                                button.otsb-button-solid:before, .otsb-button.otsb-button-solid:before {
+                                  content: "";
+                                  z-index: -1;
+                                  position: absolute;
+                                  top: 0;
+                                  right: 0;
+                                  bottom: 0;
+                                  left: 0;
+                                  width: var(--button-width);
+                                  height: var(--button-height);
+                                  background-color: var(--colors-button-hover);
+                                  backface-visibility: hidden;
+                                  will-change: transform;
+                                  transform: var(--button-transform);
+                                  transform-origin: var(--button-transform-origin);
+                                  transition: transform 0.5s ease;
+                                }
+                                button.otsb-button-solid:hover:before, .otsb-button.otsb-button-solid:hover:before {
+                                  transform: rotate3d(0,0,1,0) translateZ(0);
+                                }
+                              {% endif %}
+                              {% if button_animation == 'underline' %}
+                                .otsb-button-solid:hover .otsb-button-text::after {
+                                  background-color: rgba(var(--colors-button-text-hover));
+                                }
+                              {% endif %}
+                            }
+                          {% endstyle %}
+
                           {%- if button_label != blank -%}
-                            {% if button_link %}<a href="{{ button_link }}" aria-label="{{ button_label }}"{% if open_new_window %} target="_blank"{% endif %}{% else %}<p{% endif %} class="rounded-md otsb-button{% if show_button_primary %} otsb-button-solid{% else %} otsb-button-outline{% endif %} button--{{ block.id }} inline-block empty:otsb-hidden pl-4 pr-4 lg:pl-6 lg:pr-6 pt-2.5 pb-2.5 leading-normal md:pt-3 md:pb-3 cursor-pointer otsb-p-break-words{% if content == blank and image_ratio != "round" %} mt-3{% endif %}{% if button_link == blank %} hover:cursor-not-allowed opacity-70{%- endif -%}">
-                              {% render 'otsb-button-label', button_label: button_label, show_button_primary: show_button_primary %}
+                            {% if button_link %}<a href="{{ button_link }}" aria-label="{{ button_label }}"{% if open_new_window %} target="_blank"{% endif %}{% else %}<p{% endif %} class="otsb-button{% if show_button_primary %} otsb-button-solid{% else %} otsb-button-outline{% endif %} button--{{ block.id }} inline-block empty:otsb-hidden pl-4 pr-4 lg:pl-6 lg:pr-6 pt-2.5 pb-2.5 leading-normal md:pt-3 md:pb-3 cursor-pointer otsb-p-break-words{% if content == blank and image_ratio != "round" %} mt-3{% endif %}{% if button_link == blank %} hover:cursor-not-allowed opacity-70{%- endif -%}">
+                              {% render 'otsb-button-label', button_animation: button_animation, button_label: button_label, show_button_primary: show_button_primary, custom_icon_button: custom_icon_button %}
                             {% if button_link %}</a>{% else %}</p>{% endif %}
                           {%- endif -%}
                         </div>
