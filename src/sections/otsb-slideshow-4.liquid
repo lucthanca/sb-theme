@@ -313,102 +313,206 @@
                     </div>
                   {%- endif -%}
                   {%- if block.settings.button_label_1 != blank or block.settings.button_label_2 != blank -%}
-                    <div class="mt-4 lg:mt-9 inline-flex flex-wrap gap-x-1.5 gap-y-2 p-break-words{% if block.settings.content_alignment == 'custom' or block.settings.content_alignment contains 'center' %} justify-center{% else %} justify-{{ alignment[1] }}{% endif %}" {{ block.shopify_attributes }}>
+                    {% comment %} Button design {% endcomment %}
                       {%- liquid
-                        case block.settings.button_style
+                        case block.settings.button_type
                           when 'rounded'
                             assign borderRadius = '100px'
                           when 'rounded_corners'
                             assign borderRadius = '6px'
+                          when 'mixed'
+                            assign borderRadius = '6px 0 6px 0'
                           else
                             assign borderRadius = '0'
                         endcase
                       %}
-
                       {% style %}
-                        {% if block.settings.primary_button_animation == 'sliced' %}
-                          .x-slideshow-{{ block.id }} .otsb-button.otsb-button-outline:not(.not-icon),
-                          .x-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:not(.not-icon) {
-                            display: inline-flex;
-                            align-items: center;
-                            justify-content: center;
-                            padding-left: 1.5rem;
-                            padding-right: 1.5rem;
-                          }
-                          .x-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-icon,
-                          .x-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text {
-                            transition-timing-function: cubic-bezier(0,.71,.4,1);
-                          }
-                          .x-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-icon {
-                            width: max-content;
-                            transition: opacity .25s,transform .5s;
-                          }
-                          .x-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text {
-                            transition: transform .5s;
-                            transform: translateX(10px);
-                          }
-                          .x-slideshow-{{ block.id }} .otsb-button-solid:hover .otsb-button-text {
-                            opacity: 1;
-                            transform: translateX(0px);
-                          }
-                          .x-slideshow-{{ block.id }} .otsb-button-solid:hover .otsb-button-icon {
-                            opacity: 1;
-                            transform: translateX(5px);
-                          }
-                          .x-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:before {
-                            content: none;
-                          }
-                          .x-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:hover {
-                            transition-delay: 0s;
-                            transition: opacity .25s,transform .5s;
-                            background-color: var(--colors-button-hover, rgb(255, 102, 0));
+                        .x-button-{{ block.id }} .button--{{ block.id }} {
+                          --border-radius: {{ borderRadius }};
+                          {% if block.settings.button_animation == 'slide' %}
+                            --button-width: 102%;
+                            --button-height: 500%;
+                            --button-transform: rotate3d(0,0,1,-10deg) translate3d(-130%,-10em,0);
+                            --button-transform-origin: 100% 0%;
+                          {% elsif block.settings.button_animation == 'fill_up' %}
+                            --button-width: 120%;
+                            --button-height: 100%;
+                            --button-transform: rotate3d(0,0,1,10deg) translate3d(-1.2em,110%,0);
+                            --button-transform-origin: 0% 100%;
+                          {% endif %}
+                        }
+
+                        {% if block.settings.button_color_mobile == "hover" %}
+                          .x-button-{{ block.id }} [role="button"], .x-button-{{ block.id }} [type="button"], .x-button-{{ block.id }} .otsb-button {
                             color: rgb(var(--colors-button-text-hover));
-                            background-origin: border-box;
+                          }
+                          .x-button-{{ block.id }} button.otsb-button-solid, .x-button-{{ block.id }} .otsb-button.otsb-button-solid {
+                            border: none;
+                            background-color: var(--colors-button-hover);
+                          }
+                          .x-button-{{ block.id }} button.otsb-button-disable-effect, .x-button-{{ block.id }} .otsb-button.otsb-button-disable-effect {
+                            color: rgba(var(--colors-button-text-hover));
+                            background-color: var(--colors-button-hover);
+                          }
+                          .x-button-{{ block.id }} .otsb-button-action {
+                            border: none;
+                            color: rgba(var(--colors-button-text-hover));
+                            background-color: var(--colors-button-hover);
+                          }
+                        {% else %}
+                          .x-button-{{ block.id }} [role="button"], .x-button-{{ block.id }} [type="button"], .x-button-{{ block.id }} .otsb-button {
+                            color: rgb(var(--colors-button-text));
+                          }
+                          .x-button-{{ block.id }} button.otsb-button-solid, .x-button-{{ block.id }} .otsb-button.otsb-button-solid {
+                            border: none;
+                            background-color: rgba(var(--colors-button));
+                          }
+                          .x-button-{{ block.id }} button.otsb-button-disable-effect, .x-button-{{ block.id }} .otsb-button.otsb-button-disable-effect {
+                            color: rgb(var(--colors-button-text));
+                            background-color: rgba(var(--colors-button));
+                          }
+                          .x-button-{{ block.id }} .otsb-button-action {
+                            border: none;
+                            color: rgb(var(--colors-button-text));
+                            background-color: rgba(var(--colors-button));
                           }
                         {% endif %}
-                        {% if block.settings.primary_button_animation == 'underline' %}
-                          .x-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text {
-                            position: relative;
-                            display: block;
+                          .x-button-{{ block.id }} [role="button"], .x-button-{{ block.id }} [type="button"], .x-button-{{ block.id }} .otsb-button {
+                            direction: ltr;
                           }
-                          .x-slideshow-{{ block.id }} .otsb-button-solid .otsb-button-text::after {
-                            content: "";
-                            pointer-events: none;
-                            bottom: 1px;
-                            left: 50%;
-                            position: absolute;
-                            width: 0%;
-                            height: 1px;
-                            background-color: rgba(var(--colors-button-text));
-                            transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
-                            transition-duration: 400ms;
-                            transition-property: width, left;
+
+                          {% if block.settings.button_animation == 'sliced' %}
+                            .x-button-{{ block.id }} .otsb-button.otsb-button-outline:not(.not-icon), .x-button-{{ block.id }} .otsb-button.otsb-button-solid:not(.not-icon) {
+                              display: inline-flex;
+                              align-items: center;
+                              justify-content: center;
+                              padding-left: 1.5rem;
+                              padding-right: 1.5rem;
+                            }
+                            .x-button-{{ block.id }} .otsb-button-solid .otsb-button-icon, .x-button-{{ block.id }} .otsb-button-solid .otsb-button-text {
+                              transition-timing-function: cubic-bezier(0,.71,.4,1);
+                            }
+                            .x-button-{{ block.id }} .otsb-button-solid .otsb-button-icon {
+                              transition: opacity .25s,transform .5s;
+                            }
+                            .x-button-{{ block.id }} .otsb-button-solid .otsb-button-text {
+                              transition: transform .5s;
+                              transform: translateX(0.625rem);
+                            }
+                            .x-button-{{ block.id }} .otsb-button-solid:hover .otsb-button-text {
+                              opacity: 1;
+                              transform: translateX(0px);
+                            }
+                            .x-button-{{ block.id }} .otsb-button-solid:hover .otsb-button-icon {
+                              opacity: 1;
+                              transform: translateX(0.3125rem);
+                            }
+                          {% endif %}
+                          {% if block.settings.button_animation == 'underline' %}
+                            .x-button-{{ block.id }} .otsb-button-solid .otsb-button-text {
+                              position: relative;
+                              display: block;
+                            }
+                            .x-button-{{ block.id }} .otsb-button-solid .otsb-button-text::after {
+                              content: "";
+                              pointer-events: none;
+                              bottom: 1px;
+                              left: 50%;
+                              position: absolute;
+                              width: 0%;
+                              height: 1px;
+                              background-color: rgba(var(--colors-button-text));
+                              transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+                              transition-duration: 400ms;
+                              transition-property: width, left;
+                            }
+                            .x-button-{{ block.id }} .otsb-button-solid:hover .otsb-button-text::after {
+                              {% if block.settings.button_color_mobile == "hover" %}
+                                background-color: rgba(var(--colors-button-text-hover));
+                              {% else %}
+                                background-color: rgba(var(--colors-button-text));
+                              {% endif %}
+                                width: 100%;
+                                left: 0%;
+                            }
+                          {% endif %}
+
+                          @media (min-width: 1024px){
+                            .x-button-{{ block.id }} [role="button"], .x-button-{{ block.id }} [type="button"], .x-button-{{ block.id }} .otsb-button { 
+                              color: rgba(var(--colors-button-text));
+                            }
+                            .x-button-{{ block.id }} button.otsb-button-solid, .x-button-{{ block.id }} .otsb-button.otsb-button-solid {
+                              border: none;
+                              box-shadow: none;
+                              color: rgb(var(--colors-button-text));
+                              background-color: rgba(var(--colors-button));
+                              overflow: hidden;
+                              background-origin: border-box;
+                            }
+                            .x-button-{{ block.id }} button.otsb-button-solid:hover, .x-button-{{ block.id }} .otsb-button.otsb-button-solid:hover {
+                              {% if block.settings.button_animation == 'sliced' or block.settings.button_animation == 'underline' %}
+                                transition-duration: 0.2s;
+                              {% else %}
+                                transition-delay: 0.5s;
+                              {% endif %}
+                                transition-property: background-color;
+                                background-color: var(--colors-button-hover);
+                                color: rgba(var(--colors-button-text-hover));
+                                background-origin: border-box;
+                            }
+                            .x-button-{{ block.id }} .otsb-button-action {
+                              border: none;
+                              color: rgba(var(--colors-button-text-hover));
+                              background-color: var(--colors-button-hover);
+                            }
+                            .x-button-{{ block.id }} button.otsb-button-disable-effect, .x-button-{{ block.id }} .otsb-button.otsb-button-disable-effect {
+                              color: rgb(var(--colors-button-text));
+                              background-color: rgba(var(--colors-button));
+                            }
+                            .x-button-{{ block.id }} button.otsb-button-disable-effect:hover, .x-button-{{ block.id }} .otsb-button.otsb-button-disable-effect:hover {
+                              color: rgba(var(--colors-button-text-hover));
+                              background-color: var(--colors-button-hover);
+                            }
+                            {% if block.settings.button_animation == 'slide' or block.settings.button_animation == 'fill_up' %}
+                              .x-button-{{ block.id }} button.otsb-button-solid:before, .x-button-{{ block.id }} .otsb-button.otsb-button-solid:before {
+                                content: "";
+                                z-index: -1;
+                                position: absolute;
+                                top: 0;
+                                right: 0;
+                                bottom: 0;
+                                left: 0;
+                                width: var(--button-width);
+                                height: var(--button-height);
+                                background-color: var(--colors-button-hover);
+                                backface-visibility: hidden;
+                                will-change: transform;
+                                transform: var(--button-transform);
+                                transform-origin: var(--button-transform-origin);
+                                transition: transform 0.5s ease;
+                              }
+                              .x-button-{{ block.id }} button.otsb-button-solid:hover:before, .x-button-{{ block.id }} .otsb-button.otsb-button-solid:hover:before {
+                                transform: rotate3d(0,0,1,0) translateZ(0);
+                              }
+                            {% endif %}
+                            {% if block.settings.button_animation == 'underline' %}
+                              .x-button-{{ block.id }} .otsb-button-solid:hover .otsb-button-text::after {
+                                background-color: rgba(var(--colors-button-text-hover));
+                              }
+                            {% endif %}
                           }
-                          .x-slideshow-{{ block.id }} .otsb-button-solid:hover .otsb-button-text::after {
-                            background-color: rgb(var(--colors-button-text-hover));
-                            width: 100%;
-                            left: 0%;
-                          }
-                          .x-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:before {
-                            content: none;
-                          }
-                          .x-slideshow-{{ block.id }} .otsb-button.otsb-button-solid:hover {
-                            transition-delay: 0s;
-                            transition: opacity .25s,transform .5s;
-                            background-color: var(--colors-button-hover, rgb(255, 102, 0));
-                            color: rgb(var(--colors-button-text-hover));
-                            background-origin: border-box;
-                          }
-                        {% endif %}
                       {% endstyle %}
+                    {% comment %} End button design {% endcomment %}
+
+                    <div class="x-button-{{ block.id }} mt-4 lg:mt-9 inline-flex flex-wrap gap-x-1.5 gap-y-2 p-break-words{% if block.settings.content_alignment == 'custom' or block.settings.content_alignment contains 'center' %} justify-center{% else %} justify-{{ alignment[1] }}{% endif %}" {{ block.shopify_attributes }}>
                       {%- if block.settings.button_label_1 != blank -%}
-                        <a style="border-radius: {{borderRadius}};" {% if block.settings.button_link_1 %} href="{{ block.settings.button_link_1 }}"{% if block.settings.open_new_window_button %} target="_blank"{% endif %}{% else %} role="link" aria-disabled="true"{% endif %} class="otsb-button button--{{ block.id }}{% if block.settings.button_primary_1 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} border ml-0.5 mr-0.5 mt-0.5 mb-0.5 empty:otsb-hidden pl-6 pr-6 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal{% unless block.settings.button_link_1 %} hover:cursor-not-allowed opacity-70{% endunless %}">
-                          {% render 'otsb-button-label', button_animation: block.settings.primary_button_animation, button_label: block.settings.button_label_1, show_button_primary: block.settings.button_primary_1 %}
+                        <a {% if block.settings.button_link_1 %} href="{{ block.settings.button_link_1 }}"{% if block.settings.open_new_window_button %} target="_blank"{% endif %}{% else %} role="link" aria-disabled="true"{% endif %} class="otsb-button button--{{ block.id }}{% if block.settings.button_primary_1 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} border ml-0.5 mr-0.5 mt-0.5 mb-0.5 empty:otsb-hidden pl-6 pr-6 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal{% unless block.settings.button_link_1 %} hover:cursor-not-allowed opacity-70{% endunless %}">
+                          {% render 'otsb-button-label', button_animation: block.settings.button_animation, custom_icon_button: block.settings.custom_icon_button, button_label: block.settings.button_label_1, show_button_primary: block.settings.button_primary_1 %}
                         </a> 
                       {%- endif -%}
                       {%- if block.settings.button_label_2 != blank -%}
-                        <a style="border-radius: {{borderRadius}};" {% if block.settings.button_link_2 %} href="{{ block.settings.button_link_2 }}"{% if block.settings.open_new_window_button_2 %} target="_blank"{% endif %}{% else %} role="link" aria-disabled="true"{% endif %} class="otsb-button button--{{ block.id }}{% if block.settings.button_primary_2 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} border ml-0.5 mr-0.5 mt-0.5 mb-0.5 empty:otsb-hidden pl-6 pr-6 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal{% unless block.settings.button_link_2 %} hover:cursor-not-allowed opacity-70{% endunless %}">
-                          {% render 'otsb-button-label', button_animation: block.settings.primary_button_animation, button_label: block.settings.button_label_2, show_button_primary: block.settings.button_primary_2 %}
+                        <a {% if block.settings.button_link_2 %} href="{{ block.settings.button_link_2 }}"{% if block.settings.open_new_window_button_2 %} target="_blank"{% endif %}{% else %} role="link" aria-disabled="true"{% endif %} class="otsb-button button--{{ block.id }}{% if block.settings.button_primary_2 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} border ml-0.5 mr-0.5 mt-0.5 mb-0.5 empty:otsb-hidden pl-6 pr-6 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal{% unless block.settings.button_link_2 %} hover:cursor-not-allowed opacity-70{% endunless %}">
+                          {% render 'otsb-button-label', button_animation: block.settings.button_animation, custom_icon_button: block.settings.custom_icon_button, button_label: block.settings.button_label_2, show_button_primary: block.settings.button_primary_2 %}
                         </a> 
                       {%- endif -%}
                     </div>
@@ -779,8 +883,12 @@
           "default": "<p>Tell your brand's story through image</p>"
         },
         {
+          "type": "header",
+          "content": "Button Design"
+        },
+        {
           "type": "select",
-          "id": "button_style",
+          "id": "button_type",
           "options": [
             {
               "value": "square",
@@ -792,31 +900,61 @@
             },
             {
               "value": "rounded_corners",
-              "label": "Rounded corners"
+              "label": "Rounded Corners"
+            },
+            {
+              "value": "mixed",
+              "label": "Mixed"
             }
           ],
-          "default": "rounded",
-          "label": "Button style"
+          "label": "Button style",
+          "default": "rounded"
         },
         {
           "type": "select",
-          "id": "primary_button_animation",
+          "id": "button_color_mobile",
+          "options": [
+            {
+              "value": "hover",
+              "label": "Use button hover color"
+            },
+            {
+              "value": "color",
+              "label": "Use button color"
+            }
+          ],
+          "label": "Mobile primary button style",
+          "default": "color"
+        },
+        {
+          "type": "select",
+          "id": "button_animation",
           "options": [
             {
               "value": "slide",
               "label": "Slide"
             },
             {
+              "value": "fill_up",
+              "label": "Fill up"
+            },
+            {
               "value": "sliced",
-              "label": "Slided with icon"
+              "label": "Sliced with icon"
             },
             {
               "value": "underline",
               "label": "Underline"
             }
           ],
-          "default": "sliced",
-          "label": "Primary button hover animation"
+          "label": "Primary button hover animation",
+          "default": "sliced"
+        },
+        {
+          "type": "html",
+          "id": "custom_icon_button",
+          "label": "Custom icon (SVG code)",
+          "info": "Applies to 'Sliced with icon' animation type. For assistance with custom SVG code or fixing issues that arise from custom SVG code, please [contact our support](https://support.bsscommerce.com/support/tickets/new)."
         },
         {
           "type": "text",
