@@ -161,6 +161,10 @@
                       --image-treatment-text: {{ block.settings.color_text.red }}, {{ block.settings.color_text.green }}, {{ block.settings.color_text.blue }};
                     }
                   {%- endunless -%}
+
+                  #shopify-section-{{ section.id }} .x-collection-banner-{{ block.id }} {
+                    --colors-text-link: {{ block.settings.color_text_link.red }}, {{ block.settings.color_text_link.green }}, {{ block.settings.color_text_link.blue }};
+                  }
   
                   .button--{{ block.id }}.otsb-button-solid,
                   .button--{{ block.id }}.otsb-button-solid:before { 
@@ -702,7 +706,7 @@
   
   {% schema %}
   {
-    "name": "OT: Collection Banner #2",
+    "name": "OT: Collection Slider #2",
     "tag": "section",
     "class": "section section-collection-list-banner",
     "disabled_on": {
@@ -1268,6 +1272,12 @@
           },
           {
             "type": "color",
+            "id": "color_text_link",
+            "default": "#FD8E16",
+            "label": "Text link"
+          },
+          {
+            "type": "color",
             "id": "color_button",
             "label": "Button color",
             "default": "#FD8E16"
@@ -1307,7 +1317,7 @@
     ],
     "presets": [
       {
-        "name": "OT: Collection Banner #2",
+        "name": "OT: Collection Slider #2",
         "blocks": [
           {
             "type": "slide",
