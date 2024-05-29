@@ -475,6 +475,7 @@
               {%- endfor -%}
             </div>
             <div class="text-{{ section.settings.button_alignment }} mt-3.5 md:mt-5">
+              <div class="x-button-{{ section.id }}">
               <button
                 type="submit"
                 class="rounded-md button--{{ section.id }} otsb-button otsb-button-solid leading-normal pl-8 pr-8 lg:pl-11 lg:pr-11 pt-2.5 pb-2.5 lg:pt-3 lg:pb-3 cursor-pointer empty:otsb-hidden pointer-events-auto"
@@ -484,17 +485,202 @@
                 {%- else -%}
                   {% assign button_label = 'templates.contact.form.send' | t %}
                 {%- endif -%}
+                {%- liquid
+                  case section.settings.button_type
+                    when 'rounded'
+                      assign borderRadius = '100px'
+                    when 'rounded_corners'
+                      assign borderRadius = '6px'
+                    when 'mixed'
+                      assign borderRadius = '6px 0 6px 0'
+                    else
+                      assign borderRadius = '0'
+                  endcase
+                %}
                 {%- style -%}
                   .button--{{ section.id }}.otsb-button-solid,
                   .button--{{ section.id }}.otsb-button-solid:before {
+                    --border-radius: {{ borderRadius }};
+                      {% if section.settings.button_animation == 'slide' %}
+                        --button-width: 102%;
+                        --button-height: 500%;
+                        --button-transform: rotate3d(0,0,1,-10deg) translate3d(-130%,-10em,0);
+                        --button-transform-origin: 100% 0%;
+                      {% elsif section.settings.button_animation == 'fill_up' %}
+                        --button-width: 120%;
+                        --button-height: 100%;
+                        --button-transform: rotate3d(0,0,1,10deg) translate3d(-1.2em,110%,0);
+                        --button-transform-origin: 0% 100%;
+                      {% endif %}
                     --colors-button: {{ section.settings.color_button.red }}, {{ section.settings.color_button.green }}, {{ section.settings.color_button.blue }};
                     --colors-button-text: {{ section.settings.color_text_button.red }}, {{ section.settings.color_text_button.green }}, {{ section.settings.color_text_button.blue }};
                     --colors-button-hover: rgb({{ section.settings.color_button_hover.red }}, {{ section.settings.color_button_hover.green }}, {{ section.settings.color_button_hover.blue }});
                     --colors-button-text-hover: {{ section.settings.color_text_button_hover.red }}, {{ section.settings.color_text_button_hover.green }}, {{ section.settings.color_text_button_hover.blue }};
                   }
-                {%- endstyle -%}
-                {% render 'otsb-button-label', button_label: button_label, show_button_primary: true %}
-              </button>
+
+                  {% if section.settings.button_color_mobile == "hover" %}
+                      .x-button-{{ section.id }} [role="button"], .x-button-{{ section.id }} [type="button"], .x-button-{{ section.id }} .otsb-button {
+                        color: rgb(var(--colors-button-text-hover));
+                      }
+                      .x-button-{{ section.id }} button.otsb-button-solid, .x-button-{{ section.id }} .otsb-button.otsb-button-solid {
+                        border: none;
+                        background-color: var(--colors-button-hover);
+                      }
+                      .x-button-{{ section.id }} button.otsb-button-disable-effect, .x-button-{{ section.id }} .otsb-button.otsb-button-disable-effect {
+                        color: rgba(var(--colors-button-text-hover));
+                        background-color: var(--colors-button-hover);
+                      }
+                      .x-button-{{ section.id }} .otsb-button-action {
+                        border: none;
+                        color: rgba(var(--colors-button-text-hover));
+                        background-color: var(--colors-button-hover);
+                      }
+                    {% else %}
+                      .x-button-{{ section.id }} [role="button"], .x-button-{{ section.id }} [type="button"], .x-button-{{ section.id }} .otsb-button {
+                        color: rgb(var(--colors-button-text));
+                      }
+                      .x-button-{{ section.id }} button.otsb-button-solid, .x-button-{{ section.id }} .otsb-button.otsb-button-solid {
+                        border: none;
+                        background-color: rgba(var(--colors-button));
+                      }
+                      .x-button-{{ section.id }} button.otsb-button-disable-effect, .x-button-{{ section.id }} .otsb-button.otsb-button-disable-effect {
+                        color: rgb(var(--colors-button-text));
+                        background-color: rgba(var(--colors-button));
+                      }
+                      .x-button-{{ section.id }} .otsb-button-action {
+                        border: none;
+                        color: rgb(var(--colors-button-text));
+                        background-color: rgba(var(--colors-button));
+                      }
+                    {% endif %}
+                    .x-button-{{ section.id }} [role="button"], .x-button-{{ section.id }} [type="button"], .x-button-{{ section.id }} .otsb-button {
+                      direction: ltr;
+                    }
+                    
+                    {% if section.settings.button_animation == 'sliced' %}
+                      .x-button-{{ section.id }} .otsb-button.otsb-button-outline:not(.not-icon), .x-button-{{ section.id }} .otsb-button.otsb-button-solid:not(.not-icon) {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding-left: 1.5rem;
+                        padding-right: 1.5rem;
+                      }
+                      .x-button-{{ section.id }} .otsb-button-solid .otsb-button-icon, .x-button-{{ section.id }} .otsb-button-solid .otsb-button-text {
+                        transition-timing-function: cubic-bezier(0,.71,.4,1);
+                      }
+                      .x-button-{{ section.id }} .otsb-button-solid .otsb-button-icon {
+                        transition: opacity .25s,transform .5s;
+                      }
+                      .x-button-{{ section.id }} .otsb-button-solid .otsb-button-text {
+                        transition: transform .5s;
+                        transform: translateX(0.625rem);
+                      }
+                      .x-button-{{ section.id }} .otsb-button-solid:hover .otsb-button-text {
+                        opacity: 1;
+                        transform: translateX(0px);
+                      }
+                      .x-button-{{ section.id }} .otsb-button-solid:hover .otsb-button-icon {
+                        opacity: 1;
+                        transform: translateX(0.3125rem);
+                      }
+                    {% endif %}
+                    {% if section.settings.button_animation == 'underline' %}
+                      .x-button-{{ section.id }} .otsb-button-solid .otsb-button-text {
+                        position: relative;
+                        display: block;
+                      }
+                      .x-button-{{ section.id }} .otsb-button-solid .otsb-button-text::after {
+                        content: "";
+                        pointer-events: none;
+                        bottom: 1px;
+                        left: 50%;
+                        position: absolute;
+                        width: 0%;
+                        height: 1px;
+                        background-color: rgba(var(--colors-button-text));
+                        transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+                        transition-duration: 400ms;
+                        transition-property: width, left;
+                      }
+                      .x-button-{{ section.id }} .otsb-button-solid:hover .otsb-button-text::after {
+                        {% if section.settings.button_color_mobile == "hover" %}
+                          background-color: rgba(var(--colors-button-text-hover));
+                        {% else %}
+                          background-color: rgba(var(--colors-button-text));
+                        {% endif %}
+                          width: 100%;
+                          left: 0%;
+                      }
+                    {% endif %}
+                  
+                    @media (min-width: 1024px){
+                      .x-button-{{ section.id }} [role="button"], .x-button-{{ section.id }} [type="button"], .x-button-{{ section.id }} .otsb-button { 
+                        color: rgba(var(--colors-button-text));
+                      }
+                      .x-button-{{ section.id }} button.otsb-button-solid, .x-button-{{ section.id }} .otsb-button.otsb-button-solid {
+                        border: none;
+                        box-shadow: none;
+                        color: rgb(var(--colors-button-text));
+                        background-color: rgba(var(--colors-button));
+                        overflow: hidden;
+                        background-origin: border-box;
+                      }
+                      .x-button-{{ section.id }} button.otsb-button-solid:hover, .x-button-{{ section.id }} .otsb-button.otsb-button-solid:hover {
+                        {% if section.settings.button_animation == 'sliced' or section.settings.button_animation == 'underline' %}
+                          transition-duration: 0.2s;
+                        {% else %}
+                          transition-delay: 0.5s;
+                        {% endif %}
+                          transition-property: background-color;
+                          background-color: var(--colors-button-hover);
+                          color: rgba(var(--colors-button-text-hover));
+                          background-origin: border-box;
+                      }
+                      .x-button-{{ section.id }} .otsb-button-action {
+                        border: none;
+                        color: rgba(var(--colors-button-text-hover));
+                        background-color: var(--colors-button-hover);
+                      }
+                      .x-button-{{ section.id }} button.otsb-button-disable-effect, .x-button-{{ section.id }} .otsb-button.otsb-button-disable-effect {
+                        color: rgb(var(--colors-button-text));
+                        background-color: rgba(var(--colors-button));
+                      }
+                      .x-button-{{ section.id }} button.otsb-button-disable-effect:hover, .x-button-{{ section.id }} .otsb-button.otsb-button-disable-effect:hover {
+                        color: rgba(var(--colors-button-text-hover));
+                        background-color: var(--colors-button-hover);
+                      }
+                      {% if section.settings.button_animation == 'slide' or section.settings.button_animation == 'fill_up' %}
+                        .x-button-{{ section.id }} button.otsb-button-solid:before, .x-button-{{ section.id }} .otsb-button.otsb-button-solid:before {
+                          content: "";
+                          z-index: -1;
+                          position: absolute;
+                          top: 0;
+                          right: 0;
+                          bottom: 0;
+                          left: 0;
+                          width: var(--button-width);
+                          height: var(--button-height);
+                          background-color: var(--colors-button-hover);
+                          backface-visibility: hidden;
+                          will-change: transform;
+                          transform: var(--button-transform);
+                          transform-origin: var(--button-transform-origin);
+                          transition: transform 0.5s ease;
+                        }
+                        .x-button-{{ section.id }} button.otsb-button-solid:hover:before, .x-button-{{ section.id }} .otsb-button.otsb-button-solid:hover:before {
+                          transform: rotate3d(0,0,1,0) translateZ(0);
+                        }
+                      {% endif %}
+                      {% if section.settings.button_animation == 'underline' %}
+                        .x-button-{{ section.id }} .otsb-button-solid:hover .otsb-button-text::after {
+                          background-color: rgba(var(--colors-button-text-hover));
+                        }
+                      {% endif %}
+                    }
+                {%- endstyle -%}     
+                    {% render 'otsb-button-label', button_animation: section.settings.button_animation, custom_icon_button: section.settings.custom_icon_button, button_label: button_label, show_button_primary: true %}
+                  </button>
+                </div>
             </div>
           {%- endunless -%}
         {%- endform -%}
@@ -650,30 +836,6 @@
       "label": "Background color"
     },
     {
-      "type": "color",
-      "id": "color_button",
-      "label": "Button color",
-      "default": "#FD8E16"
-    },
-    {
-      "type": "color",
-      "id": "color_text_button",
-      "label": "Button text color",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "color",
-      "id": "color_button_hover",
-      "label": "Button hover color",
-      "default": "#FF6600"
-    },
-    {
-      "type": "color",
-      "id": "color_text_button_hover",
-      "label": "Button text hover color",
-      "default": "#000000"
-    },
-    {
       "type": "text",
       "id": "button_label",
       "default": "Button Label",
@@ -698,6 +860,104 @@
           "label": "Right"
         }
       ]
+    },
+    {
+      "type": "header",
+      "content": "Button design"
+    },
+    {
+      "type": "select",
+      "id": "button_type",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "rounded",
+          "label": "Rounded"
+        },
+        {
+          "value": "rounded_corners",
+          "label": "Rounded Corners"
+        },
+        {
+          "value": "mixed",
+          "label": "Mixed"
+        }
+      ],
+      "label": "Button style",
+      "default": "square"
+    },
+    {
+      "type": "select",
+      "id": "button_color_mobile",
+      "options": [
+        {
+          "value": "hover",
+          "label": "Use button hover color"
+        },
+        {
+          "value": "color",
+          "label": "Use button color"
+        }
+      ],
+      "label": "Mobile primary button style",
+      "default": "color"
+    },
+    {
+      "type": "select",
+      "id": "button_animation",
+      "options": [
+        {
+          "value": "slide",
+          "label": "Slide"
+        },
+        {
+          "value": "fill_up",
+          "label": "Fill up"
+        },
+        {
+          "value": "sliced",
+          "label": "Sliced with icon"
+        },
+        {
+          "value": "underline",
+          "label": "Underline"
+        }
+      ],
+      "label": "Primary button hover animation",
+      "default": "fill_up"
+    },
+    {
+      "type": "html",
+      "id": "custom_icon_button",
+      "label": "Custom icon (SVG code)",
+      "info": "Applies to 'Sliced with icon' animation type. For assistance with custom SVG code or fixing issues that arise from custom SVG code, please [contact our support](https://support.bsscommerce.com/support/tickets/new)."
+    },
+    {
+      "type": "color",
+      "id": "color_button",
+      "label": "Button color",
+      "default": "#FD8E16"
+    },
+    {
+      "type": "color",
+      "id": "color_text_button",
+      "label": "Button text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "color_button_hover",
+      "label": "Button hover color",
+      "default": "#FF6600"
+    },
+    {
+      "type": "color",
+      "id": "color_text_button_hover",
+      "label": "Button text hover color",
+      "default": "#000000"
     },
     {
       "type": "text",

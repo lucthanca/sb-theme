@@ -143,6 +143,17 @@
                   if block.settings.video != null 
                     assign video_type = 'video_select'
                   endif
+
+                  case block.settings.button_type
+                  when 'rounded'
+                    assign borderRadius = '100px'
+                  when 'rounded_corners'
+                    assign borderRadius = '6px'
+                  when 'mixed'
+                    assign borderRadius = '6px 0 6px 0'
+                  else
+                    assign borderRadius = '0'
+                endcase
                 -%}
                 {%- style -%}
                   {%- unless block.settings.color_text.alpha == 0.0 -%}
@@ -153,6 +164,18 @@
   
                   .button--{{ block.id }}.otsb-button-solid,
                   .button--{{ block.id }}.otsb-button-solid:before { 
+                    --border-radius: {{ borderRadius }};
+                  {% if block.settings.button_animation == 'slide' %}
+                    --button-width: 102%;
+                    --button-height: 500%;
+                    --button-transform: rotate3d(0,0,1,-10deg) translate3d(-130%,-10em,0);
+                    --button-transform-origin: 100% 0%;
+                  {% elsif block.settings.button_animation == 'fill_up' %}
+                    --button-width: 120%;
+                    --button-height: 100%;
+                    --button-transform: rotate3d(0,0,1,10deg) translate3d(-1.2em,110%,0);
+                    --button-transform-origin: 0% 100%;
+                  {% endif %}
                     {%- unless block.settings.color_button.alpha == 0.0 -%}
                       --colors-line-and-border: {{ block.settings.color_button.red }}, {{ block.settings.color_button.green }}, {{ block.settings.color_button.blue }};
                       --colors-button: {{ block.settings.color_button.red }}, {{ block.settings.color_button.green }}, {{ block.settings.color_button.blue }};
@@ -170,6 +193,7 @@
                     {%- endunless -%}
                   }
                   .button--{{ block.id }}.otsb-button-outline {
+                    --border-radius: {{ borderRadius }};
                     {%- if block.settings.secondary_button_text.alpha != 0.0 -%} 
                       --colors-secondary-button: {{ block.settings.secondary_button_text.red }}, {{ block.settings.secondary_button_text.green }}, {{ block.settings.secondary_button_text.blue }}; 
                       --colors-line-secondary-button: {{ block.settings.secondary_button_text.red }}, {{ block.settings.secondary_button_text.green }}, {{ block.settings.secondary_button_text.blue }}; 
@@ -381,9 +405,198 @@
                           </div>
                         {%- endif -%}
                         {%- if block.settings.button_label_1 != blank -%}
-                          <div class="mt-4 lg:mt-9 inline-flex flex-wrap gap-x-1.5 gap-y-2 otsb-p-break-words justify-center" {{ block.shopify_attributes }}>
+                          {%- liquid
+                            case block.settings.button_type
+                              when 'rounded'
+                                assign borderRadius = '100px'
+                              when 'rounded_corners'
+                                assign borderRadius = '6px'
+                              when 'mixed'
+                                assign borderRadius = '6px 0 6px 0'
+                              else
+                                assign borderRadius = '0'
+                            endcase
+                          %}
+  
+                          {% style %}
+                          .button-{{ block.id }}, .button-{{ block.id }} *:before {
+                          --border-radius: {{ borderRadius }};
+                        {% if block.settings.button_animation == 'slide' %}
+                          --button-width: 102%;
+                          --button-height: 500%;
+                          --button-transform: rotate3d(0,0,1,-10deg) translate3d(-130%,-10em,0);
+                          --button-transform-origin: 100% 0%;
+                        {% elsif block.settings.button_animation == 'fill_up' %}
+                          --button-width: 120%;
+                          --button-height: 100%;
+                          --button-transform: rotate3d(0,0,1,10deg) translate3d(-1.2em,110%,0);
+                          --button-transform-origin: 0% 100%;
+                        {% endif %}
+                      }
+  
+                      {% if block.settings.button_color_mobile == "hover" %}
+                        .x-button-{{ block.id }} [role="button"], .x-button-{{ block.id }} [type="button"], .x-button-{{ block.id }} .otsb-button {
+                          color: rgb(var(--colors-button-text-hover));
+                        }
+                        .x-button-{{ block.id }} button.otsb-button-solid, .x-button-{{ block.id }} .otsb-button.otsb-button-solid {
+                          border: none;
+                          background-color: var(--colors-button-hover);
+                        }
+                        .x-button-{{ block.id }} button.otsb-button-disable-effect, .x-button-{{ block.id }} .otsb-button.otsb-button-disable-effect {
+                          color: rgba(var(--colors-button-text-hover));
+                          background-color: var(--colors-button-hover);
+                        }
+                        .x-button-{{ block.id }} .otsb-button-action {
+                          border: none;
+                          color: rgba(var(--colors-button-text-hover));
+                          background-color: var(--colors-button-hover);
+                        }
+                      {% else %}
+                        .x-button-{{ block.id }} [role="button"], .x-button-{{ block.id }} [type="button"], .x-button-{{ block.id }} .otsb-button {
+                          color: rgb(var(--colors-button-text));
+                        }
+                        .x-button-{{ block.id }} button.otsb-button-solid, .x-button-{{ block.id }} .otsb-button.otsb-button-solid {
+                          border: none;
+                          background-color: rgba(var(--colors-button));
+                        }
+                        .x-button-{{ block.id }} button.otsb-button-disable-effect, .x-button-{{ block.id }} .otsb-button.otsb-button-disable-effect {
+                          color: rgb(var(--colors-button-text));
+                          background-color: rgba(var(--colors-button));
+                        }
+                        .x-button-{{ block.id }} .otsb-button-action {
+                          border: none;
+                          color: rgb(var(--colors-button-text));
+                          background-color: rgba(var(--colors-button));
+                        }
+                      {% endif %}
+                      .x-button-{{ block.id }} [role="button"], .x-button-{{ block.id }} [type="button"], .x-button-{{ block.id }} .otsb-button {
+                        direction: ltr;
+                      }
+                      
+                      {% if block.settings.button_animation == 'sliced' %}
+                        .x-button-{{ block.id }} .otsb-button.otsb-button-outline:not(.not-icon), .x-button-{{ block.id }} .otsb-button.otsb-button-solid:not(.not-icon) {
+                          display: inline-flex;
+                          align-items: center;
+                          justify-content: center;
+                          padding-left: 1.5rem;
+                          padding-right: 1.5rem;
+                        }
+                        .x-button-{{ block.id }} .otsb-button-solid .otsb-button-icon, .x-button-{{ block.id }} .otsb-button-solid .otsb-button-text {
+                          transition-timing-function: cubic-bezier(0,.71,.4,1);
+                        }
+                        .x-button-{{ block.id }} .otsb-button-solid .otsb-button-icon {
+                          transition: opacity .25s,transform .5s;
+                        }
+                        .x-button-{{ block.id }} .otsb-button-solid .otsb-button-text {
+                          transition: transform .5s;
+                          transform: translateX(0.625rem);
+                        }
+                        .x-button-{{ block.id }} .otsb-button-solid:hover .otsb-button-text {
+                          opacity: 1;
+                          transform: translateX(0px);
+                        }
+                        .x-button-{{ block.id }} .otsb-button-solid:hover .otsb-button-icon {
+                          opacity: 1;
+                          transform: translateX(0.3125rem);
+                        }
+                      {% endif %}
+                      {% if block.settings.button_animation == 'underline' %}
+                        .x-button-{{ block.id }} .otsb-button-solid .otsb-button-text {
+                          position: relative;
+                          display: block;
+                        }
+                        .x-button-{{ block.id }} .otsb-button-solid .otsb-button-text::after {
+                          content: "";
+                          pointer-events: none;
+                          bottom: 1px;
+                          left: 50%;
+                          position: absolute;
+                          width: 0%;
+                          height: 1px;
+                          background-color: rgba(var(--colors-button-text));
+                          transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+                          transition-duration: 400ms;
+                          transition-property: width, left;
+                        }
+                        .x-button-{{ block.id }} .otsb-button-solid:hover .otsb-button-text::after {
+                          {% if block.settings.button_color_mobile == "hover" %}
+                            background-color: rgba(var(--colors-button-text-hover));
+                          {% else %}
+                            background-color: rgba(var(--colors-button-text));
+                          {% endif %}
+                            width: 100%;
+                            left: 0%;
+                        }
+                      {% endif %}
+                    
+                      @media (min-width: 1024px){
+                        .x-button-{{ block.id }} [role="button"], .x-button-{{ block.id }} [type="button"], .x-button-{{ block.id }} .otsb-button { 
+                          color: rgba(var(--colors-button-text));
+                        }
+                        .x-button-{{ block.id }} button.otsb-button-solid, .x-button-{{ block.id }} .otsb-button.otsb-button-solid {
+                          border: none;
+                          box-shadow: none;
+                          color: rgb(var(--colors-button-text));
+                          background-color: rgba(var(--colors-button));
+                          overflow: hidden;
+                          background-origin: border-box;
+                        }
+                        .x-button-{{ block.id }} button.otsb-button-solid:hover, .x-button-{{ block.id }} .otsb-button.otsb-button-solid:hover {
+                          {% if block.settings.button_animation == 'sliced' or block.settings.button_animation == 'underline' %}
+                            transition-duration: 0.2s;
+                          {% else %}
+                            transition-delay: 0.5s;
+                          {% endif %}
+                            transition-property: background-color;
+                            background-color: var(--colors-button-hover);
+                            color: rgba(var(--colors-button-text-hover));
+                            background-origin: border-box;
+                        }
+                        .x-button-{{ block.id }} .otsb-button-action {
+                          border: none;
+                          color: rgba(var(--colors-button-text-hover));
+                          background-color: var(--colors-button-hover);
+                        }
+                        .x-button-{{ block.id }} button.otsb-button-disable-effect, .x-button-{{ block.id }} .otsb-button.otsb-button-disable-effect {
+                          color: rgb(var(--colors-button-text));
+                          background-color: rgba(var(--colors-button));
+                        }
+                        .x-button-{{ block.id }} button.otsb-button-disable-effect:hover, .x-button-{{ block.id }} .otsb-button.otsb-button-disable-effect:hover {
+                          color: rgba(var(--colors-button-text-hover));
+                          background-color: var(--colors-button-hover);
+                        }
+                        {% if block.settings.button_animation == 'slide' or block.settings.button_animation == 'fill_up' %}
+                          .x-button-{{ block.id }} button.otsb-button-solid:before, .x-button-{{ block.id }} .otsb-button.otsb-button-solid:before {
+                            content: "";
+                            z-index: -1;
+                            position: absolute;
+                            top: 0;
+                            right: 0;
+                            bottom: 0;
+                            left: 0;
+                            width: var(--button-width);
+                            height: var(--button-height);
+                            background-color: var(--colors-button-hover);
+                            backface-visibility: hidden;
+                            will-change: transform;
+                            transform: var(--button-transform);
+                            transform-origin: var(--button-transform-origin);
+                            transition: transform 0.5s ease;
+                          }
+                          .x-button-{{ block.id }} button.otsb-button-solid:hover:before, .x-button-{{ block.id }} .otsb-button.otsb-button-solid:hover:before {
+                            transform: rotate3d(0,0,1,0) translateZ(0);
+                          }
+                        {% endif %}
+                        {% if block.settings.button_animation == 'underline' %}
+                          .x-button-{{ block.id }} .otsb-button-solid:hover .otsb-button-text::after {
+                            background-color: rgba(var(--colors-button-text-hover));
+                          }
+                        {% endif %}
+                      }
+                          {% endstyle %}
+                          <div class="x-button-{{ block.id }} mt-4 lg:mt-9 inline-flex flex-wrap gap-x-1.5 gap-y-2 otsb-p-break-words justify-center" {{ block.shopify_attributes }}>
                             <a{% if block.settings.button_link_1 %} href="{{ block.settings.button_link_1 }}"{% if block.settings.open_new_window_button %} target="_blank"{% endif %}{% else %} role="link" aria-disabled="true"{% endif %} class="rounded-md otsb-button button--{{ block.id }}{% if block.settings.button_primary_1 %} otsb-button-solid{% else %} otsb-button-outline{% endif %} border ml-0.5 mr-0.5 mt-0.5 mb-0.5 empty:otsb-hidden pl-6 pr-6 lg:pl-9 lg:pr-9 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal{% unless block.settings.button_link_1 %} hover:cursor-not-allowed opacity-70{% endunless %}">
-                              {% render 'otsb-button-label', button_label: block.settings.button_label_1, show_button_primary: block.settings.button_primary_1 %}
+                              {% render 'otsb-button-label', button_animation: block.settings.button_animation, button_label: block.settings.button_label_1, show_button_primary: block.settings.button_primary_1, custom_icon_button: block.settings.custom_icon_button %}
                             </a> 
                           </div>
                         {%- endif -%}
@@ -971,6 +1184,80 @@
           },
           {
             "type": "header",
+            "content": "Button design"
+          },
+          {
+            "type": "select",
+            "id": "button_type",
+            "options": [
+              {
+                "value": "square",
+                "label": "Square"
+              },
+              {
+                "value": "rounded",
+                "label": "Rounded"
+              },
+              {
+                "value": "rounded_corners",
+                "label": "Rounded Corners"
+              },
+              {
+                "value": "mixed",
+                "label": "Mixed"
+              }
+            ],
+            "label": "Button style",
+            "default": "square"
+          },
+          {
+            "type": "select",
+            "id": "button_color_mobile",
+            "options": [
+              {
+                "value": "hover",
+                "label": "Use button hover color"
+              },
+              {
+                "value": "color",
+                "label": "Use button color"
+              }
+            ],
+            "label": "Mobile primary button style",
+            "default": "color"
+          },
+          {
+            "type": "select",
+            "id": "button_animation",
+            "options": [
+              {
+                "value": "slide",
+                "label": "Slide"
+              },
+              {
+                "value": "fill_up",
+                "label": "Fill up"
+              },
+              {
+                "value": "sliced",
+                "label": "Sliced with icon"
+              },
+              {
+                "value": "underline",
+                "label": "Underline"
+              }
+            ],
+            "label": "Primary button hover animation",
+            "default": "fill_up"
+          },
+          {
+            "type": "html",
+            "id": "custom_icon_button",
+            "label": "Custom icon (SVG code)",
+            "info": "Applies to 'Sliced with icon' animation type. For assistance with custom SVG code or fixing issues that arise from custom SVG code, please [contact our support](https://support.bsscommerce.com/support/tickets/new)."
+          },
+          {
+            "type": "header",
             "content": "Styles"
           },
           {
@@ -983,25 +1270,25 @@
             "type": "color",
             "id": "color_button",
             "label": "Button color",
-            "default": "rgba(0,0,0,0)"
+            "default": "#FD8E16"
           },
           {
             "type": "color",
             "id": "color_text_button",
             "label": "Button text color",
-            "default": "rgba(0,0,0,0)"
+            "default": "#FFFFFF"
           },
           {
             "type": "color",
             "id": "color_button_hover",
             "label": "Button hover color",
-            "default": "rgba(0,0,0,0)"
+            "default": "#FF6600"
           },
           {
             "type": "color",
             "id": "color_text_button_hover",
             "label": "Button text hover color",
-            "default": "rgba(0,0,0,0)"
+            "default": "#000000"
           },
           {
             "type": "color",
@@ -1012,7 +1299,7 @@
           {
             "type": "color",
             "id": "secondary_button_text",
-            "default": "rgba(0,0,0,0)",
+            "default": "#000000",
             "label": "Secondary button text color"
           }
         ]

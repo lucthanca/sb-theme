@@ -501,7 +501,7 @@ button {
 
 button.otsb-button-outline, .otsb-button.otsb-button-outline {
   background: rgba(var(--background-secondary-button),1);
-  color: rgb(var(--colors-secondary-button));
+  color: rgb(var(--colors-secondary-button)) !important;
   box-shadow: inset 0 0 0 1px rgba(var(--colors-line-secondary-button),1);
   border: none;
   transition: 0.3s;
