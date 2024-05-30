@@ -8,6 +8,7 @@ button
 button-outline
 button-solid
 button-arrow
+button-link
 ltr
 rtl
 rte
@@ -71,3 +72,11 @@ button-comparison
 ic-content
 map
 bg-section-map
+truncate-container
+truncate-text
+truncate-expanded
+truncate-line-clamped
+text-truncate
+add-dot
+add-dot-mobile
+add-dot-none

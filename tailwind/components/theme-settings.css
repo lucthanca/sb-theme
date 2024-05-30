@@ -1069,3 +1069,18 @@ svg {
 .text-\[rgb\(var\(--colors-text\)\)\] {
   color: rgb(var(--colors-text, 82, 81, 81));
 }
+
+.otsb-rte a,
+.otsb-button-link {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)), linear-gradient(to right, rgba(var(--colors-text-link), 1), rgba(var(--colors-text-link), 1), rgba(var(--colors-text-link), 1));
+  background-size: 100% 0.1em, 0 0.1em;
+  background-position: 100% 100%,100% 100%;
+  background-repeat: no-repeat;
+  transition: background-size 250ms;
+}
+
+.otsb-rte a:hover,
+  .otsb-button-link:hover {
+    background-size: 0 0.1em, 100% 0.1em;
+    background-position: 100% 100%, 0% 100%;
+  }

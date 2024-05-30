@@ -161,10 +161,14 @@
                     assign size_heading_mobile = size_heading | times: 0.6
                   -%}
                   {%- style -%}
+                    .x-button-{{ block.id }} {
+                      --colors-text-link: {{ block.settings.color_text_link.red }}, {{ block.settings.color_text_link.green }}, {{ block.settings.color_text_link.blue }};
+                    }
                     .heading-size--{{ block.id }} {
                       font-size: {{ size_heading_mobile }}rem;
                     }
                     .color-text-{{ block.id }} {
+                      --colors-text-link: {{ block.settings.color_text_link.red }}, {{ block.settings.color_text_link.green }}, {{ block.settings.color_text_link.blue }};
                       {% if block.settings.heading_light.alpha != 0.0 %}
                         --colors-heading: {{ block.settings.heading_light.red }}, {{ block.settings.heading_light.green }}, {{ block.settings.heading_light.blue }};
                       {% endif %}
@@ -200,9 +204,14 @@
                       </{{ block.settings.heading_tag }}>
                     {% endif %}
                     {% if block.settings.text != blank %}
-                      <div class="otsb-rte">
-                        {{ block.settings.text }}
-                      </div>
+                      {%- render 'otsb-truncate-text', 
+                        number_of_lines_shown: block.settings.number_of_lines_shown 
+                        blockID: block.id,
+                        content: block.settings.text,
+                        read_more_label: block.settings.read_more_label,
+                        text_alignment_mobile: section.settings.heading_alignment,
+                        text_alignment: section.settings.heading_alignment
+                      -%}
                     {% endif %}
                   </div>
                 {%- when 'button' -%}
@@ -903,6 +912,18 @@
               "label": "Text"
             },
             {
+              "type": "number",
+              "id": "number_of_lines_shown",
+              "label": "Number of lines shown by default",
+              "info": "Number of lines shown before showing a \"Read more\" link. Leave blank or 0 to show full content."
+            },
+            {
+              "type": "text",
+              "id": "read_more_label",
+              "default": "Read more",
+              "label": "\"Read more\" label"
+            },
+            {
               "type": "color",
               "id": "heading_light",
               "label": "Heading color",
@@ -913,6 +934,12 @@
               "id": "text_light",
               "label": "Text color",
               "default": "rgba(0,0,0,0)"
+            },
+            {
+              "type": "color",
+              "id": "color_text_link",
+              "label": "Text link",
+              "default": "#FD8E16"
             }
           ]
         },
@@ -943,6 +970,76 @@
               "id": "button_primary",
               "default": true,
               "label": "Show as primary button"
+            },
+            {
+              "type": "select",
+              "id": "button_type",
+              "options": [
+                {
+                  "value": "square",
+                  "label": "Square"
+                },
+                {
+                  "value": "rounded",
+                  "label": "Rounded"
+                },
+                {
+                  "value": "rounded_corners",
+                  "label": "Rounded Corners"
+                },
+                {
+                  "value": "mixed",
+                  "label": "Mixed"
+                }
+              ],
+              "label": "Button style",
+              "default": "square"
+            },
+            {
+              "type": "select",
+              "id": "button_color_mobile",
+              "options": [
+                {
+                  "value": "hover",
+                  "label": "Use button hover color"
+                },
+                {
+                  "value": "color",
+                  "label": "Use button color"
+                }
+              ],
+              "label": "Mobile primary button style",
+              "default": "color"
+            },
+            {
+              "type": "select",
+              "id": "button_animation",
+              "options": [
+                {
+                  "value": "slide",
+                  "label": "Slide"
+                },
+                {
+                  "value": "fill_up",
+                  "label": "Fill up"
+                },
+                {
+                  "value": "sliced",
+                  "label": "Sliced with icon"
+                },
+                {
+                  "value": "underline",
+                  "label": "Underline"
+                }
+              ],
+              "label": "Primary button hover animation",
+              "default": "fill_up"
+            },
+            {
+              "type": "html",
+              "id": "custom_icon_button",
+              "label": "Custom icon (SVG code)",
+              "info": "Applies to 'Sliced with icon' animation type. For assistance with custom SVG code or fixing issues that arise from custom SVG code, please [contact our support](https://support.bsscommerce.com/support/tickets/new)."
             },
             {
               "type": "color",
