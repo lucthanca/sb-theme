@@ -139,7 +139,7 @@
     <div class="{{ classDivider2 }}">
       {% render 'otsb-section-divider', class: classDivider2 %}
     </div>
-    <div class="{% if is_rtl %}otsb-rtl {% endif %}otsb-contact-form-container flex justify-center{% if section.settings.show_content == 'both' and section.settings.image %} flex-col items-center{% endif %}{% if section.settings.form_alignment == "left" %} pt-7 md:justify-end{% else %} pb-7 md:justify-start{% endif %}{% if section.settings.full_width_mobile %} pl-5 pr-5{% endif %} md:pl-5 md:pr-5 {{ class_form }}{% if section.settings.show_content == 'image' and section.settings.image %} md:pt-[{{ section.settings.padding_top }}px] md:pb-[{{ section.settings.padding_bottom }}px]{% else %} md:pb-7 md:pt-7{% endif %}{% if section.settings.background_color_light.alpha != 0.0 %} pl-5 pr-5{% else %} lg:pl-0 lg:pr-0{% endif %}{% if section.settings.background_color_dark.alpha != 0.0 %} otsb-dark:pl-5 otsb-dark:pr-5{% else %} otsb-dark:pl-0 otsb-dark:pr-0 otsb-dark:lg:pl-0 otsb-dark:lg:pr-0{% endif %}">
+    <div class="{% if is_rtl %}otsb-rtl {% endif %}otsb-contact-form-container flex justify-center{% if section.settings.show_content == 'both' and section.settings.image %} flex-col items-center{% endif %}{% if section.settings.form_alignment == "left" %} pt-7 md:justify-end{% else %} pb-7 md:justify-start{% endif %}{% if section.settings.full_width_mobile %} pl-5 pr-5{% endif %} md:pl-5 md:pr-5 {{ class_form }}{% if section.settings.show_content == 'image' and section.settings.image %} md:pt-[{{ section.settings.padding_top }}px] md:pb-[{{ section.settings.padding_bottom }}px]{% else %} md:pb-7 md:pt-7{% endif %}">
       {% if section.settings.show_content == 'info' or section.settings.show_content == 'both' %}
         {% capture info_content %} 
             <div class="{% if is_rtl %}otsb-rtl {% endif %}otsb-contact-infomation {{ class_infomation }} {{ class_form_both }} flex justify-center md:pb-7 md:pt-7{% if section.settings.form_alignment == "left" %} pb-7 md:justify-end{% else %} pt-7 md:justify-start{% endif %}{% if section.settings.background_color_light.alpha != 0.0 %} pl-5 pr-5{% else %} lg:pl-0 lg:pr-0{% endif %}{% if section.settings.background_color_dark.alpha != 0.0 %} otsb-dark:pl-5 otsb-dark:pr-5{% else %} otsb-dark:pl-0 otsb-dark:pr-0 otsb-dark:lg:pl-0 otsb-dark:lg:pr-0{% endif %}{% if section.settings.full_width_mobile %} pl-5 pr-5{% endif %}">
@@ -403,13 +403,18 @@
                         {%- elsif block.settings.type_field == 'radio' -%}
                           <div class="otsb-grid md:grid-cols-2 gap-x-7">
                             {%- for option in options -%}
+                              {%- style -%}
+                                .otsb-radio-checked {
+                                  --colors-text-link: {{ section.settings.color_text_link.red }}, {{ section.settings.color_text_link.green }}, {{ section.settings.color_text_link.blue }};
+                                }
+                              {%- endstyle -%}
                               <div class="flex items-center mt-1.5 mb-1.5 cursor-pointer">
                                 <input
                                   type="radio"
                                   id="{{ ContactForm }}-{{ forloop.index }}"
                                   name="contact[{%- if block.settings.heading != blank -%}{{ block.settings.heading }}{%- else -%}{{ FormItem }}{% endif %}]"
                                   value="{{ option }}"
-                                  class="otsb-radio-checked relative h-4 w-4 mr-2 rtl:mr-0 rtl:ml-2 border focus:outline-none rounded-full cursor-pointer"
+                                  class="otsb-radio-checked relative h-[16px] w-[16px] mr-2 rtl:mr-0 rtl:ml-2 border focus:outline-none rounded-full cursor-pointer"
                                   {% if block.settings.mark_as_required -%}
                                     required
                                   {%- endif %}
@@ -452,14 +457,14 @@
                             {%- for option in options -%}
                               {%- style -%}
                                 .otsb-checkbox {
-                                  --colors-text-link: 253, 142, 22
+                                  --colors-text-link: {{ section.settings.color_text_link.red }}, {{ section.settings.color_text_link.green }}, {{ section.settings.color_text_link.blue }};
                                 }
                               {%- endstyle -%}
                               <div class="flex items-center mt-1.5 mb-1.5">
                                 <input
                                   type="checkbox"
                                   id="{{ ContactForm }}-{{ forloop.index }}"
-                                  class="otsb-checkbox otsb-checkbox-checked !mr-2 rtl:mr-0 rtl:ml-2 h-4 !w-4 border checked:border-[rgba(var(--colors-text-link))] checked:bg-[rgba(var(--colors-text-link))] relative cursor-pointer{% if settings.edges_type == 'rounded_corners' %} rounded{% else %} rounded-none{% endif %}"
+                                  class="otsb-checkbox otsb-checkbox-checked !mr-2 rtl:mr-0 rtl:ml-2 h-[16px] !w-[16px] border checked:border-[rgba(var(--colors-text-link))] checked:bg-[rgba(var(--colors-text-link))] relative cursor-pointer{% if settings.edges_type == 'rounded_corners' %} rounded{% else %} rounded-none{% endif %}"
                                   value="{{ option }}"
                                   x-model="data"
                                   {% if block.settings.mark_as_required %}
@@ -842,6 +847,12 @@
       "id": "background_color_light",
       "default": "rgba(0,0,0,0)",
       "label": "Background color"
+    },
+    {
+      "type": "color",
+      "id": "color_text_link",
+      "default": "#FD8E16",
+      "label": "Text link"
     },
     {
       "type": "text",

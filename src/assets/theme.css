@@ -2011,6 +2011,10 @@ video {
   height:1px
 }
 
+.h-\[16px\]{
+  height:16px
+}
+
 .max-h-0{
   max-height:0px
 }
@@ -2118,6 +2122,14 @@ video {
 
 .w-px{
   width:1px
+}
+
+.\!w-\[16px\]{
+  width:16px !important
+}
+
+.w-\[16px\]{
+  width:16px
 }
 
 .min-w-\[90\%\]{
@@ -5595,6 +5607,14 @@ svg{
     flex-direction:row-reverse
   }
 
+  .md\:items-start{
+    align-items:flex-start
+  }
+
+  .md\:items-end{
+    align-items:flex-end
+  }
+
   .md\:items-center{
     align-items:center
   }
@@ -6706,6 +6726,24 @@ svg{
 
 .rtl\:pr-0:where([dir="rtl"], [dir="rtl"] *){
   padding-right:0px
+}
+
+@media (min-width: 768px){
+  .rtl\:md\:items-start:where([dir="rtl"], [dir="rtl"] *){
+    align-items:flex-start
+  }
+
+  .rtl\:md\:items-end:where([dir="rtl"], [dir="rtl"] *){
+    align-items:flex-end
+  }
+
+  .rtl\:md\:justify-start:where([dir="rtl"], [dir="rtl"] *){
+    justify-content:flex-start
+  }
+
+  .rtl\:md\:justify-end:where([dir="rtl"], [dir="rtl"] *){
+    justify-content:flex-end
+  }
 }
 
 @media (min-width: 1024px){
