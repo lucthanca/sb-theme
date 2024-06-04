@@ -1,0 +1,38 @@
+1. color_text_link
+Config color for all text link inside section
+Step to do:
+- Create config
+- Assign css variable --colors-text-link for element
+Example: https://prnt.sc/u6vRhkLOg0dZ
+
+2. color_heading
+Config color for heading and title inside section
+Step to do:
+- Create config
+- Assign css variable --colors-heading for element
+Exmaple: https://prnt.sc/0XVnX7NSNE6t
+
+3. color_text
+Config color for body text inside section
+Step to do:
+- Create config
+- Assign css variable --colors-text for element
+Exmaple: https://prnt.sc/mBstQSsjGzAL
+
+4. color_line
+Config color for section divider of the section (all section have this setting)
+Step to do:
+- Create config
+- Assign css variable --colors-line-and-border for element
+Exmaple: https://prnt.sc/ODPGvKhyF6VK
+
+5. edges_type
+Config edges_type of images inside section (section which have images should have this setting)
+Step to do:
+- Create config
+- Add code to check if edges_type == rounded_corners then add rounded-[10px] 
+Example: https://prnt.sc/5_MuL3UTk9Pj
+
+6. configs for button
+Need to add for all section which have buttons
+Step to do: https://pms.bssgroup.vn/default/viewtaskdetail/?SASB-26&requestreview742819&showcomment

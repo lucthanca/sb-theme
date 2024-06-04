@@ -14,7 +14,12 @@
   {%- style -%}
     #shopify-section-{{ section.id }}{
       background: {{ section.settings.background_color_light }};
-      --colors-text-link: {{ section.settings.color_text_link.red }}, {{ section.settings.color_text_link.green }}, {{ section.settings.color_text_link.blue }}
+      --colors-text-link: {{ section.settings.color_text_link.red }}, {{ section.settings.color_text_link.green }}, {{ section.settings.color_text_link.blue }};
+      --colors-heading: {{ section.settings.color_heading.red }}, {{ section.settings.color_heading.green }}, {{ section.settings.color_heading.blue }};
+      --colors-line-and-border: {{ section.settings.color_line.red }}, {{ section.settings.color_line.green }}, {{ section.settings.color_line.blue }};
+    }
+    #shopify-section-{{ section.id }} .otsb-faq-item {
+      color: {{ section.settings.color_text }}
     }
     .dark #shopify-section-{{ section.id }}{
       {%- if section.settings.background_color_dark == blank -%}
@@ -334,6 +339,24 @@
         "id": "color_text_link",
         "default": "#FD8E16",
         "label": "Text link"
+      },
+      {
+        "type": "color",
+        "id": "color_heading",
+        "default": "#000000",
+        "label": "Heading and title"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "default": "#000000",
+        "label": "Text"
+      },
+      {
+        "type": "color",
+        "id": "color_line",
+        "default": "#F2F2F2",
+        "label": "Line and borders"
       },
       {
         "type": "image_picker",
