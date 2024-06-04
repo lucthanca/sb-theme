@@ -57,6 +57,7 @@
 {%- style -%}
   {% if section.settings.image != blank %}
     .contact-form-{{ section.id }} {
+      --colors-text-link: {{ section.settings.color_text_link.red }}, {{ section.settings.color_text_link.green }}, {{ section.settings.color_text_link.blue }};
        {% if section.settings.background_color_light.alpha == 0.0 %}
         background: transparent;
       {% else %}
@@ -72,6 +73,7 @@
     }
     {% else %}
       #shopify-section-{{ section.id }}{
+        --colors-text-link: {{ section.settings.color_text_link.red }}, {{ section.settings.color_text_link.green }}, {{ section.settings.color_text_link.blue }};
         {% if section.settings.background_color_light.alpha == 0.0 %}
           background: transparent;
           {% if settings.colors_background.red != blank and settings.colors_background.green != blank and settings.colors_background.blue != blank %}
@@ -397,11 +399,6 @@
                         {%- elsif block.settings.type_field == 'radio' -%}
                           <div class="otsb-grid md:grid-cols-2 gap-x-7">
                             {%- for option in options -%}
-                              {%- style -%}
-                                .otsb-radio-checked {
-                                  --colors-text-link: {{ section.settings.color_text_link.red }}, {{ section.settings.color_text_link.green }}, {{ section.settings.color_text_link.blue }};
-                                }
-                              {%- endstyle -%}
                               <div class="flex items-center mt-1.5 mb-1.5 cursor-pointer">
                                 <input
                                   type="radio"
@@ -449,11 +446,6 @@
                             class="otsb-multi-select otsb-grid md:grid-cols-2 gap-x-7"
                           >
                             {%- for option in options -%}
-                              {%- style -%}
-                                .otsb-checkbox {
-                                  --colors-text-link: {{ section.settings.color_text_link.red }}, {{ section.settings.color_text_link.green }}, {{ section.settings.color_text_link.blue }};
-                                }
-                              {%- endstyle -%}
                               <div class="flex items-center mt-1.5 mb-1.5">
                                 <input
                                   type="checkbox"
@@ -1008,7 +1000,7 @@
     {
       "type": "select",
       "id": "form_alignment",
-      "default": "left",
+      "default": "right",
       "label": "Form alignment",
       "options": [
         {
