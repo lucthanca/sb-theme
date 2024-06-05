@@ -15,11 +15,12 @@
     {%- unless section.settings.color_text_light.alpha == 0.0 -%}
       --colors-text: {{ section.settings.color_text_light.red }},{{ section.settings.color_text_light.green }},{{ section.settings.color_text_light.blue }};
     {% endunless %}
+    --colors-line-and-border: {{ section.settings.color_line.red }}, {{ section.settings.color_line.green }}, {{ section.settings.color_line.blue }};
   }
   .dark .section-{{ section.id }} {
     {%- unless section.settings.color_text_dark.alpha == 0.0 -%}
       --colors-text: {{ section.settings.color_text_dark.red }},{{ section.settings.color_text_dark.green }},{{ section.settings.color_text_dark.blue }};
-    {% else %}  
+    {% else %}
       --colors-text: transparent;
     {% endunless %}
   }  
@@ -193,7 +194,7 @@
           assign w_img = block.settings.image.aspect_ratio | times: block.settings.height_image
         %}
         <div class="h-full w-max flex items-center space-blocks-{{ section.id }} space-block-{{ block.id }} whitespace-nowrap">
-          <div class="img-{{ block.id }} overflow-hidden relative{% if settings.edges_type == 'rounded_corners' %} rounded-[10px]{% endif %}">
+          <div class="img-{{ block.id }} overflow-hidden relative{% if block.settings.edges_type == 'rounded_corners' %} rounded-[10px]{% endif %}">
             {% if block.settings.image != blank %}
               <img
                 class="w-full h-full absolute top-0 left-0"
@@ -465,6 +466,11 @@
       "id": "show_border",
       "default": true,
       "label": "Show section borders"
+    },
+    {
+      "type": "color",
+      "id": "color_line",
+      "label": "Line and borders"
     },
     {
       "type": "header",
@@ -1061,6 +1067,22 @@
           "unit": "px",
           "label": "Image height",
           "default": 80
+        },
+        {
+          "type": "select",
+          "id": "edges_type",
+          "label": "Edges",
+          "options": [
+            {
+              "value": "square",
+              "label": "Square"
+            },
+            {
+              "value": "rounded_corners",
+              "label": "Rounded corners"
+            }
+          ],
+          "default": "rounded_corners"
         },
         {
           "type": "header",

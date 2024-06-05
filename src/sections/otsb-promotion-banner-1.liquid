@@ -785,25 +785,25 @@
                   {{ block.shopify_attributes }}
                 >
                   <div class="x-countdown-promo-banner x-countdown-{{ block.id }} justify-{{ section.settings.content_alignment }} flex otsb-rtl:flex-row-reverse">
-                    <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if section.settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
+                    <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if block.settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
                       <div class="flex flex-col items-center justify-center absolute top-0 left-0 h-full w-full">
                         <span x-html="loading?textLoad:days" class="otsb-h2 timer--{{ block.id }}"></span>
                         <span>Days</span>
                       </div>
                     </div>
-                    <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if section.settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
+                    <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if block.settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
                       <div class="flex flex-col items-center justify-center absolute top-0 left-0 h-full w-full">
                         <span x-html="loading?textLoad:hours" class="otsb-h2 timer--{{ block.id }}"></span>
                         <span>Hours</span>
                       </div>
                     </div>
-                    <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if section.settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
+                    <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if block.settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
                       <div class="flex flex-col items-center justify-center absolute top-0 left-0 h-full w-full">
                         <span x-html="loading?textLoad:minutes" class="otsb-h2 timer--{{ block.id }}"></span>
                         <span>Minutes</span>
                       </div>
                     </div>
-                    <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if section.settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
+                    <div class="countdown--{{ block.id }} relative w-full max-w-[86px] min-h-[60px] md:max-w-[112px] md:min-h-[80px] bg-color--{{ block.id }}{% if block.settings.border_style != 'none' %} border border-dashed border-color--{{ block.id }}{% endif %}{% if block.settings.timer_style == 'square' %}{% if block.settings.edges_type == 'rounded_corners' %} rounded{% endif %}{% else %} flex-1 rounded-full before:block before:h-0 before:pb-[100%]{% endif %}">
                       <div class="flex flex-col items-center justify-center absolute top-0 left-0 h-full w-full">
                         <span x-html="loading?textLoad:seconds" class="otsb-h2 timer--{{ block.id }}"></span>
                         <span>Seconds</span>
@@ -1069,22 +1069,6 @@
       "default": false,
       "label": "Used as Hero",
       "info": "Enable if this section is used as hero, disable if not."
-    },
-    {
-      "type": "select",
-      "id": "edges_type",
-      "label": "Edges",
-      "options": [
-        {
-          "value": "square",
-          "label": "Square"
-        },
-        {
-          "value": "rounded_corners",
-          "label": "Rounded corners"
-        }
-      ],
-      "default": "rounded_corners"
     },
     {
       "type": "header",
@@ -2005,6 +1989,22 @@
           "unit": "%",
           "label": "Overlay opacity",
           "default": 100
+        },
+        {
+          "type": "select",
+          "id": "edges_type",
+          "label": "Edges",
+          "options": [
+            {
+              "value": "square",
+              "label": "Square"
+            },
+            {
+              "value": "rounded_corners",
+              "label": "Rounded corners"
+            }
+          ],
+          "default": "rounded_corners"
         },
         {
           "type": "header",
