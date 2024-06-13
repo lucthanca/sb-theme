@@ -140,7 +140,12 @@
                 </div>
               {% endif %}
               {% if section.settings.image == blank and section.settings.image_second == blank %}
-                  {{ 'image' | placeholder_svg_tag: 'absolute w-full h-full bg-[#C9C9C9] text-[#acacac] otsb-rounded-svg' }}
+                {%- style -%}
+                  #shopify-section-{{ section.id }} .media-with-text-placehoder {
+                    border-radius: {{ section.settings.image_corner_radius }}px
+                  }
+                {%- endstyle -%}
+                {{ 'image' | placeholder_svg_tag: 'media-with-text-placehoder absolute w-full h-full bg-[#C9C9C9] text-[#acacac] otsb-rounded-svg' }}
               {% endif %}
             {% endif %}
           </div>
@@ -677,7 +682,7 @@
         "step": 1,
         "unit": "px",
         "label": "Corner radius",
-        "default": 0
+        "default": 10
       },
       {
         "type": "select",
@@ -771,7 +776,7 @@
       {
         "type": "checkbox",
         "id": "full_width",
-        "default": false,
+        "default": true,
         "label": "Make section full width"
       },
       {
@@ -1086,7 +1091,7 @@
           {
             "type": "heading",
             "settings": {
-              "subheading": "Example subheading",
+              "subheading": "",
               "heading": "Image with text",
               "text": "<p>Pair text an image to focus on your chosen product, collection or blog post. Add detail on availability, style or even provide a review.</p>"
             }

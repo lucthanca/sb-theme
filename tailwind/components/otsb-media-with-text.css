@@ -28,11 +28,13 @@
     }
 
     .otsb-image-position-right .otsb-iwt-overlap {
-        @apply md:-mr-10 z-10 pt-3 md:pt-10;
+        /*decrease z-10 to z-2 to prevent image overlap above content in other theme*/
+        @apply md:-mr-10 z-2 pt-3 md:pt-10;
     }
 
     .otsb-image-position-left .otsb-iwt-overlap {
-        @apply md:-ml-10 z-10 pt-3 md:pt-10;
+        /*decrease z-10 to z-2 to prevent image overlap above content in other theme*/
+        @apply md:-ml-10 z-2 pt-3 md:pt-10;
     }
 
     .otsb-image-position-right .otsb-iwt-no-overlap {

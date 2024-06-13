@@ -491,7 +491,8 @@ h6,
 [type="button"],
 .otsb-button {
   border-radius: var(--border-radius);
-  @apply z-10 relative select-none;
+  /*decrease z-10 to z-2 to prevent button above content in other theme*/
+  @apply z-2 relative select-none;
 }
 
 button {

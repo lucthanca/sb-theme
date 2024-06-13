@@ -31,6 +31,9 @@ export const theme = {
     flex: {
       '2': '2 2 0%'
     },
+    zIndex: {
+      '2': '2'
+    },
     keyframes: theme => ({
       scrollX: {
         '0%': {
