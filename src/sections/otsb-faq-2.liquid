@@ -94,8 +94,17 @@
             </div>
           </div>
       {%- else -%}
+        {%- style -%}
+          #shopify-section-{{ section.id }} .faq-placeholder {
+            {%- if section.settings.edges_type == 'rounded_corners' -%}
+              border-radius: 10px;
+            {%- else -%}
+              border-radius: 0px;
+            {%- endif -%}
+          }
+        {%- endstyle -%}
         <div class="relative lg:flex-1{% if section.settings.mobile_height == 'auto' %}natural-image-mobile-{{ section.id }}{% endif %}{% if section.settings.desktop_height == 'auto' %} natural-image-{{ section.id }}{% endif %} h-[{{ section.settings.mobile_height }}] lg:h-[{{ section.settings.desktop_height }}]{% if section.settings.desktop_height == 'adapt' %} lg:h-full{% endif %}">  
-          {{ 'image' | placeholder_svg_tag: 'w-full h-full object-cover bg-[#C9C9C9] text-[#acacac]' }}
+          {{ 'image' | placeholder_svg_tag: 'faq-placeholder w-full h-full object-cover bg-[#C9C9C9] text-[#acacac]' }}
         </div>
       {%- endif -%} 
           
@@ -382,7 +391,7 @@
             "label": "Rounded corners"
           }
         ],
-        "default": "square"
+        "default": "rounded_corners"
       },
       {
         "type": "header",
