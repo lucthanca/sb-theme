@@ -117,7 +117,7 @@
   {% endif %}
   #shopify-section-{{ section.id }} button.otsb-button-arrow {
     background-color: rgba({{ section.settings.slider_button_color.red }}, {{ section.settings.slider_button_color.green }}, {{ section.settings.slider_button_color.blue }}, 0.3);
-    color: {{ section.settings.slider_button_text_color }};
+    color: {{ section.settings.slider_button_color }};
     box-shadow: none;
     border-radius: 50px;
   }
@@ -424,7 +424,7 @@
           "label": "Natural"
         }
       ],
-      "default": "square",
+      "default": "3/4",
       "label": "Image style"
     },
     {
@@ -435,7 +435,7 @@
       "step": 10,
       "unit": "%",
       "label": "Title size",
-      "default": 80
+      "default": 120
     },
     {
       "type": "checkbox",
@@ -558,12 +558,6 @@
     },
     {
       "type": "color",
-      "id": "slider_button_text_color",
-      "default": "#525151",
-      "label": "Slider button text color"
-    },
-    {
-      "type": "color",
       "id": "slider_button_hover_color",
       "default": "#FF6600",
       "label": "Slider button hover color"
@@ -583,7 +577,7 @@
     {
       "type": "checkbox",
       "id": "swiper_on_mobile",
-      "default": false,
+      "default": true,
       "label": "Enable swipe on mobile"
     },
     {

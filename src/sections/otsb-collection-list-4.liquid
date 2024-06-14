@@ -117,7 +117,7 @@
   {% endif %}
   #shopify-section-{{ section.id }} button.otsb-button-arrow {
     background-color: rgba({{ section.settings.slider_button_color.red }}, {{ section.settings.slider_button_color.green }}, {{ section.settings.slider_button_color.blue }}, 0.3);
-    color: {{ section.settings.slider_button_text_color }};
+    color: {{ section.settings.slider_button_color }};
     box-shadow: none;
     border-radius: 50px;
   }
@@ -435,7 +435,7 @@
       "step": 10,
       "unit": "%",
       "label": "Title size",
-      "default": 80
+      "default": 120
     },
     {
       "type": "checkbox",
@@ -555,12 +555,6 @@
       "id": "slider_button_color",
       "default": "#525151",
       "label": "Slider button color"
-    },
-    {
-      "type": "color",
-      "id": "slider_button_text_color",
-      "default": "#525151",
-      "label": "Slider button text color"
     },
     {
       "type": "color",
