@@ -15,7 +15,9 @@
     {%- unless section.settings.color_text_light.alpha == 0.0 -%}
       --colors-text: {{ section.settings.color_text_light.red }},{{ section.settings.color_text_light.green }},{{ section.settings.color_text_light.blue }};
     {% endunless %}
-    --colors-line-and-border: {{ section.settings.color_line.red }}, {{ section.settings.color_line.green }}, {{ section.settings.color_line.blue }};
+    {%- unless section.settings.color_line.alpha == 0.0 -%}
+      --colors-line-and-border: {{ section.settings.color_line.red }}, {{ section.settings.color_line.green }}, {{ section.settings.color_line.blue }};
+    {% endunless %}
   }
   .dark .section-{{ section.id }} {
     {%- unless section.settings.color_text_dark.alpha == 0.0 -%}
@@ -470,7 +472,8 @@
     {
       "type": "color",
       "id": "color_line",
-      "label": "Line and borders"
+      "label": "Line and borders",
+      "default": "rgba(0,0,0,0)"
     },
     {
       "type": "header",
@@ -516,13 +519,13 @@
       "type": "color",
       "id": "bg_light",
       "label": "Background color",
-      "default": "rgb(250, 142, 24)"
+      "default": "#FA8E18"
     },
     {
       "type": "color",
       "id": "color_text_light",
       "label": "Primary color",
-      "default": "rgb(255, 255, 255)"
+      "default": "#FFFFFF"
     },
     {
       "type": "color",
