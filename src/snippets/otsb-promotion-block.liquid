@@ -21,7 +21,7 @@
   endif
 
   assign corner_image = false
-  if settings.edges_type == 'rounded_corners'
+  if edges_type == 'rounded_corners'
     assign corner_image = true
   endif
 %}
@@ -46,6 +46,9 @@
       {% endif %}
     }
   {% endif %}
+  .promotion-block-{{ block.id }} {
+    --colors-text-link: {{ color_text_link.red }}, {{ color_text_link.green }}, {{ color_text_link.blue }}
+  }
   .text-color--{{ block.id }} {
     {% if block.settings.text_color_light.alpha != 0.0 %}
       --colors-heading: {{ block.settings.text_color_light.red }}, {{ block.settings.text_color_light.green }}, {{ block.settings.text_color_light.blue }};

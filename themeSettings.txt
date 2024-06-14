@@ -27,7 +27,7 @@ Step to do:
 Exmaple: https://prnt.sc/ODPGvKhyF6VK
 
 5. edges_type
-Config edges_type of images inside section (section which have images should have this setting)
+Config edges_type of images inside section (section which have images may have this setting)
 Step to do:
 - Create config
 - Add code to check if edges_type == rounded_corners then add rounded-[10px] 
@@ -36,3 +36,15 @@ Example: https://prnt.sc/5_MuL3UTk9Pj
 6. configs for button
 Need to add for all section which have buttons
 Step to do: https://pms.bssgroup.vn/default/viewtaskdetail/?SASB-26&requestreview742819&showcomment
+
+7. image_overlay_color
+Config overlay color of images inside section (section which have images may have this setting)
+Step to do:
+- Create config
+- Assign css variable --image-treatment-overlay for element
+
+8. configs for slider arrow buttons
+Config color and hover color for slider arrow buttons
+Step to do:
+- Create config: https://prnt.sc/OI8vxVWC3z41
+- Add css code for element: https://prnt.sc/JDc_7KOMaIF6

@@ -45,6 +45,8 @@
 
   #shopify-section-{{ section.id }}{
     background: {{ section.settings.background_color_light }};
+    --colors-heading: {{ section.settings.color_heading.red }},{{ section.settings.color_heading.green }},{{ section.settings.color_heading.blue }};
+    --colors-line-and-border: {{ section.settings.color_line.red }}, {{ section.settings.color_line.green }}, {{ section.settings.color_line.blue }};
   }
   .content--{{ section.id }} {
     {% if section.settings.text_light.alpha != 0.0 %}
@@ -234,7 +236,8 @@
                       content_position: section.settings.content_position,
                       image_overlay_opacity: section.settings.image_overlay_opacity,
                       index: forloop.index,
-                      image_overlay_color: section.settings.image_overlay_color
+                      image_overlay_color: section.settings.image_overlay_color,
+                      edges_type: section.settings.edges_type
                     %}
                   {%- when 'promotion_block' -%}
                     {% render 'otsb-promotion-block',
@@ -258,6 +261,7 @@
                       show_button_primary: block.settings.show_button_primary,
                       color_button: block.settings.color_button,
                       color_text_button: block.settings.color_text_button,
+                      color_text_link: block.settings.color_text_link,
                       color_button_hover: block.settings.color_button_hover,
                       color_text_button_hover: block.settings.color_text_button_hover,
                       color_button_secondary: block.settings.color_button_secondary,
@@ -270,7 +274,8 @@
                       button_type: block.settings.button_type,
                       button_color_mobile: block.settings.button_color_mobile,
                       button_animation: block.settings.button_animation,
-                      custom_icon_button: block.settings.custom_icon_button
+                      custom_icon_button: block.settings.custom_icon_button,
+                      edges_type: section.settings.edges_type
                     %}
                 {%- endcase -%}
               </div>
@@ -428,6 +433,22 @@
       "label": "Image style"
     },
     {
+      "type": "select",
+      "id": "edges_type",
+      "label": "Edges",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "rounded_corners",
+          "label": "Rounded corners"
+        }
+      ],
+      "default": "rounded_corners"
+    },
+    {
       "type": "range",
       "id": "title_size",
       "min": 50,
@@ -501,6 +522,12 @@
     },
     {
       "type": "color",
+      "id": "color_heading",
+      "default": "#242424",
+      "label": "Heading color"
+    },
+    {
+      "type": "color",
       "id": "title_color",
       "default": "rgba(0,0,0,0)",
       "label": "Title color"
@@ -510,6 +537,12 @@
       "id": "text_light",
       "label": "Text color",
       "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "color_line",
+      "default": "#E3E3E3",
+      "label": "Line and borders"
     },
     {
       "type": "checkbox",
@@ -553,19 +586,19 @@
     {
       "type": "color",
       "id": "slider_button_color",
-      "default": "#525151",
+      "default": "#242424",
       "label": "Slider button color"
     },
     {
       "type": "color",
       "id": "slider_button_hover_color",
-      "default": "#FF6600",
+      "default": "#000000",
       "label": "Slider button hover color"
     },
     {
       "type": "color",
       "id": "slider_button_hover_text_color",
-      "default": "#000000",
+      "default": "#FFFFFF",
       "label": "Slider button hover text color"
     },
     {
@@ -1181,8 +1214,14 @@
         },
         {
           "type": "color",
+          "id": "color_text_link",
+          "default": "#6B7050",
+          "label": "Text link"
+        },
+        {
+          "type": "color",
           "id": "color_button",
-          "default": "#FD8E16",
+          "default": "#686648",
           "label": "Button color"
         },
         {
@@ -1194,13 +1233,13 @@
         {
           "type": "color",
           "id": "color_button_hover",
-          "default": "#FF6600",
+          "default": "#242424",
           "label": "Button hover color"
         },
         {
           "type": "color",
           "id": "color_text_button_hover",
-          "default": "#000000",
+          "default": "#FFFFFF",
           "label": "Button text hover color"
         },
         {
