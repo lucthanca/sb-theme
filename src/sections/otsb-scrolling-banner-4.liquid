@@ -15,7 +15,9 @@
     {%- unless section.settings.color_text_light.alpha == 0.0 -%}
       --colors-text: {{ section.settings.color_text_light.red }},{{ section.settings.color_text_light.green }},{{ section.settings.color_text_light.blue }};
     {% endunless %}
-    --colors-line-and-border: {{ section.settings.color_line.red }}, {{ section.settings.color_line.green }}, {{ section.settings.color_line.blue }};
+    {%- unless section.settings.color_line.alpha == 0.0 -%}
+      --colors-line-and-border: {{ section.settings.color_line.red }}, {{ section.settings.color_line.green }}, {{ section.settings.color_line.blue }};
+    {% endunless %}
   }
   .dark .section-{{ section.id }} {
     {%- unless section.settings.color_text_dark.alpha == 0.0 -%}
@@ -23,7 +25,7 @@
     {% else %}  
       --colors-text: transparent;
     {% endunless %}
-  }  
+  }
   .section-{{ section.id }} .text-color-secondary {
     {%- unless section.settings.color_text_light_2.alpha == 0.0 -%}
       color: {{ section.settings.color_text_light_2 }};
@@ -470,7 +472,8 @@
     {
       "type": "color",
       "id": "color_line",
-      "label": "Line and borders"
+      "label": "Line and borders",
+      "default": "rgba(0,0,0,0)"
     },
     {
       "type": "header",
@@ -516,7 +519,7 @@
       "type": "color",
       "id": "bg_light",
       "label": "Background color",
-      "default": "rgb(242, 242, 242)"
+      "default": "#f2f2f2"
     },
     {
       "type": "color",
@@ -1082,7 +1085,7 @@
               "label": "Rounded corners"
             }
           ],
-          "default": "rounded_corners"
+          "default": "square"
         },
         {
           "type": "header",
@@ -1165,13 +1168,13 @@
           "type": "color",
           "id": "color_button",
           "label": "Button color",
-          "default": "#f696b2"
+          "default": "#FA8E18"
         },
         {
           "type": "color",
           "id": "color_button_hover",
           "label": "Button hover color",
-          "default": "#FFFFFF"
+          "default": "#FA8E18"
         },
         {
           "type": "color",
@@ -1183,7 +1186,7 @@
           "type": "color",
           "id": "color_text_button_hover",
           "label": "Button text hover color",
-          "default": "#f696b2"
+          "default": "#FFFFFF"
         },
         {
           "type": "color",
@@ -1223,7 +1226,7 @@
             }
           ],
           "label": "Button style",
-          "default": "square"
+          "default": "rounded_corners"
         },
         {
           "type": "select",
@@ -1270,10 +1273,6 @@
           "id": "custom_icon_button",
           "label": "Custom icon (SVG code)",
           "info": "Applies to 'Sliced with icon' animation type. For assistance with custom SVG code or fixing issues that arise from custom SVG code, please [contact our support](https://support.bsscommerce.com/support/tickets/new)."
-        },
-        {
-          "type": "header",
-          "content": "Desktop layout"
         },
         {
           "type": "header",

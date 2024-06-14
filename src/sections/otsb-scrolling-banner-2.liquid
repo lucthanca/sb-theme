@@ -15,7 +15,9 @@
     {%- unless section.settings.color_text_light.alpha == 0.0 -%}
       --colors-text: {{ section.settings.color_text_light.red }},{{ section.settings.color_text_light.green }},{{ section.settings.color_text_light.blue }};
     {% endunless %}
-    --colors-line-and-border: {{ section.settings.color_line.red }}, {{ section.settings.color_line.green }}, {{ section.settings.color_line.blue }};
+    {%- unless section.settings.color_line.alpha == 0.0 -%}
+      --colors-line-and-border: {{ section.settings.color_line.red }}, {{ section.settings.color_line.green }}, {{ section.settings.color_line.blue }};
+    {% endunless %}
   }
   .dark .section-{{ section.id }} {
     {%- unless section.settings.color_text_dark.alpha == 0.0 -%}
@@ -470,7 +472,8 @@
     {
       "type": "color",
       "id": "color_line",
-      "label": "Line and borders"
+      "label": "Line and borders",
+      "default": "rgba(0,0,0,0)"
     },
     {
       "type": "header",
@@ -516,7 +519,7 @@
       "type": "color",
       "id": "bg_light",
       "label": "Background color",
-      "default": "rgba(0,0,0,0)"
+      "default": "#f2f2f2"
     },
     {
       "type": "color",
@@ -1270,10 +1273,6 @@
           "id": "custom_icon_button",
           "label": "Custom icon (SVG code)",
           "info": "Applies to 'Sliced with icon' animation type. For assistance with custom SVG code or fixing issues that arise from custom SVG code, please [contact our support](https://support.bsscommerce.com/support/tickets/new)."
-        },
-        {
-          "type": "header",
-          "content": "Desktop layout"
         },
         {
           "type": "header",
