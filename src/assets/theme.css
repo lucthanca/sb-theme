@@ -1401,6 +1401,10 @@ video {
   background-color: rgba(var(--background-color));
 }
 
+.otsb-image-with-text .otsb-button {
+  z-index: 1;
+}
+
 .otsb-contact-align-right{
   display:flex;
   flex-direction:column

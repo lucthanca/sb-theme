@@ -82,4 +82,7 @@
         width: fit-content;
         background-color: rgba(var(--background-color));
     }
+    .otsb-image-with-text .otsb-button {
+        z-index: 1;
+    }
 }
