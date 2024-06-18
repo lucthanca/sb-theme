@@ -1,0 +1,1813 @@
+{% liquid
+  assign setting_base_size = 100
+  assign heading_base_size =  setting_base_size | times: 0.0225
+  assign heading_size =  section.settings.heading_size | times: 0.01 | times: heading_base_size
+  assign has_map = false
+%}
+{%- style -%}
+  .button.otsb-button-solid {
+    border: none;
+    background: var(--colors-button-mobile);
+  }
+  .button.otsb-button-solid {
+    border: none;
+    background-color: var(--colors-button-hover, #242424);
+  }
+  .heading--{{ section.id }} {
+  font-size: {{ heading_size | times: 0.6 }}rem;
+  }
+  @media (min-width: 1024px) {
+    .otsb-button.otsb-button-solid {
+      border: none;
+      box-shadow: none;
+      color: rgb(var(--colors-button-text));
+      background-color: rgba(var(--colors-button));
+      overflow: hidden;
+      background-origin: border-box;
+    }
+    .otsb-button.otsb-button-solid:hover {
+      transition-delay: 0.5s;
+      transition-property: background-color;
+      background-color: var(--colors-button-hover, #242424);
+      color: rgba(var(--colors-button-text-hover, 255, 255, 255, 1));
+      background-origin: border-box;
+    }
+    .otsb-button.otsb-button-solid:before {
+      content: "";
+      z-index: -1;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: var(--button-width, 120%);
+      height: var(--button-height, 100%);
+      background-color: var(--colors-button-hover, #242424);
+      backface-visibility: hidden;
+      will-change: transform;
+      transform: var(--button-transform, rotate3d(0,0,1,10deg) translate3d(-1.2em,110%,0));
+      transform-origin: var(--button-transform-origin, 0% 100%);
+      transition: transform 0.5s ease;
+    }
+    .otsb-button.otsb-button-solid:hover:before {transform: rotate3d(0,0,1,0) translateZ(0);}
+  }
+  @media (min-width: 767px) {
+  .heading--{{ section.id }} {
+  font-size: {{ heading_size }}rem;
+  }
+  }
+  .button--{{ section.id }},
+  .button--{{ section.id }}:before {
+  {%- unless section.settings.color_button.alpha == 0.0 -%}
+    --colors-button: {{ section.settings.color_button.red }}, {{ section.settings.color_button.green }}, {{ section.settings.color_button.blue }};
+  {%- endunless -%}
+  {%- unless section.settings.color_button_hover.alpha == 0.0 -%}
+    --colors-button-hover: rgb({{ section.settings.color_button_hover.red }}, {{ section.settings.color_button_hover.green }}, {{ section.settings.color_button_hover.blue }});
+  {%- endunless -%}
+  {%- unless section.settings.color_text_button.alpha == 0.0 -%}
+    --colors-button-text: {{ section.settings.color_text_button.red }}, {{ section.settings.color_text_button.green }}, {{ section.settings.color_text_button.blue }};
+  {%- endunless -%}
+  {%- unless section.settings.color_text_button_hover.alpha == 0.0 -%}
+    --colors-button-text-hover: {{ section.settings.color_text_button_hover.red }}, {{ section.settings.color_text_button_hover.green }}, {{ section.settings.color_text_button_hover.blue }};
+  {%- endunless -%}
+  {% if section.settings.secondary_button_text_light.alpha != 0.0 %}
+    --colors-secondary-button: {{ section.settings.secondary_button_text_light.red }}, {{ section.settings.secondary_button_text_light.green }}, {{ section.settings.secondary_button_text_light.blue }};
+    --colors-line-secondary-button: {{ section.settings.secondary_button_text_light.red }}, {{ section.settings.secondary_button_text_light.green }}, {{ section.settings.secondary_button_text_light.blue }};
+    --background-secondary-button: transparent;
+  {% endif %}
+  {% if section.settings.secondary_button_light.alpha != 0.0 %}
+    --background-secondary-button: {{ section.settings.secondary_button_light.red }}, {{ section.settings.secondary_button_light.green }}, {{ section.settings.secondary_button_light.blue }};
+    --colors-line-secondary-button: {{ section.settings.secondary_button_light.red }}, {{ section.settings.secondary_button_light.green }}, {{ section.settings.secondary_button_light.blue }};
+  {% endif %}
+  }
+  .dark .button--{{ section.id }},
+  .dark .button--{{ section.id }}:before {
+  --background-secondary-button: transparent;
+  }
+  .event-day-{{ section.id }} {
+  {% if section.settings.date_background_color.alpha != 0 %}
+    background-color: {{ section.settings.date_background_color }};
+  {% endif %}
+  {% if section.settings.date_color.alpha != 0 %}
+    color: {{ section.settings.date_color }};
+    --colors-text: {{ section.settings.date_color.red }}, {{ section.settings.date_color.green }}, {{ section.settings.date_color.blue }};
+    --colors-heading: {{ section.settings.date_color.red }}, {{ section.settings.date_color.green }}, {{ section.settings.date_color.blue }};
+    --color-foreground: {{ section.settings.date_color.red }}, {{ section.settings.date_color.green }}, {{ section.settings.date_color.blue }};
+  {% endif %}
+  }
+  .dark .event-day-{{ section.id }} {
+    background-color: transparent;
+  }
+{%- endstyle -%}
+
+{% render 'otsb-section-divider' %}
+<div class="event-container ml-auto mr-auto relative page-width mx-auto pb-[{{ section.settings.padding_bottom_mobile }}px] pt-[{{ section.settings.padding_top_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px] md:pt-[{{ section.settings.padding_top }}px]">
+  <div class="mb-8 lg:mb-10">
+    {%- if section.settings.heading != blank -%}
+    <{{ section.settings.heading_tag }} class="heading--{{ section.id }} h2 block text-{{ section.settings.heading_alignment }} leading-tight flex-auto p-break-words">{{ section.settings.heading | escape }}</{{ section.settings.heading_tag }}>
+  {%- endif -%}
+  {%- if section.settings.description != blank -%}
+    <div class="event-description mb-6 md:mb-10 rte text-{{ section.settings.heading_alignment }}">
+      {{ section.settings.description }}
+    </div>
+  {%- endif -%}
+</div>
+
+<div class="otsb-grid{% if section.settings.desktop_layout == "2" %} md:otsb-grid-cols-2 gap-x-7{% endif %}{% unless section.settings.border_column == "line" %} gap-y-7{% endunless %}">
+  {%- for block in section.blocks -%}
+    {% liquid
+      if block.settings.button_label_add_calendar != blank
+        assign add_to_calendar = block.settings.button_label_add_calendar
+      else
+        assign add_to_calendar = 'Add to calendar'
+      endif
+
+      if block.settings.ticket_button_label != blank
+        assign ticket_button_label = block.settings.ticket_button_label
+      else
+        assign ticket_button_label = 'Buy Tickets'
+      endif
+
+      assign date = block.settings.month | append: block.settings.day | date: "%b %d" | append: ", " | append: block.settings.start_year
+      assign compare_date = date | date: "%s" | times: 1
+      assign show_end_date = false
+      assign show_end_time = false
+      assign start_hour = block.settings.start_hour | times: 1
+      assign start_minute = block.settings.start_minute | times: 1
+      assign end_hour = block.settings.end_hour | times: 1
+      assign end_minute = block.settings.end_minute | times: 1
+
+      if section.settings.timeformat == "12"
+        if start_hour == 12
+          assign timeStart = 12 | append: ":" | append: block.settings.start_minute | append: " PM"
+        elsif start_hour == 0
+          assign timeStart = 12 | append: ":" | append: block.settings.start_minute | append: " AM"
+        elsif start_hour > 12
+          assign timeStart = block.settings.start_hour | minus: 12
+          if timeStart < 10
+            assign timeStart = "0" | append: timeStart | append: ":" | append: block.settings.start_minute | append: " PM"
+          else
+            assign timeStart = timeStart | append: ":" | append: block.settings.start_minute | append: " PM"
+          endif
+        else
+          assign timeStart = block.settings.start_hour | append: ":" | append: block.settings.start_minute | append: " AM"
+        endif
+        if end_hour == 12
+          assign timeEnd = 12 | append: ":" | append: block.settings.end_minute | append: " PM"
+        elsif end_hour == 0
+          assign timeEnd = 12 | append: ":" | append: block.settings.end_minute | append: " AM"
+        elsif end_hour > 12
+          assign timeEnd = block.settings.end_hour | minus: 12
+          if timeEnd < 10
+            assign timeEnd = "0" | append: timeEnd | append: ":" | append: block.settings.end_minute | append: " PM"
+          else
+            assign timeEnd = timeEnd | append: ":" | append: block.settings.end_minute | append: " PM"
+          endif
+        else
+          assign timeEnd = block.settings.end_hour | append: ":" | append: block.settings.end_minute | append: " AM"
+        endif
+      else
+        assign timeStart = block.settings.start_hour | append: ":" | append: block.settings.start_minute
+        assign timeEnd = block.settings.end_hour | append: ":" | append: block.settings.end_minute
+      endif
+
+      assign end_date = block.settings.end_month | append: block.settings.end_day | date: "%b %d" | append: ", " | append: block.settings.end_year
+      assign compare_end_date = end_date | date: "%s" | times: 1
+      if block.settings.show_end_date and compare_end_date > compare_date
+        assign show_end_date = true
+      elsif block.settings.show_end_date and compare_end_date == compare_date and end_hour > start_hour
+        assign show_end_time = true
+      elsif block.settings.show_end_date and end_hour == start_hour and end_minute > start_minute
+        assign show_end_time = true
+      endif
+    %}
+    {%- capture dataEventItem -%}
+      {
+      "sectionID": "{{ section.id }}",
+      "blockID": "{{ block.id }}",
+      "title": "{{ block.settings.heading }}",
+      "location": "{{ block.settings.location | default: '' }}",
+      "details": "{{ block.settings.content | strip_html | escape | default: '' }}",
+      "description": "{{ block.settings.content | default: '' | escape }}",
+      "start_year": "{{ block.settings.start_year }}",
+      "month": "{{ block.settings.month }}",
+      "day": "{{ block.settings.day }}",
+      "end_year": "{{ block.settings.end_year }}",
+      "end_month": "{{ block.settings.end_month }}",
+      "end_day": "{{ block.settings.end_day }}",
+      "date": "{{ date }}",
+      "end_date": "{{ end_date }}",
+      "timeStart": "{{ timeStart }}",
+      "timeEnd": "{{ timeEnd }}",
+      "start_hour" : "{{ block.settings.start_hour }}",
+      "end_hour" : "{{ block.settings.end_hour }}",
+      "start_minute" : "{{ block.settings.start_minute }}",
+      "end_minute" : "{{ block.settings.end_minute }}",
+      "show_end_date": {{ show_end_date }},
+      "show_end_time": {{ show_end_time }},
+      "timezone": "{{ section.settings.timezone }}",
+      "image": {% if block.settings.image != blank %}"{{ block.settings.image | image_url }}"{% else %}false{% endif %},
+      "button_label_add_calendar": "{{ add_to_calendar }}",
+      "show_button_style": "{{ block.settings.show_button_style }}",
+      "ticket_button_label": "{{ ticket_button_label }}",
+      "offer_tickets": {{ block.settings.offer_tickets }},
+      "ticket_link": "{{ block.settings.ticket_link }}",
+      "ticket_button_label_style": "{{ block.settings.ticket_button_label_style }}"
+      }
+    {%- endcapture %}
+    <div id="x-data-event-{{ block.id }}" class="event-block flex gap-x-5 lg:gap-x-7 event-{{ block.id }}{% if block.settings.image != blank %} flex flex-col lg:flex-row lg:items-start{% endif %}
+        {% if section.settings.border_column == "border" %} border border-dashed pt-5 pb-5 pl-5 pr-5{% if settings.edges_type == 'rounded_corners' %} rounded-[10px]{% endif %}{% endif %}
+        {% if section.settings.border_column == "line" %} border-b pb-7 pt-7{% unless forloop.index > 1 %} border-t{% endunless %}{% if forloop.index == 2 and section.settings.desktop_layout == "2" %} md:border-t{% endif %}{% endif %}"
+         x-event-data="{{ dataEventItem | escape }}"
+            {{ block.shopify_attributes }}
+    >
+      <div class="{% if block.settings.image != blank %} w-full lg:max-w-[300px] overflow-hidden{% endif %} relative">
+        {% if block.settings.image != blank %}
+          <div class="relative block{% if section.settings.image_ratio != "auto" %} h-0 pb-[{{ section.settings.image_ratio }}]{% endif %}{% if settings.edges_type == 'rounded_corners' %} overflow-hidden rounded-[10px]{% endif %}"
+            {% if section.settings.image_ratio == 'auto' and block.settings.image != blank %} style='padding-bottom: {{ 1 | divided_by: block.settings.image.aspect_ratio | times: 100 }}%;'{% endif %}
+          >
+            <img
+              class="block max-w-full image-hover absolute top-0 left-0 h-full w-full object-cover object-center"
+              srcset="{{ block.settings.image | image_url: width: 375 }} 375w,
+            {{ block.settings.image | image_url: width: 450 }} 450w,
+            {{ block.settings.image | image_url: width: 750 }} 750w,
+            {{ block.settings.image | image_url: width: 900 }} 900w,
+            {{ block.settings.image | image_url: width: 1100 }} 1100w,
+            {{ block.settings.image | image_url: width: 1500 }} 1500w,
+            {{ block.settings.image | image_url: width: 1780 }} 1780w,
+            {{ block.settings.image | image_url: width: 2000 }} 2000w,
+            {{ block.settings.image | image_url: width: 3000 }} 3000w,
+            {{ block.settings.image | image_url: width: 3840 }} 3840w"
+              sizes="(min-width: 1000px) 400px, 100vw"
+              src="{{ block.settings.image | image_url: width: 3840 }}"
+              loading="lazy"
+              alt="{{ block.settings.image.alt | escape }}"
+              width="{{ block.settings.image.width }}"
+              height="{{ block.settings.image.width | divided_by: block.settings.image.aspect_ratio }}"
+              style="object-position: {{ block.settings.image.presentation.focal_point }};"
+            />
+          </div>
+        {% endif %}
+
+        <div class="event-day event-day-{{ section.id }} aspect-square{% if block.settings.image != blank %} absolute top-0 left-0 rtl:left-auto rtl:right-0 rtl:ml-0 rtl:mr-2 mt-2 mb-2 ml-2 pb-2 pt-2 pr-4 pl-4 lg:pb-1.5 lg:pt-1.5 lg:pl-4 lg:pr-4{% else %} pb-2.5 pt-2.5 pr-5 pl-5 lg:pb-2 lg:pt-2 lg:pl-5 lg:pr-5 border border-dashed border-[rgba(var(--colors-text-link))]{% endif %} flex flex-col justify-center bg-[rgba(var(--background-color,255,255,255,1))] text-center{% if settings.edges_type == 'rounded_corners' %} rounded-[10px]{% endif %}">
+
+          <p class="text-large whitespace-nowrap h3">{{ block.settings.day }}</p>
+          <p>{{ block.settings.month | append: block.settings.day | date: "%b" }}</p>
+        </div>
+      </div>
+      <div class="lg:w-3/4 grow flex flex-col lg:justify-start{% if block.settings.image != blank %} pt-5 lg:pt-0 lg:pb-0{% endif %}">
+        {% if block.settings.heading != blank %}
+          {% assign heading_size =  block.settings.heading_size | times: setting_base_size | times: 0.0001575 %}
+          {% style %}
+            .heading-{{ block.id }} { font-size: {{ heading_size | times: 0.7 }}rem; }
+            @media screen and (min-width: 1025px) {
+            .heading-{{ block.id }} {
+            font-size: {{ heading_size }}rem;
+            }
+            }
+          {% endstyle %}
+          <div
+            class="heading-{{ block.id }} hover-text-link h3 cursor-pointer"
+            @click="$store.xEventCalendarDetail.load($el, '{{ block.id }}')"
+          >
+            {{ block.settings.heading }}
+          </div>
+        {% endif %}
+        <div class="flex flex-wrap gap-1.5 mt-2 lg:mt-1{% if show_end_date %} flex-col{% endif %}">
+          <div class="inline-flex items-start pl-[calc(17px+0.25rem)] rtl:pl-0 rtl:pr-[calc(17px+0.25rem)] flex-col relative">
+            <span class="w-[17px] h-[18px] absolute left-0 top-[calc((100%-18px)/2)] rtl:left-auto rtl:right-0">{% render 'otsb-icon-alls', icon: 'icon-clock' %}</span>
+            {% if show_end_date %}
+              <div class="event-day">
+                <p>{{ date }} @ {{ timeStart }} - </p>
+                <p> {{ end_date }} @ {{ timeEnd }}</p>
+              </div>
+            {% elsif show_end_time %}
+              <span class="event-day">{{ timeStart }} - {{ timeEnd }}</span>
+            {% else %}
+              <span class="event-day">{{ timeStart }}</span>
+            {% endif %}
+          </div>
+          {% if block.settings.show_end_date and compare_end_date < compare_date and request.design_mode %}
+            <p class="relative event-error pl-5 rtl:pl-0 rtl:pr-5 text-[rgba(var(--color-error))]">
+              <span class="absolute left-0 rtl:left-auto rtl:right-0 top-1/2 -translate-y-1/2 w-3">{% render 'otsb-icon-alls', icon: 'icon-error' %}</span>
+              <span class="cart-item__error-text text-sm p-break-words">End time must comes after start time</span>
+            </p>
+          {% endif %}
+          {% if block.settings.location != blank %}
+            {% assign has_map = true %}
+            <div class="flex items-start pl-[calc(17px+0.25rem)] rtl:pl-0 rtl:pr-[calc(17px+0.25rem)] relative">
+              <span class="w-[17px] h-[18px] inline-block absolute left-0 top-[calc((100%-18px)/2)] rtl:left-auto rtl:right-0">{%- render 'otsb-icon-alls', icon: 'icon-location-1' -%}</span>
+              <span>{{ block.settings.location }}</span>
+            </div>
+          {% endif %}
+        </div>
+        <div class="mt-2 rte line-clamp-4">{{ block.settings.description }}</div>
+
+        <div class="flex gap-3 flex-wrap grow items-end lg:items-start lg:grow-0 mt-6 mb-0.5">
+          {% if block.settings.offer_tickets %}
+            <a
+              {% if block.settings.ticket_link == blank %}
+                role="link" aria-disabled="true"
+              {% else %}
+                href="{{ block.settings.ticket_link }}"
+              {% endif %}
+              class="otsb-button{% if block.settings.ticket_button_label_style == 'primary' %} otsb-button-solid{% else %} button-outline{% endif %}{% if block.settings.ticket_link == blank %} opacity-60 cursor-not-allowed{% endif %} border button--{{ section.id }} flex flex-row rtl:flex-row-reverse items-center empty:hidden !pl-5 !pr-5 md:pl-6 md:pr-6 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal"
+              @click="open = !open"
+            >
+              {{ ticket_button_label }}
+            </a>
+          {% endif %}
+          <div
+            class="relative"
+            x-data="xEventCalendar({{ dataEventItem | escape }})"
+            @click.away="open = false"
+          >
+            <button
+              class="otsb-button{% if block.settings.show_button_style == 'primary' %} otsb-button-solid{% else %} button-outline{% endif %} border button--{{ section.id }} flex flex-row rtl:flex-row-reverse items-center empty:hidden !pl-5 !pr-5 md:pl-6 md:pr-6 pt-2.5 pb-2.5 md:pt-3 md:pb-3 leading-normal"
+              @click="open = !open"
+            >
+              <span>
+                {{ add_to_calendar }}
+              </span>
+              <span class="w-2.5 relative transition-none duration-200 inline-block ml-1.5 rtl:ml-0 rtl:mr-1.5" :class="open ? 'rotate-180' : 'top-[1px]'">
+                {% render 'otsb-icon-alls', icon: 'icon-caret' %}
+              </span>
+            </button>
+            <div
+              class="atcb-list left-0 w-full flex flex-col gap-y-4 md:max-w-[15rem] absolute top-full z-40 bg-[rgba(var(--background-color,255,255,255,1))] shadow-[0_0_6px_-4px_rgba(var(--colors-text,36,36,36,1))] pt-5 pb-5 pl-5 pr-5"
+              x-cloak
+              x-show="open"
+              role="list"
+            >
+              <button
+                class="atcb-list-item text-left rtl:text-right relative cursor-pointer"
+                role="link"
+                data-option-number="1"
+                id="atcb-btn-1-apple"
+                aria-label="Apple"
+                @click="addToCal('apple'); open = false"
+              >
+                <span class="atcb-text inline-block button-link hover-text-link">Apple</span>
+              </button>
+              <button
+                class="atcb-list-item text-left rtl:text-right relative cursor-pointer"
+                role="link"
+                data-option-number="2"
+                id="atcb-btn-1-google"
+                aria-label="Google"
+                @click="addToCal('google'); open = false"
+              >
+                <span class="atcb-text inline-block button-link hover-text-link">Google</span>
+              </button>
+              <button
+                class="atcb-list-item text-left rtl:text-right relative cursor-pointer"
+                role="link"
+                data-option-number="3"
+                id="atcb-btn-1-outlookcom"
+                aria-label="Outlook"
+                @click="addToCal('outlook'); open = false"
+              >
+                <span class="atcb-text inline-block button-link hover-text-link">Outlook</span>
+              </button>
+              <button
+                class="atcb-list-item text-left rtl:text-right relative cursor-pointer"
+                role="link"
+                data-option-number="4"
+                id="atcb-btn-1-yahoo"
+                aria-label="Yahoo"
+                @click="addToCal('yahoo'); open = false"
+              >
+                <span class="atcb-text inline-block button-link hover-text-link">Yahoo</span>
+              </button>
+              <button
+                class="atcb-list-item text-left rtl:text-right relative cursor-pointer"
+                role="link"
+                data-option-number="4"
+                id="atcb-btn-1-ical"
+                aria-label="Ical"
+                @click="addToCal('ical'); open = false"
+              >
+                <span class="atcb-text inline-block button-link hover-text-link">Ical</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {%- endfor -%}
+</div>
+</div>
+{% if has_map %}
+  <script>
+    requestAnimationFrame(() => {
+      document.addEventListener("alpine:init", () => {
+        Alpine.data("xMap", (data) => ({
+          load() {
+            this.$el.querySelector(
+                    "iframe"
+            ).src = `https://maps.google.com/maps?q=${data}&t=m&z=17&ie=UTF8&output=embed&iwloc=near`;
+          },
+          loadMap(location) {
+            this.$el.querySelector(
+                    "iframe"
+            ).src = `https://maps.google.com/maps?q=${location}&t=m&z=17&ie=UTF8&output=embed&iwloc=near`;
+          },
+          removeMap() {
+            this.$el.querySelector(
+                    "iframe"
+            ).src = ``;
+          }
+        }));
+      });
+    });
+  </script>
+{% endif %}
+{% render 'otsb-event-calendar-detail' %}
+<script>
+  requestAnimationFrame(() => {
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('xEventCalendar', (event) => ({
+        open: false,
+        eventDetails: {},
+        addToCal(options) {
+          let link = "";
+          let timeEnd = ""
+          this.eventDetails = event;
+
+          if(!event) {
+            this.eventDetails = JSON.parse(JSON.stringify(Alpine.store("xEventCalendarDetail").eventDetail))
+          }
+
+          let timeStart = this.handleTime(this.eventDetails.start_year, this.eventDetails.month, this.eventDetails.day, this.eventDetails.start_hour, this.eventDetails.start_minute, options);
+
+          if (this.eventDetails.show_end_date) {
+            timeEnd = this.handleTime(this.eventDetails.end_year, this.eventDetails.end_month, this.eventDetails.end_day, this.eventDetails.end_hour, this.eventDetails.end_minute, options);
+          }
+          else if (this.eventDetails.show_end_time) {
+            timeEnd = this.handleTime(this.eventDetails.start_year, this.eventDetails.month, this.eventDetails.day, this.eventDetails.end_hour, this.eventDetails.end_minute, options);
+          }
+          else {
+            timeEnd = timeStart;
+          }
+
+          switch (options) {
+            case 'apple':
+              this.createDownloadICSFile(0, timeStart, timeEnd, this.eventDetails.title, this.eventDetails.details, this.eventDetails.location, "apple");
+              break;
+            case 'google':
+              link = "http://www.google.com/calendar/event?action=TEMPLATE&trp=false" + "&text=" + encodeURIComponent(this.eventDetails.title) + "&dates=" + timeStart + "/" +  timeEnd + "&location=" + encodeURIComponent(this.eventDetails.location) + "&details=" + encodeURIComponent(this.eventDetails.details);
+              window.open(link);
+              break;
+            case 'outlook':
+              link = "https://outlook.live.com/calendar/action/compose?rru=addevent" + "&startdt=" + timeStart + "&enddt=" + timeEnd + "&subject=" + encodeURIComponent(this.eventDetails.title) + "&location=" + encodeURIComponent(this.eventDetails.location) + "&body=" + encodeURIComponent(this.eventDetails.details);
+              window.open(link)
+              break;
+            case 'yahoo':
+              link = "http://calendar.yahoo.com/?v=60" + "&st=" + timeStart + "&et=" +  timeEnd + "&title=" + encodeURIComponent(this.eventDetails.title);
+              window.open(link)
+              break;
+            case 'ical':
+              this.createDownloadICSFile(0, timeStart, timeEnd, this.eventDetails.title, this.eventDetails.details, this.eventDetails.location, "ical");
+              break;
+            default:
+              console.log(`Sorry, error`);
+          }
+        },
+        handleTime(year,month,day,hour,minute,options) {
+          let date = new Date();
+
+          if (options == 'google' || options == 'yahoo') {
+            date = new Date(Date.UTC(year, this.getMonthNumber(month), parseInt(day), parseInt(hour), parseInt(minute)));
+            date.setTime(date.getTime() + (-1 * parseInt(this.eventDetails.timezone) * 60 - date.getTimezoneOffset()) * 60 * 1000)
+            return date.toISOString().split("Z")[0].replace(".000", "").replace(/[^A-Z0-9]/ig, "");
+          } else {
+            date = new Date(year, this.getMonthNumber(month), parseInt(day), parseInt(hour), parseInt(minute));
+            date.setTime(date.getTime() + (-1 * parseInt(this.eventDetails.timezone) * 60 - date.getTimezoneOffset()) * 60 * 1000)
+            if ( options == 'apple' ) {
+              return date.toISOString().split("Z")[0].replace(".000", "").replace(/[^A-Z0-9]/ig, "");
+            } else {
+              return date.toISOString();
+            }
+          }
+        },
+        getMonthNumber(month) {
+          return new Date(`${month} 1, 2022`).getMonth();
+        },
+        createDownloadICSFile(timezone, timeStart, timeEnd, title, description, location, type) {
+          let icsBody = "BEGIN:VCALENDAR\n" +
+                  "VERSION:2.0\n" +
+                  "PRODID:Calendar\n" +
+                  "CALSCALE:GREGORIAN\n" +
+                  "METHOD:PUBLISH\n" +
+                  "BEGIN:VTIMEZONE\n" +
+                  "TZID:" + timezone + "\n" +
+                  "END:VTIMEZONE\n" +
+                  "BEGIN:VEVENT\n" +
+                  "SUMMARY:" + title + "\n" +
+                  "UID:@Default\n" +
+                  "SEQUENCE:0\n" +
+                  "STATUS:CONFIRMED\n" +
+                  "TRANSP:TRANSPARENT\n" +
+                  "DTSTART;TZID=" + timezone + ":" + timeStart + "\n" +
+                  "DTEND;TZID=" + timezone + ":" + timeEnd + "\n" +
+                  "LOCATION:" + location + "\n" +
+                  "DESCRIPTION:" + description + "\n" +
+                  "END:VEVENT\n" +
+                  "END:VCALENDAR\n";
+
+          this.download(title + ".ics", icsBody, type);
+        },
+        download(filename, fileBody, type) {
+          var element = document.createElement("a");
+
+          if (type == "ical") {
+            element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(fileBody));
+          } else if (type == "apple") {
+            var file = new Blob([fileBody], { type: "text/calendar;charset=utf-8"})
+            element.href = window.URL.createObjectURL(file)
+          }
+
+          element.setAttribute("download", filename);
+          element.style.display = "none";
+          document.body.appendChild(element);
+          element.click();
+          document.body.removeChild(element);
+        }
+      }));
+
+      Alpine.store('xEventCalendarDetail', {
+        show: false,
+        eventDetail: {},
+        handleEventSelect() {
+          var _this = this;
+          const eventDetail = JSON.parse(JSON.stringify(this.eventDetail));
+
+          document.addEventListener('shopify:section:select', function(event) {
+            if (event.target.classList.contains('section-event-calendar') == false) {
+              if (window.Alpine) {
+                _this.close();
+              } else {
+                document.addEventListener('alpine:initialized', () => {
+                  _this.close();
+                });
+              }
+            }
+          })
+
+          if(eventDetail && eventDetail.blockID && eventDetail.sectionID) {
+            this.eventDetail = xParseJSON(document.getElementById('x-data-event-' + eventDetail.blockID).getAttribute('x-event-data'));
+            let element = document.getElementById('EventDescription-' + this.eventDetail.sectionID);
+            element.innerHTML = this.eventDetail.description;
+            element.innerHTML = element.textContent;
+          }
+        },
+        load(el, blockID) {
+          this.eventDetail = xParseJSON(el.closest('#x-data-event-' + blockID).getAttribute('x-event-data'));
+          let element = document.getElementById('EventDescription-' + this.eventDetail.sectionID);
+          this.sectionID = this.eventDetail.sectionID;
+          element.innerHTML = this.eventDetail.description;
+          element.innerHTML = element.textContent;
+          this.showEventCalendarDetail();
+        },
+        showEventCalendarDetail() {
+          this.show = true;
+          Alpine.store('xPopup').open = true;
+        },
+        close() {
+          this.show = false;
+          Alpine.store('xPopup').open = false;
+        }
+      });
+    });
+  });
+</script>
+{% schema %}
+{
+  "name": "OT: Event calendar",
+  "tag": "section",
+  "class": "section section-event-calendar x-section",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Events"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 50,
+      "max": 200,
+      "unit": "%",
+      "step": 10,
+      "default": 100,
+      "label": "Heading size"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "default": "h2",
+      "label": "Heading tag",
+      "options": [
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        },
+        {
+          "value": "h4",
+          "label": "H4"
+        },
+        {
+          "value": "h5",
+          "label": "H5"
+        },
+        {
+          "value": "h6",
+          "label": "H6"
+        },
+        {
+          "value": "p",
+          "label": "p"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "default": "center",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "select",
+      "id": "border_column",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "border",
+          "label": "Border"
+        },
+        {
+          "value": "line",
+          "label": "Line border"
+        }
+      ],
+      "default": "none",
+      "label": "Line and border"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Natural"
+        },
+        {
+          "value": "100%",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "75%",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "150%",
+          "label": "Portrait (2:3)"
+        },
+        {
+          "value": "56%",
+          "label": "Wide (16:9)"
+        },
+        {
+          "value": "133%",
+          "label": "Standard (3:4)"
+        }
+      ],
+      "default": "75%",
+      "label": "Image style"
+    },
+    {
+      "type": "select",
+      "id": "timezone",
+      "options": [
+        {
+          "value": "-12",
+          "label": "GMT -12:00"
+        },
+        {
+          "value": "-11",
+          "label": "GMT -11:00"
+        },
+        {
+          "value": "-10",
+          "label": "GMT -10:00"
+        },
+        {
+          "value": "-9",
+          "label": "GMT -9:00"
+        },
+        {
+          "value": "-8",
+          "label": "GMT -8:00"
+        },
+        {
+          "value": "-7",
+          "label": "GMT -7:00"
+        },
+        {
+          "value": "-6",
+          "label": "GMT -6:00"
+        },
+        {
+          "value": "-5",
+          "label": "GMT -5:00"
+        },
+        {
+          "value": "-4",
+          "label": "GMT -4:00"
+        },
+        {
+          "value": "-3",
+          "label": "GMT -3:00"
+        },
+        {
+          "value": "-2",
+          "label": "GMT -2:00"
+        },
+        {
+          "value": "-1",
+          "label": "GMT -1:00"
+        },
+        {
+          "value": "0",
+          "label": "GMT"
+        },
+        {
+          "value": "1",
+          "label": "GMT +1:00"
+        },
+        {
+          "value": "2",
+          "label": "GMT +2:00"
+        },
+        {
+          "value": "3",
+          "label": "GMT +3:00"
+        },
+        {
+          "value": "4",
+          "label": "GMT +4:00"
+        },
+        {
+          "value": "5",
+          "label": "GMT +5:00"
+        },
+        {
+          "value": "6",
+          "label": "GMT +6:00"
+        },
+        {
+          "value": "7",
+          "label": "GMT +7:00"
+        },
+        {
+          "value": "8",
+          "label": "GMT +8:00"
+        },
+        {
+          "value": "9",
+          "label": "GMT +9:00"
+        },
+        {
+          "value": "10",
+          "label": "GMT +10:00"
+        },
+        {
+          "value": "11",
+          "label": "GMT +11:00"
+        },
+        {
+          "value": "12",
+          "label": "GMT +12:00"
+        },
+        {
+          "value": "13",
+          "label": "GMT +13:00"
+        },
+        {
+          "value": "14",
+          "label": "GMT +14:00"
+        }
+      ],
+      "default": "-4",
+      "label": "Time zone"
+    },
+    {
+      "type": "select",
+      "id": "timeformat",
+      "options": [
+        {
+          "value": "12",
+          "label": "12-hour"
+        },
+        {
+          "value": "24",
+          "label": "24-hour"
+        }
+      ],
+      "default": "24",
+      "label": "Time format"
+    },
+    {
+      "type": "header",
+      "content": "Design"
+    },
+    {
+      "type": "select",
+      "id": "edges_type",
+      "label": "Edges",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "rounded_corners",
+          "label": "Rounded corners"
+        }
+      ],
+      "default": "rounded_corners"
+    },
+    {
+      "type": "select",
+      "id": "button_edges_type",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "rounded",
+          "label": "Rounded"
+        },
+        {
+          "value": "rounded_corners",
+          "label": "Rounded corners"
+        },
+        {
+          "value": "mixed",
+          "label": "Mixed"
+        },
+      ],
+      "default": "rounded_corners"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "color_button",
+      "default": "rgba(0,0,0,0)",
+      "label": "Primary button"
+    },
+    {
+      "type": "color",
+      "id": "color_text_button",
+      "default": "rgba(0,0,0,0)",
+      "label": "Primary button text"
+    },
+    {
+      "type": "color",
+      "id": "color_button_hover",
+      "default": "rgba(0,0,0,0)",
+      "label": "Primary button hover"
+    },
+    {
+      "type": "color",
+      "id": "color_text_button_hover",
+      "default": "rgba(0,0,0,0)",
+      "label": "Primary button hover text"
+    },
+    {
+      "type": "color",
+      "id": "secondary_button_light",
+      "label": "Secondary button color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "secondary_button_text_light",
+      "label": "Secondary button text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "date_background_color",
+      "default": "rgba(0,0,0,0)",
+      "label": "Date background color"
+    },
+    {
+      "type": "color",
+      "id": "date_color",
+      "default": "rgba(0,0,0,0)",
+      "label": "Date color"
+    },
+    {
+      "type": "header",
+      "content": "Desktop layout"
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Desktop layout",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_section_divider",
+      "default": false,
+      "label": "Show section divider"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 28
+    },
+    {
+      "type": "header",
+      "content": "Mobile layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_section_divider_mobile",
+      "default": false,
+      "label": "Show section divider"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 28
+    }
+  ],
+  "blocks": [
+    {
+      "type": "event",
+      "name": "Event",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image",
+          "info": "For recommended image sizes, check our [user guide](https://support.omnithemes.com/blogs/user-guide/faqs)."
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Event",
+          "label": "Event name"
+        },
+        {
+          "type": "range",
+          "id": "heading_size",
+          "min": 50,
+          "max": 200,
+          "step": 10,
+          "unit": "%",
+          "label": "Event name size",
+          "default": 100
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "default": "Share information and details about this event.",
+          "label": "Summary"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "default": "<p>Share information and details about this event.</p>",
+          "label": "Detailed description"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "default": "75 9th Ave, New York, NY 10011-7006",
+          "label": "Location"
+        },
+        {
+          "type": "text",
+          "id": "button_label_add_calendar",
+          "label": "\"Add to calendar\" button label",
+          "default": "Add to calendar"
+        },
+        {
+          "type": "select",
+          "id": "show_button_style",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            }
+          ],
+          "label": "Button style",
+          "default": "primary"
+        },
+        {
+          "type": "header",
+          "content": "Event tickets"
+        },
+        {
+          "type": "checkbox",
+          "id": "offer_tickets",
+          "default": false,
+          "label": "Offer tickets for this event"
+        },
+        {
+          "type": "url",
+          "id": "ticket_link",
+          "label": "Ticket page link",
+          "info": "Add a ticket page to sell tickets to attendees. Create a [digital product](https://help.shopify.com/en/manual/products/digital-service-product/selling-services-or-digital-products) to provide more information about the event, and optionally hide it from product listings. [Contact us](https://omnithemes.com/contact/) for free support to exclude products from internal search and product recommendations."
+        },
+        {
+          "type": "text",
+          "id": "ticket_button_label",
+          "label": "Ticket button label"
+        },
+        {
+          "type": "select",
+          "id": "ticket_button_label_style",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            }
+          ],
+          "label": "Button style",
+          "default": "primary"
+        },
+        {
+          "type": "header",
+          "content": "Start date"
+        },
+        {
+          "type": "number",
+          "id": "start_year",
+          "default": 2024,
+          "label": "Start year"
+        },
+        {
+          "type": "select",
+          "id": "month",
+          "options": [
+            {
+              "value": "January",
+              "label": "January"
+            },
+            {
+              "value": "February",
+              "label": "February"
+            },
+            {
+              "value": "March",
+              "label": "March"
+            },
+            {
+              "value": "April",
+              "label": "April"
+            },
+            {
+              "value": "May",
+              "label": "May"
+            },
+            {
+              "value": "June",
+              "label": "June"
+            },
+            {
+              "value": "July",
+              "label": "July"
+            },
+            {
+              "value": "August",
+              "label": "August"
+            },
+            {
+              "value": "September",
+              "label": "September"
+            },
+            {
+              "value": "October",
+              "label": "October"
+            },
+            {
+              "value": "November",
+              "label": "November"
+            },
+            {
+              "value": "December",
+              "label": "December"
+            }
+          ],
+          "default": "January",
+          "label": "Month"
+        },
+        {
+          "type": "select",
+          "id": "day",
+          "options": [
+            {
+              "value": "01",
+              "label": "01"
+            },
+            {
+              "value": "02",
+              "label": "02"
+            },
+            {
+              "value": "03",
+              "label": "03"
+            },
+            {
+              "value": "04",
+              "label": "04"
+            },
+            {
+              "value": "05",
+              "label": "05"
+            },
+            {
+              "value": "06",
+              "label": "06"
+            },
+            {
+              "value": "07",
+              "label": "07"
+            },
+            {
+              "value": "08",
+              "label": "08"
+            },
+            {
+              "value": "09",
+              "label": "09"
+            },
+            {
+              "value": "10",
+              "label": "10"
+            },
+            {
+              "value": "11",
+              "label": "11"
+            },
+            {
+              "value": "12",
+              "label": "12"
+            },
+            {
+              "value": "13",
+              "label": "13"
+            },
+            {
+              "value": "14",
+              "label": "14"
+            },
+            {
+              "value": "15",
+              "label": "15"
+            },
+            {
+              "value": "16",
+              "label": "16"
+            },
+            {
+              "value": "17",
+              "label": "17"
+            },
+            {
+              "value": "18",
+              "label": "18"
+            },
+            {
+              "value": "19",
+              "label": "19"
+            },
+            {
+              "value": "20",
+              "label": "20"
+            },
+            {
+              "value": "21",
+              "label": "21"
+            },
+            {
+              "value": "22",
+              "label": "22"
+            },
+            {
+              "value": "23",
+              "label": "23"
+            },
+            {
+              "value": "24",
+              "label": "24"
+            },
+            {
+              "value": "25",
+              "label": "25"
+            },
+            {
+              "value": "26",
+              "label": "26"
+            },
+            {
+              "value": "27",
+              "label": "27"
+            },
+            {
+              "value": "28",
+              "label": "28"
+            },
+            {
+              "value": "29",
+              "label": "29"
+            },
+            {
+              "value": "30",
+              "label": "30"
+            },
+            {
+              "value": "31",
+              "label": "31"
+            }
+          ],
+          "default": "01",
+          "label": "Day"
+        },
+        {
+          "type": "select",
+          "id": "start_hour",
+          "options": [
+            {
+              "value": "00",
+              "label": "12 AM"
+            },
+            {
+              "value": "01",
+              "label": "01 AM"
+            },
+            {
+              "value": "02",
+              "label": "02 AM"
+            },
+            {
+              "value": "03",
+              "label": "03 AM"
+            },
+            {
+              "value": "04",
+              "label": "04 AM"
+            },
+            {
+              "value": "05",
+              "label": "05 AM"
+            },
+            {
+              "value": "06",
+              "label": "06 AM"
+            },
+            {
+              "value": "07",
+              "label": "07 AM"
+            },
+            {
+              "value": "08",
+              "label": "08 AM"
+            },
+            {
+              "value": "09",
+              "label": "09 AM"
+            },
+            {
+              "value": "10",
+              "label": "10 AM"
+            },
+            {
+              "value": "11",
+              "label": "11 AM"
+            },
+            {
+              "value": "12",
+              "label": "12 PM"
+            },
+            {
+              "value": "13",
+              "label": "01 PM"
+            },
+            {
+              "value": "14",
+              "label": "02 PM"
+            },
+            {
+              "value": "15",
+              "label": "03 PM"
+            },
+            {
+              "value": "16",
+              "label": "04 PM"
+            },
+            {
+              "value": "17",
+              "label": "05 PM"
+            },
+            {
+              "value": "18",
+              "label": "06 PM"
+            },
+            {
+              "value": "19",
+              "label": "07 PM"
+            },
+            {
+              "value": "20",
+              "label": "08 PM"
+            },
+            {
+              "value": "21",
+              "label": "09 PM"
+            },
+            {
+              "value": "22",
+              "label": "10 PM"
+            },
+            {
+              "value": "23",
+              "label": "11 PM"
+            }
+          ],
+          "default": "00",
+          "label": "Start hour"
+        },
+        {
+          "type": "select",
+          "id": "start_minute",
+          "options": [
+            {
+              "value": "00",
+              "label": "00"
+            },
+            {
+              "value": "15",
+              "label": "15"
+            },
+            {
+              "value": "30",
+              "label": "30"
+            },
+            {
+              "value": "45",
+              "label": "45"
+            }
+          ],
+          "default": "00",
+          "label": "Start minute"
+        },
+        {
+          "type": "header",
+          "content": "End date"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_end_date",
+          "default": false,
+          "label": "This event has an end date"
+        },
+        {
+          "type": "number",
+          "id": "end_year",
+          "default": 2024,
+          "label": "End year"
+        },
+        {
+          "type": "select",
+          "id": "end_month",
+          "options": [
+            {
+              "value": "January",
+              "label": "January"
+            },
+            {
+              "value": "February",
+              "label": "February"
+            },
+            {
+              "value": "March",
+              "label": "March"
+            },
+            {
+              "value": "April",
+              "label": "April"
+            },
+            {
+              "value": "May",
+              "label": "May"
+            },
+            {
+              "value": "June",
+              "label": "June"
+            },
+            {
+              "value": "July",
+              "label": "July"
+            },
+            {
+              "value": "August",
+              "label": "August"
+            },
+            {
+              "value": "September",
+              "label": "September"
+            },
+            {
+              "value": "October",
+              "label": "October"
+            },
+            {
+              "value": "November",
+              "label": "November"
+            },
+            {
+              "value": "December",
+              "label": "December"
+            }
+          ],
+          "default": "January",
+          "label": "Month"
+        },
+        {
+          "type": "select",
+          "id": "end_day",
+          "options": [
+            {
+              "value": "01",
+              "label": "01"
+            },
+            {
+              "value": "02",
+              "label": "02"
+            },
+            {
+              "value": "03",
+              "label": "03"
+            },
+            {
+              "value": "04",
+              "label": "04"
+            },
+            {
+              "value": "05",
+              "label": "05"
+            },
+            {
+              "value": "06",
+              "label": "06"
+            },
+            {
+              "value": "07",
+              "label": "07"
+            },
+            {
+              "value": "08",
+              "label": "08"
+            },
+            {
+              "value": "09",
+              "label": "09"
+            },
+            {
+              "value": "10",
+              "label": "10"
+            },
+            {
+              "value": "11",
+              "label": "11"
+            },
+            {
+              "value": "12",
+              "label": "12"
+            },
+            {
+              "value": "13",
+              "label": "13"
+            },
+            {
+              "value": "14",
+              "label": "14"
+            },
+            {
+              "value": "15",
+              "label": "15"
+            },
+            {
+              "value": "16",
+              "label": "16"
+            },
+            {
+              "value": "17",
+              "label": "17"
+            },
+            {
+              "value": "18",
+              "label": "18"
+            },
+            {
+              "value": "19",
+              "label": "19"
+            },
+            {
+              "value": "20",
+              "label": "20"
+            },
+            {
+              "value": "21",
+              "label": "21"
+            },
+            {
+              "value": "22",
+              "label": "22"
+            },
+            {
+              "value": "23",
+              "label": "23"
+            },
+            {
+              "value": "24",
+              "label": "24"
+            },
+            {
+              "value": "25",
+              "label": "25"
+            },
+            {
+              "value": "26",
+              "label": "26"
+            },
+            {
+              "value": "27",
+              "label": "27"
+            },
+            {
+              "value": "28",
+              "label": "28"
+            },
+            {
+              "value": "29",
+              "label": "29"
+            },
+            {
+              "value": "30",
+              "label": "30"
+            },
+            {
+              "value": "31",
+              "label": "31"
+            }
+          ],
+          "default": "01",
+          "label": "Day"
+        },
+        {
+          "type": "select",
+          "id": "end_hour",
+          "options": [
+            {
+              "value": "00",
+              "label": "12 AM"
+            },
+            {
+              "value": "01",
+              "label": "01 AM"
+            },
+            {
+              "value": "02",
+              "label": "02 AM"
+            },
+            {
+              "value": "03",
+              "label": "03 AM"
+            },
+            {
+              "value": "04",
+              "label": "04 AM"
+            },
+            {
+              "value": "05",
+              "label": "05 AM"
+            },
+            {
+              "value": "06",
+              "label": "06 AM"
+            },
+            {
+              "value": "07",
+              "label": "07 AM"
+            },
+            {
+              "value": "08",
+              "label": "08 AM"
+            },
+            {
+              "value": "09",
+              "label": "09 AM"
+            },
+            {
+              "value": "10",
+              "label": "10 AM"
+            },
+            {
+              "value": "11",
+              "label": "11 AM"
+            },
+            {
+              "value": "12",
+              "label": "12 PM"
+            },
+            {
+              "value": "13",
+              "label": "01 PM"
+            },
+            {
+              "value": "14",
+              "label": "02 PM"
+            },
+            {
+              "value": "15",
+              "label": "03 PM"
+            },
+            {
+              "value": "16",
+              "label": "04 PM"
+            },
+            {
+              "value": "17",
+              "label": "05 PM"
+            },
+            {
+              "value": "18",
+              "label": "06 PM"
+            },
+            {
+              "value": "19",
+              "label": "07 PM"
+            },
+            {
+              "value": "20",
+              "label": "08 PM"
+            },
+            {
+              "value": "21",
+              "label": "09 PM"
+            },
+            {
+              "value": "22",
+              "label": "10 PM"
+            },
+            {
+              "value": "23",
+              "label": "11 PM"
+            }
+          ],
+          "default": "00",
+          "label": "End hour"
+        },
+        {
+          "type": "select",
+          "id": "end_minute",
+          "options": [
+            {
+              "value": "00",
+              "label": "00"
+            },
+            {
+              "value": "15",
+              "label": "15"
+            },
+            {
+              "value": "30",
+              "label": "30"
+            },
+            {
+              "value": "45",
+              "label": "45"
+            }
+          ],
+          "default": "00",
+          "label": "End minute"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "OT: Event calendar",
+      "blocks": [
+        {
+          "type": "event"
+        },
+        {
+          "type": "event"
+        },
+        {
+          "type": "event"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
