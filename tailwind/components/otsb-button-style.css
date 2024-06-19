@@ -1,0 +1,102 @@
+@layer components {
+  .otsb-btn-rounded {
+    --border-radius: 9999px;
+  }
+  .otsb-btn-rounded-corners {
+    --border-radius: 0.5rem;
+  }
+  .otsb-btn-mixed {
+    --border-radius: 0.5rem;
+    @apply !rounded-tr-none !rounded-bl-none;
+  }
+  .otsb-btn__solid {
+    border: none;
+    background-color: rgb(var(--color-button-mobile));
+    color: var(--color-button-text-mobile);
+  }
+  @media (min-width: 1024px) {
+    .otsb-btn__solid {
+      box-shadow: none;
+      color: rgb(var(--color-button-text, #fff));
+      background-color: rgb(var(--color-button, #121212));
+      overflow: hidden;
+      background-origin: border-box;
+    }
+    .otsb-btn__solid:hover {
+      transition-property: background-color;
+      background-color: rgb(var(--colors-button-hover, #383838));
+      color: rgb(var(--colors-button-text-hover, var(--color-button-text, #fff)));
+    }
+    .otsb-btn__solid.otsb-btn__slide:hover,
+    .otsb-btn__solid.otsb-btn__fill_up:hover {
+      transition-delay: 0.5s;
+    }
+    .otsb-btn__solid.otsb-btn__slide:before,
+    .otsb-btn__solid.otsb-btn__fill_up:before {
+      content: "";
+      z-index: -1;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: var(--button-width, 120%);
+      height: var(--button-height, 100%);
+      background-color: rgb(var(--colors-button-hover, #383838));
+      backface-visibility: hidden;
+      will-change: transform;
+      transform: var(--button-transform, rotate3d(0,0,1,10deg) translate3d(-1.2em,110%,0));
+      transform-origin: var(--button-transform-origin, 0% 100%);
+      transition: transform 0.5s ease;
+    }
+    .otsb-btn__solid:hover:before {transform: rotate3d(0,0,1,0) translateZ(0);}
+    .otsb-btn__solid.otsb-btn__slide:before {
+      --button-width: 102%;
+      --button-height: 500%;
+      --button-transform: rotate3d(0,0,1,-10deg) translate3d(-130%,-10em,0);
+      --button-transform-origin: 100% 0%;
+    }
+    .otsb-btn__solid.otsb-btn__sliced .otsb-btn-icon {
+      transition: opacity .25s,transform .5s;
+      width: 20px;
+    }
+    .otsb-btn__solid.otsb-btn__sliced .otsb-btn-text {
+      transition: transform .5s;
+      transform: translateX(10px);
+    }
+    .otsb-btn__solid.otsb-btn__sliced:hover .otsb-btn-text {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .otsb-btn__solid.otsb-btn__sliced:hover .otsb-btn-icon {
+      opacity: 1;
+      transform: translateX(5px);
+    }
+
+    .otsb-btn__solid.otsb-btn__underline .otsb-btn-text {
+      position: relative;
+      display: block;
+    }
+    .otsb-btn__solid.otsb-btn__underline .otsb-btn-text::after {
+      content: "";
+      pointer-events: none;
+      bottom: 1px;
+      left: 50%;
+      position: absolute;
+      width: 0%;
+      height: 1px;
+      background-color: rgba(var(--color-button-text));
+      transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+      transition-duration: 400ms;
+      transition-property: width, left;
+    }
+    .otsb-btn__solid.otsb-btn__underline:hover {
+      transition-duration: 0.2s;
+    }
+    .otsb-btn__solid.otsb-btn__underline:hover .otsb-btn-text::after {
+      background-color: rgba(var(--colors-button-text-hover, var(--color-button-text, #fff)), var(--alpha-button-background, 1));
+      width: 100%;
+      left: 0%;
+    }
+  }
+}

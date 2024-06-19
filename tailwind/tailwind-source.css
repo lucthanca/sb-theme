@@ -11,5 +11,6 @@
 @import url(components/otsb-slideshow.css);
 @import url(components/otsb-media-with-text.css);
 @import url(components/otsb-contact-form.css);
+@import url(components/otsb-button-style.css);
 
 [x-cloak] { display: none !important; }
