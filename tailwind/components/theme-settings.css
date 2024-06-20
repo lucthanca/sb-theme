@@ -959,7 +959,7 @@ svg {
   }
 
   .otsb-image-hover {
-    @apply lg:group-hover:scale-105 lg:will-change-transform lg:hover:scale-105 lg:duration-500 lg:transition-transform lg:ease-out;
+    @apply lg:group-hover:scale-[var(--otsb-image-zoom,1.05)] lg:will-change-transform lg:hover:scale-[var(--otsb-image-zoom,1.05)] lg:duration-500 lg:transition-transform lg:ease-out;
   }
 
   .image-second-hover {

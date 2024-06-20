@@ -5,12 +5,13 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 @import url(components/theme-settings.css);
+/* @import url(components/common.scss); */
 @import url(components/component-rte.css);
 @import url(components/otsb-collection-list.css);
 @import url(components/otsb-promotion-banner.css);
 @import url(components/otsb-slideshow.css);
 @import url(components/otsb-media-with-text.css);
 @import url(components/otsb-contact-form.css);
-@import url(components/otsb-button-style.css);
+@import url(components/otsb-button-style.scss);
 
 [x-cloak] { display: none !important; }
